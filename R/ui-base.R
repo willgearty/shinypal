@@ -31,7 +31,7 @@ shinypal_ui <- function(modules) {
       ),
       card(
         card_header(tagList(
-          "Workflow (click and drag to reorder)",
+          "Workflow (click and drag headers to reorder)",
           div(
             actionButton("close_steps", label = "Collapse all steps",
                          class = "btn-sm"),
@@ -47,7 +47,8 @@ shinypal_ui <- function(modules) {
                       onSort =
                         sortable_js_capture_input(
                           input_id = "workflow_sortable"
-                        )
+                        ),
+                      handle = ".accordion-header"
                     ))
       ),
       style = css(grid_template_columns = "1fr 2fr")
