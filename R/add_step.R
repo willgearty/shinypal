@@ -25,13 +25,26 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
   # probably want to use check_required instead
   #req(input, ind, fun_workflow, fun_report, code_chain_list, libs)
 
+  colors <- get_colors(ind)
+
   # add the UI elements to the workflow
-  accordion_panel_insert("workflow_accordion", panel = fun_workflow(ind))
+  accordion_panel_insert("workflow_accordion", panel = tagList(
+    fun_workflow(ind),
+    tags$script(paste0(
+      "$('[data-rank-id=step_", ind, "] .accordion-button')",
+      ".css('background-color', '", colors$background, "')",
+      ".css('color', '", colors$color, "');"
+    ))
+  ))
   accordion_panel_open("workflow_accordion", values = paste0("step_", ind))
 
   # add the UI elements to the report
   tmp_list <- shinypal_env$report_list()
-  tmp_list[[paste0("step_", ind)]] <- fun_report(ind)
+  tmp_list[[paste0("step_", ind)]] <- div(
+    fun_report(ind),
+    style = paste0("border-left: 5px solid ", colors$background, "; ",
+                   "border-radius: 0.375rem;")
+  )
   shinypal_env$report_list(tmp_list)
 
   # add the code to the code chain
@@ -99,4 +112,26 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
   updateNumericInput(inputId = "accordion_version",
                      value =
                        isolate(input$accordion_version) + 1)
+}
+
+# Start at purple instead of off-white
+# https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#rainbow
+rainbow_palette <- khroma::color("smooth rainbow")(100, range = c(0.25, 1))
+
+#' Generate a background color and font color for a step based on its index
+#' @param ind The index of the step.
+#' @returns A list containing the `color` and `background` CSS styles for the
+#'   step.
+#' @importFrom grDevices col2rgb
+#' @export
+get_colors <- function(ind) {
+  # get last two digits of the index
+  digits <- ind %% 100
+  # skip 22 colors between each sequential step
+  bkgd <- rainbow_palette[(digits * 23) %% 100]
+  # determine font color based on luminance
+  # https://stackoverflow.com/questions/1855884
+  luminance <- c(.299, .587, .114) %*% col2rgb(bkgd) / 255
+  col <- if (luminance < 0.5) "white" else "black"
+  return(list(color = col, background = bkgd))
 }
