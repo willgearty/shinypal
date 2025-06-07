@@ -47,6 +47,8 @@ df_modal_observe <- function(input, output, ind, df_name) {
 }
 
 #' @title Keep a `selectInput` of intermediate data.frames up-to-date
+#' @param input The shiny input object.
+#' @param ind The index of the step.
 #' @importFrom shiny req observe isolate updateSelectInput
 #' @importFrom rlang `%||%`
 #' @export
@@ -137,9 +139,12 @@ file_observe <- function(input, inputId) {
 #' @description
 #'   A wrapper for [shinymeta::expandChain()] that uses a shared expansion
 #'   context specific to shinypal.
-#' @inherit shinymeta::expandChain
+#' @inheritParams shinymeta::expandChain
 #' @importFrom shinymeta expandChain
 #' @export
+#' @return The return value of `expandChain()` is a code object that's suitable
+#'   for printing or passing to [shinymeta::displayCodeModal()],
+#'   [shinymeta::buildScriptBundle()], or [shinymeta::buildRmdBundle()].
 expandChain_shared <- function(...) {
   expandChain(..., .expansionContext = shinypal_env$shared_ec)
 }

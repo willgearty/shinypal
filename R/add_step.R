@@ -14,6 +14,7 @@
 #'   used to substitute expansion contexts in the code chain.
 #' @importFrom shiny req isolate observeEvent updateNumericInput
 #' @importFrom shiny reactiveValuesToList
+#' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
 #' @importFrom rlang inject !!

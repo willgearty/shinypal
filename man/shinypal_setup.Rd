@@ -22,7 +22,11 @@ shinypal_setup(
 
 \item{modules}{A character vector of paths to independent modules.}
 
-\item{accordion_id}{The ID of the accordion element.}
+\item{download_filename}{The name of the file to download when the user
+clicks the download button.}
+
+\item{download_template}{The path to the Quarto markdown template file that
+will be used to generate the report.}
 }
 \description{
 A function to set up the shinypal environment. This function should be

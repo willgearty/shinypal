@@ -14,6 +14,5 @@ df_modal_button(ind, text = "View data")
 \description{
 Generates a \code{\link[shiny:actionButton]{shiny::actionButton()}} that, when clicked, generates a modal
 for the resulting dataset for the specified step. Make sure to set up a
-\code{\link[shiny:observeEvent]{shiny::observeEvent()}} observer for when the \code{\link[shiny:actionButton]{shiny::actionButton()}} is
-clicked, triggering \code{\link[=show_df_modal]{show_df_modal()}}.
+corresponding observer using \code{\link[=df_modal_observe]{df_modal_observe()}}.
 }

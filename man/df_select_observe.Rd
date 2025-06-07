@@ -6,6 +6,11 @@
 \usage{
 df_select_observe(input, ind)
 }
+\arguments{
+\item{input}{The shiny input object.}
+
+\item{ind}{The index of the step.}
+}
 \description{
 Keep a \code{selectInput} of intermediate data.frames up-to-date
 }

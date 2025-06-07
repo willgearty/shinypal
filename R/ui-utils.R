@@ -51,8 +51,7 @@ select_column_input <- function(ind, label = "Choose a column:",
 #' @description
 #'   Generates a [shiny::actionButton()] that, when clicked, generates a modal
 #'   for the resulting dataset for the specified step. Make sure to set up a
-#'   [shiny::observeEvent()] observer for when the [shiny::actionButton()] is
-#'   clicked, triggering [show_df_modal()].
+#'   corresponding observer using [df_modal_observe()].
 #' @param ind The index of the step.
 #' @param text The text to display on the button.
 #' @importFrom shiny actionButton

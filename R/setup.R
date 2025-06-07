@@ -12,7 +12,10 @@
 #' @param output The shiny output object.
 #' @param session The shiny session object.
 #' @param modules A character vector of paths to independent modules.
-#' @param accordion_id The ID of the accordion element.
+#' @param download_filename The name of the file to download when the user
+#'   clicks the download button.
+#' @param download_template The path to the Quarto markdown template file that
+#'   will be used to generate the report.
 #' @importFrom shinymeta newExpansionContext expandChain buildRmdBundle
 #' @importFrom shiny reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
