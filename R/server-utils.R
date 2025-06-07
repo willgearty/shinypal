@@ -23,13 +23,15 @@ get_int_dfs <- function(ind) {
 #' @param df_name The name of the data.frame to be displayed.
 #' @importFrom shiny observeEvent showModal modalDialog
 #' @importFrom reactable reactableOutput reactable renderReactable colDef
+#' @importFrom shinycssloaders withSpinner
 #' @export
 df_modal_observe <- function(input, output, ind, df_name) {
   check_setup()
   req(input, output, ind, df_name)
   observeEvent(input[[paste0("df_modal_", ind)]], {
     showModal(modalDialog(
-      reactableOutput(paste0("df_", ind)), size = "l", easyClose = TRUE
+      withSpinner(reactableOutput(paste0("df_", ind))),
+      size = "l", easyClose = TRUE
     ))
     output[[paste0("df_", ind)]] <- renderReactable({
       reactable(isolate(shinypal_env$intermediate_list[[df_name]]()),

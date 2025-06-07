@@ -1,7 +1,7 @@
 Package: shinypal
 Title: Tools to Make Modular and Interactive R Workflow Builders
 Version: 0.0.0.9000
-Depends:
+Imports:
     shiny,
     shinymeta,
     reactable,
@@ -12,7 +12,8 @@ Depends:
     clipr,
     purrr,
     khroma,
-    grDevices
+    grDevices,
+    shinycssloaders
 Authors@R: 
     person("William", "Gearty", email = "willgearty@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0076-3262"))

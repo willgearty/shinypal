@@ -52,6 +52,8 @@ shinypal_setup <- function(input, output, session, modules,
   # unordered, named list of files to include in the download bundle
   shinypal_env$include_files <- reactiveValues()
 
+  options(spinner.type = 8)
+
   # render dynamic UI ####
   # add libraries to load at the beginning of the report
   output$libraries <- renderPrint({
