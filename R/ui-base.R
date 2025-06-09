@@ -17,6 +17,13 @@ shinypal_ui <- function(modules) {
     tags$style(
       HTML(
         "
+        #steps_card .accordion .card,
+        #steps_card .accordion .card-body,
+        #steps_card .accordion .card-header {
+          padding: 0;
+          margin: 0;
+          border: 0;
+        }
         pre.shiny-text-output {
           white-space: pre-wrap;
           margin-bottom: 0;
