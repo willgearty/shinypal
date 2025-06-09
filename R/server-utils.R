@@ -22,7 +22,7 @@ get_int_dfs <- function(ind) {
 #' @param ind The index of the step.
 #' @param df_name The name of the data.frame to be displayed.
 #' @importFrom shiny observeEvent showModal modalDialog
-#' @importFrom reactable reactableOutput reactable renderReactable colDef
+#' @importFrom DT DTOutput renderDataTable datatable
 #' @importFrom shinycssloaders withSpinner
 #' @export
 df_modal_observe <- function(input, output, ind, df_name) {
@@ -30,19 +30,22 @@ df_modal_observe <- function(input, output, ind, df_name) {
   req(input, output, ind, df_name)
   observeEvent(input[[paste0("df_modal_", ind)]], {
     showModal(modalDialog(
-      withSpinner(reactableOutput(paste0("df_", ind))),
+      withSpinner(DTOutput(paste0("df_", ind))),
       size = "l", easyClose = TRUE
     ))
-    output[[paste0("df_", ind)]] <- renderReactable({
-      reactable(isolate(shinypal_env$intermediate_list[[df_name]]()),
-                defaultColDef = colDef(
-                  cell = function(value) format(value, nsmall = 1),
-                  align = "center",
-                  minWidth = 150,
-                  headerStyle = list(background = "#f7f7f8", cursor = "pointer")
-                ),
-                defaultPageSize = 25)
-    })
+    output[[paste0("df_", ind)]] <- renderDataTable(datatable(
+      isolate(shinypal_env$intermediate_list[[df_name]]()),
+      style = "bootstrap5",
+      options = list(
+        autoWidth = TRUE,
+        columnDefs = list(list(width = '25px', targets = 0),
+                          list(width = '150px', targets = '_all')),
+        scrollX = TRUE,
+        scrollY = "70dvh",
+        scrollCollapse = TRUE,
+        pageLength = 25
+      )
+    ))
   }, ignoreInit = TRUE)
 }
 
