@@ -57,7 +57,6 @@ select_column_input <- function(ind, label = "Choose a column:",
 #' @importFrom shiny actionButton
 #' @export
 df_modal_button <- function(ind, text = "View data") {
-  # TODO: should/can the observer be generated here?
   actionButton(paste0("df_modal_", ind), text)
 }
 
@@ -65,13 +64,11 @@ df_modal_button <- function(ind, text = "View data") {
 #' @description Render a reactive output variable as text within an application
 #'   page. Uses [shiny::verbatimTextOutput()] which is usually paired with
 #'   [shiny::renderPrint()] and provides fixed-width text in a `<pre>`. Make
-#'   sure to set up a [shiny::observeEvent()] observer for when the
-#'   [shiny::actionButton()] is clicked.
+#'   sure to set up a corresponding observer using [clip_observe()].
 #' @param ind The index of the step.
 #' @importFrom shiny div verbatimTextOutput actionButton icon
 #' @export
 verbatimTextOutput_copy <- function(ind) {
-  # TODO: should the observer be generated here?
   div(
     verbatimTextOutput(paste0("code_", ind)),
     actionButton(paste0("copy_", ind), icon("copy")),
