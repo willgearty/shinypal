@@ -72,9 +72,11 @@ shinypal_setup <- function(input, output, session, modules,
   output$report <- renderUI({
     tagList(
       div(
-        verbatimTextOutput("libraries"),
-        actionButton("copy_libraries", icon("copy")),
-        class = "code_wrapper"
+        div(
+          verbatimTextOutput("libraries"),
+          actionButton("copy_libraries", icon("copy")),
+          class = "code_wrapper libraries_wrapper"
+        )
       ),
       shinypal_env$report_list()
     )
