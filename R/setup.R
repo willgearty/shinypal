@@ -1,5 +1,3 @@
-# maybe a setup function that sets some variables in the environment?
-# maybe the names of the input objects that should be watched?
 #' @title Setup shinypal
 #' @description
 #'   A function to set up the shinypal environment. This function should be
@@ -16,7 +14,7 @@
 #'   clicks the download button.
 #' @param download_template The path to the Quarto markdown template file that
 #'   will be used to generate the report.
-#' @importFrom shinymeta newExpansionContext expandChain buildRmdBundle
+#' @importFrom shinymeta newExpansionContext expandChain
 #' @importFrom shiny reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
 #' @importFrom shiny downloadHandler actionButton icon
@@ -173,4 +171,78 @@ shinypal_setup <- function(input, output, session, modules,
   }, priority = 10000)
 
   shinypal_env$setup <- TRUE
+}
+
+# the following is copied from https://github.com/rstudio/shinymeta/blob/v0.2.1/R/report.R
+# modifications allow it to work with shinylive
+buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
+                           include_files = list(), render = TRUE,
+                           render_args = list()) {
+
+  force(report_template)
+  force(vars)
+
+  shinymeta:::with_progress_obj(function(progress) {
+    progress$set(value = 0)
+    progress$set(message = "Generating code")
+
+    if (is.list(vars)) {
+      vars <- lapply(vars, function(x) {
+        if (is.language(x)) {
+          paste(formatCode(x), collapse = "\n")
+        } else {
+          x
+        }
+      })
+    }
+
+    progress$set(value = 0.1)
+    progress$set(message = "Expanding Rmd template")
+
+    rmd_source <- shinymeta:::knit_expand_safe(report_template, vars = vars)
+    rmd_filename <- shinymeta:::template_rename(report_template, "Rmd")
+
+    build_bundle(rmd_source, rmd_filename, output_zip_path,
+                 include_files = include_files, render = render,
+                 render_args = render_args, progress = progress)
+  })
+}
+
+build_bundle <- function(input_src, input_filename, output_zip_path,
+                         include_files = list(), render = TRUE,
+                         render_args = list(), progress) {
+  force(input_src)
+  force(input_filename)
+  force(output_zip_path)
+  force(include_files)
+  force(render)
+  force(render_args)
+
+  # TODO: validate args
+  progress$set(value = 0.2)
+  progress$set(message =  "Adding items to zip archive")
+
+  x <- shinymeta:::zip_archive()
+
+  dest_filename_full <- fs::path(shinymeta:::archive_basedir(x), input_filename)
+
+  # TODO: Verify UTF-8 encoding is preserved
+  writeLines(input_src, dest_filename_full)
+
+  shinymeta:::add_items(x, !!!include_files)
+
+  progress$set(value = 0.3)
+
+  if (render) {
+    progress$set(message =  "Rendering report")
+    # WG: fork = TRUE doesn't work with shinylive because of callr::r
+    shinymeta:::render_with_args(dest_filename_full, render_args,
+                                 fork = R.Version()$os != "emscripten")
+  }
+
+  progress$set(value = 0.9)
+  progress$set(message =  "Compressing bundle")
+  archive <- shinymeta:::build_archive(x, output_zip_path)
+  progress$set(value = 1)
+  archive
 }

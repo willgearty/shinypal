@@ -6,7 +6,7 @@
 #'   Each module should have a `ui-main.R` file that defines the UI elements for
 #'   that module in the "Steps" accordion.
 #' @param modules A character vector of paths to independent modules.
-#' @importFrom shiny actionButton downloadButton numericInput uiOutput tagList
+#' @importFrom shiny actionButton numericInput uiOutput tagList
 #' @importFrom bslib card card_header layout_column_wrap layout_sidebar
 #' @importFrom bslib sidebar accordion
 #' @importFrom sortable sortable_js sortable_options sortable_js_capture_input
@@ -101,4 +101,12 @@ shinypal_ui <- function(modules) {
       )
     )
   )
+}
+
+# fixes downloads with shinylive on Chromium browsers
+# https://github.com/posit-dev/r-shinylive/issues/74
+downloadButton <- function(...) {
+  tag <- shiny::downloadButton(...)
+  tag$attribs$download <- NULL
+  tag
 }
