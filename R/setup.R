@@ -134,6 +134,8 @@ shinypal_setup <- function(input, output, session, modules,
           unname() |>
           Filter(f = Negate(is.null)) |>
           list_flatten(),
+        # need pandoc to render the rmarkdown file
+        render = rmarkdown::pandoc_available(),
         render_args = list(output_format = c("html_document", "pdf_document"))
       )
     }
