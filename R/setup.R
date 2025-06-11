@@ -103,7 +103,10 @@ shinypal_setup <- function(input, output, session, modules,
   # report download ####
   # handle downloading a zip folder with the markdown script and rendered files
   output$download_script <- downloadHandler(
-    filename = download_filename,
+    # can't bundle with shinylive because system(zip) doesn't work
+    filename = ifelse(is_shinylive(),
+                      shinymeta:::template_rename(download_filename, "Rmd"),
+                      download_filename),
     content = function(file) {
       # make a new expansion context for the report with all the substitutions
       ec <- newExpansionContext()
@@ -180,7 +183,6 @@ shinypal_setup <- function(input, output, session, modules,
 buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
                            include_files = list(), render = TRUE,
                            render_args = list()) {
-
   force(report_template)
   force(vars)
 
@@ -204,9 +206,16 @@ buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
     rmd_source <- shinymeta:::knit_expand_safe(report_template, vars = vars)
     rmd_filename <- shinymeta:::template_rename(report_template, "Rmd")
 
-    build_bundle(rmd_source, rmd_filename, output_zip_path,
-                 include_files = include_files, render = render,
-                 render_args = render_args, progress = progress)
+    # WG: can't bundle with shinylive because system(zip) doesn't work
+    if (is_shinylive()) {
+      progress$set(value = 1)
+      writeLines(rmd_source, output_zip_path)
+      return(invisible(output_zip_path))
+    } else {
+      build_bundle(rmd_source, rmd_filename, output_zip_path,
+                   include_files = include_files, render = render,
+                   render_args = render_args, progress = progress)
+    }
   })
 }
 
@@ -239,7 +248,7 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
     progress$set(message =  "Rendering report")
     # WG: fork = TRUE doesn't work with shinylive because of callr::r
     shinymeta:::render_with_args(dest_filename_full, render_args,
-                                 fork = R.Version()$os != "emscripten")
+                                 fork = !is_shinylive())
   }
 
   progress$set(value = 0.9)
@@ -248,3 +257,6 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
   progress$set(value = 1)
   archive
 }
+
+is_shinylive <- function() { R.Version()$os == "emscripten" }
+
