@@ -6,7 +6,7 @@ Imports:
     shinymeta,
     DT,
     bslib,
-    rlang,
+    rlang (< 1.1.7),
     sortable,
     htmltools,
     clipr,
