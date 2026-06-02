@@ -28,8 +28,6 @@ shinypal_setup <- function(input, output, session, modules,
                            download_filename = "shinypal_script.zip",
                            download_template = "./modules/test_report.qmd") {
   # shared server objects ####
-  # a shared expansion context for all expandChain() calls
-  shinypal_env$shared_ec <- newExpansionContext()
 
   # a named list of quoted library() calls that go at the very top of the report
   # each element may also be a list of quoted calls that will be flattened
@@ -165,15 +163,30 @@ shinypal_setup <- function(input, output, session, modules,
     if (file.exists(server_file)) source(server_file, local = TRUE)
   })
 
-  observe({
-    # observe any changes
-    inp <- reactiveValuesToList(input)
-    # reset the expansion context and add substitutes
-    shinypal_env$shared_ec <- newExpansionContext()
-    for(ec_sub in shinypal_env$ec_subs()) {
-      inject(shinypal_env$shared_ec$substituteMetaReactive(!!!ec_sub))
+  # a reactive that builds all interactive code chunks together, using one
+  # expansion context whose lifetime is one render cycle of this reactive.
+  # every chunk sees the same shared context, populated in code_chain() order,
+  # whenever any underlying dependency changes, every chunk is rebuilt together.
+  shinypal_env$chunks <- reactive({
+    ec <- newExpansionContext()
+    for (ec_sub in shinypal_env$ec_subs()) {
+      inject(ec$substituteMetaReactive(!!!ec_sub))
     }
-  }, priority = 10000)
+    chain <- shinypal_env$code_chain()
+
+    result <- list()
+    for (step_name in names(chain)) {
+      step_code <- chain[[step_name]]
+      # tryCatch lets per-step req()/validate() failures be surfaced
+      # individually by the consuming output, rather than invalidating
+      # the whole chunks reactive
+      result[[step_name]] <- tryCatch(
+        inject(expandChain(!!!step_code, .expansionContext = ec)),
+        error = function(e) e
+      )
+    }
+    result
+  })
 
   shinypal_env$setup <- TRUE
 }

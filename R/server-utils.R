@@ -138,18 +138,23 @@ file_observe <- function(input, inputId) {
   }, ignoreInit = TRUE)
 }
 
-#' @title Expand code objects with a shared context
+#' @title Get the expanded code chunk for a registered step
 #' @description
-#'   A wrapper for [shinymeta::expandChain()] that uses a shared expansion
-#'   context specific to shinypal.
-#' @inheritParams shinymeta::expandChain
-#' @importFrom shinymeta expandChain
+#'   Returns the code chunk for `ind`, expanded with a shared context across
+#'   all currently-registered steps. Use this inside a reactive consumer
+#'   (e.g., `renderPrint()`, `observeEvent()`) to display or copy a step's
+#'   code. The chunk is rebuilt whenever any dependency changes.
+#' @param ind The index of the step.
+#' @returns A code object suitable for printing or passing to
+#'   [shinymeta::displayCodeModal()], or `NULL` if the step is not registered.
 #' @export
-#' @return The return value of `expandChain()` is a code object that's suitable
-#'   for printing or passing to [shinymeta::displayCodeModal()],
-#'   [shinymeta::buildScriptBundle()], or [shinymeta::buildRmdBundle()].
-expandChain_shared <- function(...) {
-  expandChain(..., .expansionContext = shinypal_env$shared_ec)
+get_chunk <- function(ind) {
+  check_setup()
+  chunk <- shinypal_env$chunks()[[paste0("step_", ind)]]
+  # re-throw any per-step error so the consuming reactive's req()/validate()
+  # semantics handle it normally (silent errors stay silent, etc.)
+  if (inherits(chunk, "condition")) stop(chunk)
+  chunk
 }
 
 #' @title Set an intermediate data object
