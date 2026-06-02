@@ -1,12 +1,14 @@
 Package: shinypal
 Title: Tools to Make Modular and Interactive R Workflow Builders
 Version: 0.0.0.9000
+Depends: R (>= 4.1.0)
 Imports:
     shiny,
     shinymeta,
     DT,
     bslib,
     rlang (< 1.1.7),
+    vctrs (< 0.7.0),
     sortable,
     htmltools,
     clipr,
