@@ -92,7 +92,7 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
       fun(tmp_list)
     }
     # remove any intermediate objects for this step
-    for (name in grep(paste0("*_", ind),
+    for (name in grep(paste0("_", ind, "$"),
                       names(reactiveValuesToList(
                         shinypal_env$intermediate_list
                       )),
@@ -100,7 +100,7 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
       shinypal_env$intermediate_list[[name]] <- NULL
     }
     # remove included files
-    for (name in grep(paste0("*_", ind),
+    for (name in grep(paste0("_", ind, "$"),
                       names(reactiveValuesToList(shinypal_env$include_files)),
                       value = TRUE)) {
       shinypal_env$include_files[[name]] <- NULL
