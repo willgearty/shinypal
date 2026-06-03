@@ -2,17 +2,19 @@
 
 #' @title Get the names of all intermediate data.frames for a given step
 #' @param ind The index of the step.
-#' @importFrom shiny reactiveValuesToList
+#' @importFrom shiny reactiveValuesToList isolate
 #' @export
 get_int_dfs <- function(ind) {
-  # TODO: there's an infinite loop here when you have a dataset that depends
-  # on a dataset that is part of a step that depends on the original dataset
   check_setup()
   req(ind)
+  # the set of stored names is the only reactive dependency we want here; each
+  # stored reactive is evaluated inside isolate() so refreshing the dataset
+  # choices neither takes a dependency on every dataset's value nor recomputes
+  # it
   lst <- reactiveValuesToList(shinypal_env$intermediate_list)
-  lst[!grepl(paste0("_", ind), names(lst))] |>
+  lst[!grepl(paste0("_", ind, "$"), names(lst))] |>
     Filter(f = Negate(is.null)) |>
-    Filter(f = function(el) is.data.frame(el())) |>
+    Filter(f = function(el) is.data.frame(isolate(el()))) |>
     names()
 }
 
