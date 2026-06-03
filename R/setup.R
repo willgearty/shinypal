@@ -15,7 +15,7 @@
 #' @param download_template The path to the Quarto markdown template file that
 #'   will be used to generate the report.
 #' @importFrom shinymeta newExpansionContext expandChain
-#' @importFrom shiny reactiveVal reactiveValues reactiveValuesToList
+#' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
 #' @importFrom shiny downloadHandler actionButton icon
 #' @importFrom bslib accordion_panel_remove accordion_panel_close
@@ -55,14 +55,12 @@ shinypal_setup <- function(input, output, session, modules,
 
   # render dynamic UI ####
   # add libraries to load at the beginning of the report
-  output$libraries <- renderPrint({
+  libraries_expr <- reactive({
     inject(expandChain(
-      !!!shinypal_env$libraries_chain() |>
-        unname() |>
-        list_flatten() |>
-        unique()
+      !!!shinypal_env$libraries_chain() |> unname() |> list_flatten() |> unique()
     ))
   })
+  output$libraries <- renderPrint({ libraries_expr() })
 
   # render the report
   output$report <- renderUI({
@@ -78,15 +76,7 @@ shinypal_setup <- function(input, output, session, modules,
     )
   })
   observeEvent(input$copy_libraries, {
-    write_clip(
-      inject(expandChain(
-        !!!shinypal_env$libraries_chain() |>
-          unname() |>
-          list_flatten() |>
-          unique()
-      )),
-      allow_non_interactive = TRUE
-    )
+    write_clip(libraries_expr(), allow_non_interactive = TRUE)
   })
 
   # handle workflow reordering
@@ -116,13 +106,7 @@ shinypal_setup <- function(input, output, session, modules,
         file,
         vars = list(
           # lists of quoted code bits, need to be injected into expandChain()
-          libraries = inject(
-            expandChain(
-              !!!shinypal_env$libraries_chain() |>
-                unname() |>
-                list_flatten() |>
-                unique()
-            )),
+          libraries = libraries_expr(),
           code = inject(
             expandChain(
               !!!shinypal_env$code_chain() |>

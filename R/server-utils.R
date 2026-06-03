@@ -88,17 +88,15 @@ column_select_observe <- function(input, ind, inputId) {
     df_name <- input[[paste0("dataset_", ind)]]
     choices <- colnames(isolate(get_int_data(df_name)()))
     # try to preserve the old selected column name
-    for (col in 1:2) {
-      old_col <- isolate(input[[inputId]])
-      if (!is.null(old_col) && as_string(old_col) %in% choices) {
-        selected <- old_col
-      } else {
-        selected <- NULL
-      }
-      updateVarSelectInput(inputId = inputId,
-                           data = isolate(get_int_data(df_name)()),
-                           selected = selected)
+    old_col <- isolate(input[[inputId]])
+    if (!is.null(old_col) && as_string(old_col) %in% choices) {
+      selected <- old_col
+    } else {
+      selected <- NULL
     }
+    updateVarSelectInput(inputId = inputId,
+                          data = isolate(get_int_data(df_name)()),
+                          selected = selected)
   }, ignoreInit = TRUE)
 }
 
