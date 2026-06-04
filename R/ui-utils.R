@@ -42,9 +42,14 @@ select_column_input <- function(ind, label = "Choose a column:",
                                 default = NULL, ...) {
   req(ind, label)
   df_names <- get_int_dfs(ind)
+  # guard against being added before any dataset exists
+  data <- if (length(df_names) > 0) {
+    shinypal_env$intermediate_list[[df_names[[1]]]]()
+  } else {
+    data.frame()
+  }
   varSelectInput(paste0("column_", ind), label,
-                 data = shinypal_env$intermediate_list[[df_names[[1]]]](),
-                 selected = default, ...)
+                 data = data, selected = default, ...)
 }
 
 #' @title Button to show dataframe modal
