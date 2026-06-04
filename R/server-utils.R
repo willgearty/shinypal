@@ -178,6 +178,20 @@ get_int_data <- function(name) {
   shinypal_env$intermediate_list[[name]]
 }
 
+#' @title Get the next workflow step index
+#' @description
+#'   Returns a unique, monotonically increasing index for a new workflow step.
+#'   Each call increments a server-side counter. The counter is initialised by
+#'   [shinypal_setup()] and is deliberately never reset while the session is
+#'   running.
+#' @returns A single positive integer to use as the new step's index.
+#' @export
+next_step_index <- function() {
+  check_setup()
+  shinypal_env$step_counter <- shinypal_env$step_counter + 1
+  shinypal_env$step_counter
+}
+
 clear_workflow <- function() {
   check_setup()
   shinypal_env$report_list(tagList())
@@ -190,5 +204,4 @@ clear_workflow <- function() {
   for (name in names(reactiveValuesToList(shinypal_env$include_files))) {
     shinypal_env$include_files[[name]] <- NULL
   }
-  updateNumericInput(inputId = "accordion_version", value = "1")
 }

@@ -12,7 +12,7 @@
 #' @param ec_subs An optional list of length 2, where the first element is a
 #'   metaReactive object and the second element is a callback function. This is
 #'   used to substitute expansion contexts in the code chain.
-#' @importFrom shiny req isolate observeEvent updateNumericInput
+#' @importFrom shiny req observeEvent
 #' @importFrom shiny reactiveValuesToList
 #' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
@@ -110,9 +110,6 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
       clear_workflow()
     }
   }, ignoreInit = TRUE)
-  updateNumericInput(inputId = "accordion_version",
-                     value =
-                       isolate(input$accordion_version) + 1)
 }
 
 # Start at purple instead of off-white

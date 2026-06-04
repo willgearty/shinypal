@@ -51,6 +51,10 @@ shinypal_setup <- function(input, output, session, modules,
   # unordered, named list of files to include in the download bundle
   shinypal_env$include_files <- reactiveValues()
 
+  # monotonically increasing counter that hands out unique step indices via
+  # next_step_index()
+  shinypal_env$step_counter <- 0
+
   options(spinner.type = 8)
 
   # render dynamic UI ####
