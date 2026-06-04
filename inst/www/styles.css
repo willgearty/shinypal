@@ -1,0 +1,96 @@
+/* shinypal UI styles */
+
+/* Steps accordion: strip the card chrome so steps sit flush. */
+#steps_card .accordion .card,
+#steps_card .accordion .card-body,
+#steps_card .accordion .card-header {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+pre.shiny-text-output {
+  white-space: pre-wrap;
+  margin-bottom: 0;
+}
+
+.code_wrapper:not(.libraries_wrapper) pre.shiny-text-output {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Copy button sits in the top-right of each code chunk, revealed on hover. */
+.code_wrapper {
+  position: relative;
+  button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 0%;
+    transition: all ease 0.5s;
+  }
+}
+.code_wrapper:hover {
+  button {
+    opacity: 100%;
+  }
+}
+.code_wrapper:not(.libraries_wrapper) ~ div {
+  margin-top: 0.5rem;
+}
+
+/* Custom sidebar resize handle (see resize-handle.js). */
+.bslib-sidebar-layout > .shinypal-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 1;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.bslib-sidebar-layout.sidebar-right > .shinypal-resize-handle {
+  right: var(--_sidebar-width);
+  margin-right: -4px;
+}
+.bslib-sidebar-layout:not(.sidebar-right) > .shinypal-resize-handle {
+  left: var(--_sidebar-width);
+  margin-left: -4px;
+}
+.shinypal-resize-handle .shinypal-resize-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 30px;
+  border-radius: 1px;
+  background-color: var(--_sidebar-fg, currentColor);
+  opacity: 0.1;
+  transition: all 0.15s ease;
+}
+.shinypal-resize-handle:hover .shinypal-resize-indicator,
+.shinypal-resize-handle:focus .shinypal-resize-indicator,
+.bslib-sidebar-layout.shinypal-resizing > .shinypal-resize-handle .shinypal-resize-indicator {
+  opacity: 1;
+  width: 3px;
+  height: 40px;
+}
+.shinypal-resize-handle:focus {
+  outline: none;
+}
+.shinypal-resize-handle:focus .shinypal-resize-indicator {
+  outline: 2px solid var(--bs-focus-ring-color, rgba(13, 110, 253, 0.25));
+  outline-offset: 2px;
+}
+/* hide the handle when collapsed, mid-transition, or on mobile widths */
+.bslib-sidebar-layout.sidebar-collapsed > .shinypal-resize-handle,
+.bslib-sidebar-layout.transitioning > .shinypal-resize-handle {
+  display: none;
+}
+@media (max-width: 575.98px) {
+  .bslib-sidebar-layout > .shinypal-resize-handle {
+    display: none;
+  }
+}

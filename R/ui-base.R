@@ -6,7 +6,7 @@
 #'   Each module should have a `ui-main.R` file that defines the UI elements for
 #'   that module in the "Steps" accordion.
 #' @param modules A character vector of paths to independent modules.
-#' @importFrom shiny actionButton numericInput uiOutput tagList
+#' @importFrom shiny actionButton includeCSS includeScript numericInput uiOutput tagList
 #' @importFrom bslib card card_header layout_column_wrap layout_sidebar
 #' @importFrom bslib sidebar accordion
 #' @importFrom sortable sortable_js sortable_options sortable_js_capture_input
@@ -14,45 +14,7 @@
 #' @export
 shinypal_ui <- function(modules) {
   tagList(
-    tags$style(
-      HTML(
-        "
-        #steps_card .accordion .card,
-        #steps_card .accordion .card-body,
-        #steps_card .accordion .card-header {
-          padding: 0;
-          margin: 0;
-          border: 0;
-        }
-        pre.shiny-text-output {
-          white-space: pre-wrap;
-          margin-bottom: 0;
-        }
-        .code_wrapper:not(.libraries_wrapper) pre.shiny-text-output {
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
-        }
-        .code_wrapper {
-          position: relative;
-          button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            opacity: 0%;
-            transition: all ease 0.5s;
-          }
-        }
-        .code_wrapper:hover {
-          button {
-            opacity: 100%;
-          }
-        }
-        .code_wrapper:not(.libraries_wrapper) ~ div {
-          margin-top: 0.5rem;
-        }
-        "
-      )
-    ),
+    includeCSS(system.file("www/styles.css", package = "shinypal")),
     layout_sidebar(
       layout_column_wrap(
         card(
@@ -97,9 +59,12 @@ shinypal_ui <- function(modules) {
       sidebar = sidebar(
         downloadButton("download_script", "Download script"),
         uiOutput("report"),
-        width = "30%", position = "right"
+        width = "30%", position = "right",
+        # use a custom resizable handle instead of the bslib built-in option
+        resizable = FALSE, class = "shinypal-resizable"
       )
-    )
+    ),
+    includeScript(system.file("www/resize-handle.js", package = "shinypal"))
   )
 }
 
