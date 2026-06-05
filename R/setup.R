@@ -86,10 +86,16 @@ shinypal_setup <- function(input, output, session, modules,
   # handle workflow reordering
   observeEvent(input$workflow_sortable, {
     new_order <- isolate(input$workflow_sortable)
-    tmp_list <- shinypal_env$report_list()
-    shinypal_env$report_list(tmp_list[new_order])
-    tmp_list <- shinypal_env$code_chain()
-    shinypal_env$code_chain(tmp_list[new_order])
+    # drop any NA-named entries and stale/unknown ids from the sortable capture
+    reorder <- function(lst) {
+      nm <- names(lst)
+      if (is.null(nm)) return(lst)
+      lst <- lst[!is.na(nm)]
+      keep <- new_order[new_order %in% names(lst)]
+      lst[c(keep, setdiff(names(lst), keep))]
+    }
+    shinypal_env$report_list(reorder(shinypal_env$report_list()))
+    shinypal_env$code_chain(reorder(shinypal_env$code_chain()))
   }, ignoreInit = TRUE)
 
   # report download ####
