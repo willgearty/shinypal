@@ -11,7 +11,7 @@ verbatimTextOutput_copy(ind)
 }
 \description{
 Render a reactive output variable as text within an application
-page. Uses \code{\link[shiny:textOutput]{shiny::verbatimTextOutput()}} which is usually paired with
+page. Uses \code{\link[shiny:verbatimTextOutput]{shiny::verbatimTextOutput()}} which is usually paired with
 \code{\link[shiny:renderPrint]{shiny::renderPrint()}} and provides fixed-width text in a \verb{<pre>}. Make
 sure to set up a corresponding observer using \code{\link[=clip_observe]{clip_observe()}}.
 }

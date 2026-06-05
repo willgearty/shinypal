@@ -9,7 +9,7 @@ accordion_panel_remove_button(ind, ...)
 \arguments{
 \item{ind}{The index of the step.}
 
-\item{...}{Additional arguments passed to \code{\link[bslib:accordion]{bslib::accordion_panel()}}.}
+\item{...}{Additional arguments passed to \code{\link[bslib:accordion_panel]{bslib::accordion_panel()}}.}
 }
 \description{
 Accordion panel that includes a remove button
