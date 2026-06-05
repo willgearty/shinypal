@@ -12,7 +12,7 @@
 #' @param ec_subs An optional list of length 2, where the first element is a
 #'   metaReactive object and the second element is a callback function. This is
 #'   used to substitute expansion contexts in the code chain.
-#' @importFrom shiny req observeEvent
+#' @importFrom shiny req observeEvent showNotification
 #' @importFrom shiny reactiveValuesToList
 #' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
@@ -81,6 +81,27 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
 
   # handle removing this step from the report and workflow
   observeEvent(input[[paste0("remove_step_", ind)]], {
+    # refuse to remove a step whose output another step still consumes
+    my_dfs <- grep(paste0("_", ind, "$"),
+                   names(reactiveValuesToList(shinypal_env$intermediate_list)),
+                   value = TRUE)
+    dependents <- Filter(function(step_name) {
+      if (is.na(step_name)) return(FALSE)
+      other_ind <- sub("^step_", "", step_name)
+      if (identical(other_ind, as.character(ind))) return(FALSE)
+      sel <- input[[paste0("dataset_", other_ind)]]
+      !is.null(sel) && sel %in% my_dfs
+    }, names(shinypal_env$code_chain()))
+    if (length(dependents) > 0) {
+      showNotification(
+        paste0("Can't remove this step: its data is used by ",
+               length(dependents),
+               if (length(dependents) > 1) " later steps." else " later step.",
+               " Repoint or remove those first."),
+        type = "warning"
+      )
+      return()
+    }
     accordion_panel_remove("workflow_accordion",
                            target = paste0("step_", ind))
     for (fun in c(shinypal_env$report_list,
