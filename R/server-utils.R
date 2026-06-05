@@ -90,15 +90,17 @@ df_select_observe <- function(input, ind) {
 #' @param input The shiny input object.
 #' @param ind The index of the step.
 #' @param inputId The id of the [shiny::varSelectInput()] object.
-#' @importFrom shiny req observeEvent isolate updateVarSelectInput
+#' @importFrom shiny req observe isolate updateVarSelectInput
 #' @importFrom rlang as_string
 #' @export
 column_select_observe <- function(input, ind, inputId) {
   check_setup()
   req(input, ind, inputId)
-  observeEvent(input[[paste0("dataset_", ind)]], {
+  observe({
     df_name <- input[[paste0("dataset_", ind)]]
-    choices <- colnames(isolate(get_int_data(df_name)()))
+    req(df_name)
+    df <- get_int_data(df_name)()
+    choices <- colnames(df)
     # try to preserve the old selected column name
     old_col <- isolate(input[[inputId]])
     if (!is.null(old_col) && as_string(old_col) %in% choices) {
@@ -106,10 +108,8 @@ column_select_observe <- function(input, ind, inputId) {
     } else {
       selected <- NULL
     }
-    updateVarSelectInput(inputId = inputId,
-                          data = isolate(get_int_data(df_name)()),
-                          selected = selected)
-  }, ignoreInit = TRUE)
+    updateVarSelectInput(inputId = inputId, data = df, selected = selected)
+  })
 }
 
 #' @title Add an observer to a copy button
