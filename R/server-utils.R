@@ -167,6 +167,17 @@ get_chunk <- function(ind) {
   chunk
 }
 
+#' @title Check whether the workflow has incomplete or errored steps
+#' @description
+#'   Returns `TRUE` if any step in the current workflow cannot be expanded into
+#'   the downloadable script due to failing `req()`/`validate()` checks.
+#' @returns A length-one logical.
+#' @export
+workflow_has_errors <- function() {
+  check_setup()
+  any(vapply(shinypal_env$chunks(), inherits, logical(1), "condition"))
+}
+
 #' @title Set an intermediate data object
 #' @param obj A reactive data object to store.
 #' @param name A name to store data object as.

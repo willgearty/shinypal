@@ -17,7 +17,7 @@
 #' @importFrom shinymeta newExpansionContext expandChain
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
-#' @importFrom shiny downloadHandler actionButton icon
+#' @importFrom shiny downloadHandler actionButton icon showNotification
 #' @importFrom bslib accordion_panel_remove accordion_panel_close
 #' @importFrom purrr list_flatten
 #' @importFrom clipr write_clip
@@ -106,33 +106,51 @@ shinypal_setup <- function(input, output, session, modules,
                       shinymeta:::template_rename(download_filename, "Rmd"),
                       download_filename),
     content = function(file) {
-      # make a new expansion context for the report with all the substitutions
-      ec <- newExpansionContext()
-      for(ec_sub in shinypal_env$ec_subs()) {
-        inject(ec$substituteMetaReactive(!!!ec_sub))
-      }
-      buildRmdBundle(
-        download_template,
-        file,
-        vars = list(
-          # lists of quoted code bits, need to be injected into expandChain()
-          libraries = libraries_expr(),
-          code = inject(
-            expandChain(
-              !!!shinypal_env$code_chain() |>
-                unname() |>
-                list_flatten(),
-              .expansionContext = ec
-            ))
-        ),
-        include_files = reactiveValuesToList(shinypal_env$include_files) |>
-          unname() |>
-          Filter(f = Negate(is.null)) |>
-          list_flatten(),
-        # need pandoc to render the rmarkdown file
-        render = rmarkdown::pandoc_available(),
-        render_args = list(output_format = c("html_document", "pdf_document"))
-      )
+      # any unexpected failure (e.g., rendering) is reported to the user instead
+      # of producing a broken or empty download
+      tryCatch({
+        chunks <- shinypal_env$chunks()
+        failed <- vapply(chunks, inherits, logical(1), "condition")
+        code <- vapply(chunks, function(chunk) {
+          if (inherits(chunk, "condition")) {
+            paste("# --- step omitted: incomplete or errored;",
+                  "fix or remove it in the app, then re-download ---")
+          } else {
+            paste(formatCode(chunk), collapse = "\n")
+          }
+        }, character(1))
+
+        buildRmdBundle(
+          download_template,
+          file,
+          vars = list(
+            libraries = libraries_expr(),
+            code = paste(code, collapse = "\n\n")
+          ),
+          include_files = reactiveValuesToList(shinypal_env$include_files) |>
+            unname() |>
+            Filter(f = Negate(is.null)) |>
+            list_flatten(),
+          # need pandoc to render the rmarkdown file
+          render = rmarkdown::pandoc_available(),
+          render_args = list(output_format = c("html_document", "pdf_document"))
+        )
+
+        # let the user know if any steps didn't make it into the script
+        if (any(failed)) {
+          showNotification(
+            paste(sum(failed), "step(s) were incomplete or errored and were",
+                  "left out of the script as comments. Fix or remove them in",
+                  "the app for a complete script."),
+            type = "warning", duration = 10
+          )
+        }
+      }, error = function(e) {
+        showNotification(
+          paste("The script could not be generated:", conditionMessage(e)),
+          type = "error", duration = NULL
+        )
+      })
     }
   )
 
