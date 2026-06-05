@@ -7,12 +7,22 @@
 get_int_dfs <- function(ind) {
   check_setup()
   req(ind)
-  # the set of stored names is the only reactive dependency we want here; each
-  # stored reactive is evaluated inside isolate() so refreshing the dataset
-  # choices neither takes a dependency on every dataset's value nor recomputes
-  # it
+  # we only want two reactive dependencies here: the set of stored names and the
+  # workflow order (code_chain). each stored reactive is evaluated inside
+  # isolate() so refreshing the dataset choices neither depends on every
+  # dataset's value nor recomputes it.
   lst <- reactiveValuesToList(shinypal_env$intermediate_list)
-  lst[!grepl(paste0("_", ind, "$"), names(lst))] |>
+  # restrict choices to datasets produced by steps *earlier* than this one in
+  # the current workflow order, so a step can never consume a later step's (or
+  # its own) output. this keeps the step dependency graph acyclic, preventing
+  # reactive infinite loops and out-of-order generated code
+  chain_names <- names(shinypal_env$code_chain())
+  pos <- match(paste0("step_", ind), chain_names)
+  # a step still being built isn't in the chain yet; treat it as appended last
+  if (is.na(pos)) pos <- length(chain_names) + 1L
+  earlier_inds <- sub("^step_", "", chain_names[seq_len(pos - 1L)])
+  lst <- lst[sub(".*_(\\d+)$", "\\1", names(lst)) %in% earlier_inds]
+  lst |>
     Filter(f = Negate(is.null)) |>
     Filter(f = function(el) is.data.frame(isolate(el()))) |>
     names()
@@ -175,6 +185,8 @@ set_int_data <- function(obj, name) {
 get_int_data <- function(name) {
   check_setup()
   req(name)
+  # make sure the item still exists in the list
+  req(shinypal_env$intermediate_list[[name]])
   shinypal_env$intermediate_list[[name]]
 }
 
