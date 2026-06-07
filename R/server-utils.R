@@ -22,10 +22,12 @@ get_int_dfs <- function(ind) {
   if (is.na(pos)) pos <- length(chain_names) + 1L
   earlier_inds <- sub("^step_", "", chain_names[seq_len(pos - 1L)])
   lst <- lst[sub(".*_(\\d+)$", "\\1", names(lst)) %in% earlier_inds]
-  lst |>
+  dfs <- lst |>
     Filter(f = Negate(is.null)) |>
     Filter(f = function(el) is.data.frame(isolate(el()))) |>
     names()
+  # return the names in workflow order
+  dfs[order(match(sub(".*_(\\d+)$", "\\1", dfs), earlier_inds))]
 }
 
 #' @title Show a modal with a reactable data.frame
@@ -78,7 +80,8 @@ df_select_observe <- function(input, ind) {
     if (!is.null(old_df) && old_df %in% choices) {
       selected <- old_df
     } else {
-      selected <- NULL
+      # otherwise default to the most recent dataset (closest above this step)
+      selected <- if (length(choices)) choices[[length(choices)]] else NULL
     }
     # update choices but maintain selected
     updateSelectInput(inputId = paste0("dataset_", ind), choices = choices,

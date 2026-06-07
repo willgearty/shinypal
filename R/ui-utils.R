@@ -26,8 +26,10 @@ accordion_panel_remove_button <- function(ind, ...) {
 select_dataset_input <- function(ind, label = "Choose a dataset:") {
   req(ind, label)
   df_names <- get_int_dfs(ind)
-  # TODO: selected should be the most recent dataset?
-  selectInput(paste0("dataset_", ind), label, choices = df_names)
+  # default to the most recent dataset (the one produced closest above this)
+  selected_df <- if (length(df_names)) df_names[[length(df_names)]] else NULL
+  selectInput(paste0("dataset_", ind), label, choices = df_names,
+              selected = selected_df)
 }
 
 #' @title Select input to choose a column from a specified dataset
@@ -44,7 +46,8 @@ select_column_input <- function(ind, label = "Choose a column:",
   df_names <- get_int_dfs(ind)
   # guard against being added before any dataset exists
   data <- if (length(df_names) > 0) {
-    shinypal_env$intermediate_list[[df_names[[1]]]]()
+    # initialise the column choices from the most recent dataset
+    shinypal_env$intermediate_list[[df_names[[length(df_names)]]]]()
   } else {
     data.frame()
   }
