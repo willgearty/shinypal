@@ -1,8 +1,19 @@
 #' @title Add a step to the report, workflow, and the code chain
 #' @description
-#'   A short description...
-#' @param input The input object from the shiny app.
-#' @param ind The index of the step to be added.
+#'   Registers a single step with shinypal's reactive state. It inserts the
+#'   step's panel into the workflow accordion, appends the step's block to
+#'   the report, adds the step's quoted code to the code chain used to
+#'   assemble the reproducible script, and records any packages the step
+#'   needs. When `ec_subs` is supplied, it also registers an expansion-context
+#'   substitution so the downloadable script can swap in alternate code (for
+#'   example, fully-qualified calls).
+#'
+#'   Most data-producing steps should instead use [add_shinypal_data_step()],
+#'   which wraps this together with the data storage, code output, and selector
+#'   boilerplate. Call `add_shinypal_step()` directly for steps that don't fit
+#'   that pattern.
+#' @param input The shiny input object.
+#' @param ind The index of the step.
 #' @param fun_workflow A function that generates the UI elements for the
 #'   workflow.
 #' @param fun_report A function that generates the UI elements for the report.
@@ -131,6 +142,71 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
       clear_workflow()
     }
   }, ignoreInit = TRUE)
+}
+
+#' @title Register a complete data-producing step
+#' @description
+#'   Convenience wrapper around the boilerplate shared by every step that
+#'   produces an intermediate dataset: it stores the data reactive, wires
+#'   the data-preview modal, registers the step via [add_shinypal_step()],
+#'   and (optionally) keeps the dataset dropdown and column selectors in
+#'   sync. A module only supplies the `data` reactive and its UI/report
+#'   functions.
+#' @param input The shiny input object.
+#' @param output The shiny output object.
+#' @param ind The index of the step.
+#' @param data A [shinymeta::metaReactive2()] object produced by the step. It
+#'   should use `varname = paste0("occs_", ind)` so its generated variable name
+#'   matches the stored name.
+#' @param fun_workflow A function that generates the UI elements for the
+#'   workflow.
+#' @param fun_report A function that generates the UI elements for the report.
+#' @param libs A character vector of R packages required for this step.
+#' @param code_guard An optional zero-argument function evaluated inside the
+#'   code output before [get_chunk()]. Use it to surface step-specific
+#'   `validate()` messages; plain `req()`s inside `data` already propagate
+#'   through [get_chunk()], so simple steps can leave this `NULL`.
+#' @param ec_subs An optional list of length 2, where the first element is a
+#'   metaReactive object and the second element is a callback function. This is
+#'   used to substitute expansion contexts in the code chain.
+#' @param select_dataset Whether the step consumes an upstream dataset (and thus
+#'   needs a [df_select_observe()] to keep its dataset dropdown current).
+#' @param column_ids A character vector of column-selector input ids to keep in
+#'   sync via [column_select_observe()] (one per [select_column_input()]).
+#' @importFrom shiny renderPrint
+#' @importFrom rlang expr inject !!
+#' @export
+add_shinypal_data_step <- function(input, output, ind, data,
+                                   fun_workflow, fun_report,
+                                   libs = character(0), code_guard = NULL,
+                                   ec_subs = NULL, select_dataset = FALSE,
+                                   column_ids = character(0)) {
+  check_setup()
+  # every data step stores its result under occs_<ind> and previews it the same
+  # way
+  name <- paste0("occs_", ind)
+  set_int_data(data, name)
+
+  # render the step's generated code; run the optional guard first so any
+  # step-specific validate() messages show before get_chunk() is reached
+  output[[paste0("code_", ind)]] <- renderPrint({
+    if (!is.null(code_guard)) code_guard()
+    get_chunk(ind)
+  })
+
+  clip_observe(input, output, ind, expr(get_chunk(ind)))
+  df_modal_observe(input, output, ind, name)
+
+  # register the step with the standard "materialise this step's data" preview
+  add_shinypal_step(
+    input, ind, fun_workflow, fun_report,
+    list(inject(quote(invisible(get_int_data(paste0("occs_", !!ind))())))),
+    libs, ec_subs
+  )
+
+  # keep the dataset dropdown and any column selectors up to date
+  if (select_dataset) df_select_observe(input, ind)
+  for (id in column_ids) column_select_observe(input, ind, id)
 }
 
 # Start at purple instead of off-white

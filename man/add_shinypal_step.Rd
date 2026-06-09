@@ -15,9 +15,9 @@ add_shinypal_step(
 )
 }
 \arguments{
-\item{input}{The input object from the shiny app.}
+\item{input}{The shiny input object.}
 
-\item{ind}{The index of the step to be added.}
+\item{ind}{The index of the step.}
 
 \item{fun_workflow}{A function that generates the UI elements for the
 workflow.}
@@ -34,5 +34,16 @@ metaReactive object and the second element is a callback function. This is
 used to substitute expansion contexts in the code chain.}
 }
 \description{
-A short description...
+Registers a single step with shinypal's reactive state. It inserts the
+step's panel into the workflow accordion, appends the step's block to
+the report, adds the step's quoted code to the code chain used to
+assemble the reproducible script, and records any packages the step
+needs. When \code{ec_subs} is supplied, it also registers an expansion-context
+substitution so the downloadable script can swap in alternate code (for
+example, fully-qualified calls).
+
+Most data-producing steps should instead use \code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}},
+which wraps this together with the data storage, code output, and selector
+boilerplate. Call \code{add_shinypal_step()} directly for steps that don't fit
+that pattern.
 }
