@@ -283,5 +283,13 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
   archive
 }
 
+#' @title Detect a shinylive (webR) session
+#' @description
+#'   Returns `TRUE` when the app is running in a shinylive/webR session (i.e.
+#'   compiled to WebAssembly via Emscripten) and `FALSE` in a normal R session.
+#'   Useful for gating behaviour that can't run in the browser, such as loading
+#'   packages with no WebAssembly build or bundling a downloadable zip.
+#' @return A length-1 logical: `TRUE` under shinylive/webR, otherwise `FALSE`.
+#' @export
 is_shinylive <- function() { R.Version()$os == "emscripten" }
 
