@@ -209,6 +209,70 @@ add_shinypal_data_step <- function(input, output, ind, data,
   for (id in column_ids) column_select_observe(input, ind, id)
 }
 
+#' @title Register a complete plot-producing step
+#' @description
+#'   Convenience wrapper around the boilerplate shared by every step that
+#'   renders a plot: it assigns the rendered plot to its output slot, renders
+#'   the step's generated code, registers the step via [add_shinypal_step()],
+#'   and (optionally) keeps the dataset dropdown and column selectors in sync. A
+#'   module only supplies the `plot` render and its UI/report functions.
+#'
+#'   Unlike [add_shinypal_data_step()], a plot step does not store an
+#'   intermediate dataset or show a data-preview modal; its result is a figure,
+#'   not a selectable data.frame.
+#' @param input The shiny input object.
+#' @param output The shiny output object.
+#' @param ind The index of the step.
+#' @param plot A [shinymeta::metaRender2()] object that renders the plot.
+#' @param fun_workflow A function that generates the UI elements for the
+#'   workflow.
+#' @param fun_report A function that generates the UI elements for the report.
+#' @param libs A character vector of R packages required for this step.
+#' @param code_guard An optional zero-argument function evaluated inside the
+#'   code output before [get_chunk()]. Use it to surface step-specific
+#'   `validate()` messages.
+#' @param output_prefix The prefix for the plot's output slot, combined with
+#'   `ind` to form the id (default `"plot_"`, giving `plot_<ind>`). Must match
+#'   the [shiny::plotOutput()] id used in `fun_report` (e.g. `"map_"`).
+#' @param select_dataset Whether the step consumes an upstream dataset (and thus
+#'   needs a [df_select_observe()] to keep its dataset dropdown current).
+#' @param column_ids A character vector of column-selector input ids to keep in
+#'   sync via [column_select_observe()] (one per [select_column_input()]).
+#' @importFrom shiny renderPrint
+#' @importFrom rlang expr inject !!
+#' @export
+add_shinypal_plot_step <- function(input, output, ind, plot,
+                                   fun_workflow, fun_report,
+                                   libs = character(0), code_guard = NULL,
+                                   output_prefix = "plot_",
+                                   select_dataset = TRUE,
+                                   column_ids = character(0)) {
+  check_setup()
+  # the rendered plot lives in output[[<output_prefix><ind>]]; the report's
+  # plotOutput() and the code chain reference that same slot
+  output[[paste0(output_prefix, ind)]] <- plot
+
+  # render the step's generated code; run the optional guard first so any
+  # step-specific validate() messages show before get_chunk() is reached
+  output[[paste0("code_", ind)]] <- renderPrint({
+    if (!is.null(code_guard)) code_guard()
+    get_chunk(ind)
+  })
+
+  clip_observe(input, output, ind, expr(get_chunk(ind)))
+
+  # register the step; the code chain renders this step's plot output
+  add_shinypal_step(
+    input, ind, fun_workflow, fun_report,
+    list(inject(quote(output[[paste0(!!output_prefix, !!ind)]]()))),
+    libs
+  )
+
+  # keep the dataset dropdown and any column selectors up to date
+  if (select_dataset) df_select_observe(input, ind)
+  for (id in column_ids) column_select_observe(input, ind, id)
+}
+
 # Start at purple instead of off-white
 # https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#rainbow
 rainbow_palette <- khroma::color("smooth rainbow")(100, range = c(0.25, 1))

@@ -2,6 +2,7 @@
 
 export(accordion_panel_remove_button)
 export(add_shinypal_data_step)
+export(add_shinypal_plot_step)
 export(add_shinypal_step)
 export(clip_observe)
 export(column_select_observe)
