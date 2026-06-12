@@ -41,7 +41,7 @@ shinypal_ui <- function(modules) {
                            class = "btn-sm"),
               class = "btn-group float-end"
             )
-          )),
+          ), class = "justify-content-between"),
           accordion(id = "workflow_accordion"),
           sortable_js("workflow_accordion",
                       options = sortable_options(
