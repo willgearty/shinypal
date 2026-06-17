@@ -11,6 +11,17 @@ df_select_observe(input, ind)
 
 \item{ind}{The index of the step.}
 }
+\value{
+Called for its side effects; invisibly returns the observer.
+}
 \description{
-Keep a \code{selectInput} of intermediate data.frames up-to-date
+Installs an observer that keeps the step's dataset dropdown
+(\verb{dataset_<ind>}) populated with the available upstream datasets,
+preserving the current selection where possible and otherwise defaulting to
+the most recent one.
+}
+\examples{
+\dontrun{
+df_select_observe(input, ind)
+}
 }

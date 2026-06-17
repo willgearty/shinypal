@@ -14,13 +14,26 @@ Imports:
     purrr,
     khroma,
     grDevices,
-    shinycssloaders
+    shinycssloaders,
+    fs,
+    rmarkdown
+Suggests:
+    knitr,
+    testthat (>= 3.0.0)
 Authors@R: 
     person("William", "Gearty", email = "willgearty@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0076-3262"))
-Description: Contains tools to develop and run modular and interactive shiny apps
-    that use shinymeta to translate GUI-based pipelines into R and RMarkdown code.
+Description: Provides the building blocks for modular, interactive shiny applications
+    that turn point-and-click pipelines into reproducible R and R Markdown code. Using
+    shinymeta, shinypal assembles code modules into a draggable workflow, shows the
+    equivalent code as the user builds it, and lets them export the whole pipeline as
+    a runnable script or rendered report.
 License: GPL (>= 3)
+URL: https://github.com/willgearty/shinypal, http://williamgearty.com/shinypal/
+BugReports: https://github.com/willgearty/shinypal/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.0.0
+Config/testthat/edition: 3
+Config/Needs/website: pkgdown
+VignetteBuilder: knitr

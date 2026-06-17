@@ -11,6 +11,17 @@
 #' @importFrom bslib sidebar accordion
 #' @importFrom sortable sortable_js sortable_options sortable_js_capture_input
 #' @importFrom htmltools css div
+#' @returns A [shiny::tagList()] holding the shinypal interface: a sidebar
+#'   layout with the "Possible Workflow Steps" and "Workflow" cards on the left
+#'   and the live report/download sidebar on the right. Drop it into your app's
+#'   UI, for example inside a [bslib::page_navbar()] panel.
+#' @examples
+#' \dontrun{
+#' ui <- function() {
+#'   modules <- list.dirs("./modules", recursive = FALSE)
+#'   bslib::page_navbar(title = "My app", bslib::nav_panel("Build", shinypal_ui(modules)))
+#' }
+#' }
 #' @export
 shinypal_ui <- function(modules) {
   tagList(

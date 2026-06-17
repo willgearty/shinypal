@@ -48,15 +48,35 @@ needs a \code{\link[=df_select_observe]{df_select_observe()}} to keep its datase
 \item{column_ids}{A character vector of column-selector input ids to keep in
 sync via \code{\link[=column_select_observe]{column_select_observe()}} (one per \code{\link[=select_column_input]{select_column_input()}}).}
 }
+\value{
+Called for its side effects and returns \code{NULL} invisibly. Assigns
+the rendered plot to \verb{output[[<output_prefix><ind>]]}, renders the step's
+generated code, registers the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}}, and (when
+requested) installs the dataset/column selector observers.
+}
 \description{
 Convenience wrapper around the boilerplate shared by every step that
 renders a plot: it assigns the rendered plot to its output slot, renders
-the step's generated code, wires the copy-to-clipboard observer, registers
-the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}} with the plot output as its code chain,
+the step's generated code, registers the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}},
 and (optionally) keeps the dataset dropdown and column selectors in sync. A
 module only supplies the \code{plot} render and its UI/report functions.
 
 Unlike \code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}}, a plot step does not store an
 intermediate dataset or show a data-preview modal; its result is a figure,
 not a selectable data.frame.
+}
+\examples{
+\dontrun{
+# inside a module's server.R
+ind <- next_step_index()
+p <- shinymeta::metaRender2(shiny::renderPlot, {
+  df <- get_int_data(input[[paste0("dataset_", ind)]])()
+  shinymeta::metaExpr(plot(df))
+})
+add_shinypal_plot_step(
+  input, output, ind, plot = p,
+  fun_workflow = function(ind) accordion_panel_remove_button(ind, "Plot"),
+  fun_report = function(ind) shiny::plotOutput(paste0("plot_", ind))
+)
+}
 }

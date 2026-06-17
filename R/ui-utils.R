@@ -5,6 +5,14 @@
 #' @param ... Additional arguments passed to [bslib::accordion_panel()].
 #' @importFrom shiny actionButton
 #' @importFrom bslib accordion_panel
+#' @description
+#'   A [bslib::accordion_panel()] pre-wired with a "Remove this step" button and
+#'   the `data-rank-id` attribute shinypal's sortable workflow needs. Use it as
+#'   the panel returned by a step's `fun_workflow`.
+#' @returns A [bslib::accordion_panel()] tag with `value = "step_<ind>"` and a
+#'   matching `data-rank-id` attribute.
+#' @examples
+#' accordion_panel_remove_button(1, "My step")
 #' @export
 accordion_panel_remove_button <- function(ind, ...) {
   req(ind)
@@ -22,6 +30,15 @@ accordion_panel_remove_button <- function(ind, ...) {
 #' @param ind The index of the step.
 #' @param label The label for the select input.
 #' @importFrom shiny selectInput
+#' @description
+#'   A [shiny::selectInput()] listing the intermediate datasets available to
+#'   step `ind` (those produced by earlier steps), defaulting to the most
+#'   recent. Keep its choices current with [df_select_observe()].
+#' @returns A [shiny::selectInput()] tag with id `dataset_<ind>`.
+#' @examples
+#' \dontrun{
+#' select_dataset_input(ind)
+#' }
 #' @export
 select_dataset_input <- function(ind, label = "Choose a dataset:") {
   req(ind, label)
@@ -39,6 +56,11 @@ select_dataset_input <- function(ind, label = "Choose a dataset:") {
 #' @param default The default value for the select input.
 #' @param ... Additional arguments passed to [shiny::varSelectInput()].
 #' @importFrom shiny varSelectInput
+#' @returns A [shiny::varSelectInput()] tag with id `column_<ind>`.
+#' @examples
+#' \dontrun{
+#' select_column_input(ind)
+#' }
 #' @export
 select_column_input <- function(ind, label = "Choose a column:",
                                 default = NULL, ...) {
@@ -63,6 +85,9 @@ select_column_input <- function(ind, label = "Choose a column:",
 #' @param ind The index of the step.
 #' @param text The text to display on the button.
 #' @importFrom shiny actionButton
+#' @returns A [shiny::actionButton()] with id `df_modal_<ind>`.
+#' @examples
+#' df_modal_button(1)
 #' @export
 df_modal_button <- function(ind, text = "View data") {
   actionButton(paste0("df_modal_", ind), text)
@@ -75,6 +100,10 @@ df_modal_button <- function(ind, text = "View data") {
 #'   sure to set up a corresponding observer using [clip_observe()].
 #' @param ind The index of the step.
 #' @importFrom shiny div verbatimTextOutput actionButton icon
+#' @returns A [htmltools::div()] wrapping a [shiny::verbatimTextOutput()] (id
+#'   `code_<ind>`) and a copy [shiny::actionButton()] (id `copy_<ind>`).
+#' @examples
+#' verbatimTextOutput_copy(1)
 #' @export
 verbatimTextOutput_copy <- function(ind) {
   div(

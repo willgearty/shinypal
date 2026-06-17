@@ -15,6 +15,14 @@ select_column_input(ind, label = "Choose a column:", default = NULL, ...)
 
 \item{...}{Additional arguments passed to \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}}.}
 }
+\value{
+A \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}} tag with id \verb{column_<ind>}.
+}
 \description{
 This should be paired with \code{\link[=select_dataset_input]{select_dataset_input()}}.
+}
+\examples{
+\dontrun{
+select_column_input(ind)
+}
 }

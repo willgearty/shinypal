@@ -13,6 +13,16 @@ column_select_observe(input, ind, inputId)
 
 \item{inputId}{The id of the \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}} object.}
 }
+\value{
+Called for its side effects; invisibly returns the observer.
+}
 \description{
-Keep a \code{varSelectInput} of data.frame column names up-to-date
+Installs an observer that keeps a \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}} of column names
+in sync with the dataset currently chosen in the step's \verb{dataset_<ind>}
+dropdown. Pair with \code{\link[=select_dataset_input]{select_dataset_input()}} and \code{\link[=select_column_input]{select_column_input()}}.
+}
+\examples{
+\dontrun{
+column_select_observe(input, ind, paste0("column_", ind))
+}
 }

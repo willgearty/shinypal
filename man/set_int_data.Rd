@@ -11,6 +11,16 @@ set_int_data(obj, name)
 
 \item{name}{A name to store data object as.}
 }
+\value{
+Called for its side effects; invisibly returns \code{NULL}.
+}
 \description{
-Set an intermediate data object
+Stores a reactive data object in shinypal's intermediate-data registry
+under \code{name}, making it available to later steps and to the assembled
+script. Usually called for you by \code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}}.
+}
+\examples{
+\dontrun{
+set_int_data(occs, paste0("occs_", ind))
+}
 }

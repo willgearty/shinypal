@@ -51,6 +51,12 @@ needs a \code{\link[=df_select_observe]{df_select_observe()}} to keep its datase
 \item{column_ids}{A character vector of column-selector input ids to keep in
 sync via \code{\link[=column_select_observe]{column_select_observe()}} (one per \code{\link[=select_column_input]{select_column_input()}}).}
 }
+\value{
+Called for its side effects and returns \code{NULL} invisibly. Stores the
+step's data reactive under \verb{occs_<ind>}, wires its code output and
+data-preview modal, registers the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}}, and (when
+requested) installs the dataset/column selector observers.
+}
 \description{
 Convenience wrapper around the boilerplate shared by every step that
 produces an intermediate dataset: it stores the data reactive, wires
@@ -58,4 +64,18 @@ the data-preview modal, registers the step via \code{\link[=add_shinypal_step]{a
 and (optionally) keeps the dataset dropdown and column selectors in
 sync. A module only supplies the \code{data} reactive and its UI/report
 functions.
+}
+\examples{
+\dontrun{
+# inside a module's server.R
+ind <- next_step_index()
+occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+  shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
+})
+add_shinypal_data_step(
+  input, output, ind, data = occs,
+  fun_workflow = function(ind) accordion_panel_remove_button(ind, "Subset"),
+  fun_report = function(ind) verbatimTextOutput_copy(ind)
+)
+}
 }

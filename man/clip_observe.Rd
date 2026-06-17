@@ -17,8 +17,16 @@ clip_observe(input, output, ind, code_expr)
 evaluated, returns content to be copied (such as the output from
 \code{\link[shinymeta:expandChain]{shinymeta::expandChain()}}.}
 }
+\value{
+Called for its side effects; invisibly returns the observer.
+}
 \description{
 Generates an event observer that watches for when a copy button is clicked.
 Upon clicking, the \code{code_expr} is evaluated and copied to the clipboard
 using \code{\link[clipr:write_clip]{clipr::write_clip()}}.
+}
+\examples{
+\dontrun{
+clip_observe(input, output, ind, rlang::expr(get_chunk(ind)))
+}
 }

@@ -15,6 +15,16 @@ df_modal_observe(input, output, ind, df_name)
 
 \item{df_name}{The name of the data.frame to be displayed.}
 }
+\value{
+Called for its side effects; invisibly returns the observer.
+}
 \description{
-Show a modal with a reactable data.frame
+Installs an observer that opens a modal showing a \code{\link[DT:datatable]{DT::datatable()}} of the
+named intermediate dataset when the step's "view data" button is clicked.
+Pair with \code{\link[=df_modal_button]{df_modal_button()}}.
+}
+\examples{
+\dontrun{
+df_modal_observe(input, output, ind, paste0("occs_", ind))
+}
 }

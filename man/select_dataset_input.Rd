@@ -11,6 +11,16 @@ select_dataset_input(ind, label = "Choose a dataset:")
 
 \item{label}{The label for the select input.}
 }
+\value{
+A \code{\link[shiny:selectInput]{shiny::selectInput()}} tag with id \verb{dataset_<ind>}.
+}
 \description{
-Select input to choose a shinypal intermediate dataset
+A \code{\link[shiny:selectInput]{shiny::selectInput()}} listing the intermediate datasets available to
+step \code{ind} (those produced by earlier steps), defaulting to the most
+recent. Keep its choices current with \code{\link[=df_select_observe]{df_select_observe()}}.
+}
+\examples{
+\dontrun{
+select_dataset_input(ind)
+}
 }

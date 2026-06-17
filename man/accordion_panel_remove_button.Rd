@@ -11,6 +11,15 @@ accordion_panel_remove_button(ind, ...)
 
 \item{...}{Additional arguments passed to \code{\link[bslib:accordion_panel]{bslib::accordion_panel()}}.}
 }
+\value{
+A \code{\link[bslib:accordion_panel]{bslib::accordion_panel()}} tag with \code{value = "step_<ind>"} and a
+matching \code{data-rank-id} attribute.
+}
 \description{
-Accordion panel that includes a remove button
+A \code{\link[bslib:accordion_panel]{bslib::accordion_panel()}} pre-wired with a "Remove this step" button and
+the \code{data-rank-id} attribute shinypal's sortable workflow needs. Use it as
+the panel returned by a step's \code{fun_workflow}.
+}
+\examples{
+accordion_panel_remove_button(1, "My step")
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_step.R
 \name{get_colors}
 \alias{get_colors}
-\title{Generate a background color and font color for a step based on its index}
+\title{Generate step colors from a step index}
 \usage{
 get_colors(ind)
 }
@@ -10,9 +10,17 @@ get_colors(ind)
 \item{ind}{The index of the step.}
 }
 \value{
-A list containing the \code{color} and \code{background} CSS styles for the
-step.
+A list with two elements: \code{color}, the foreground color
+(\code{"black"} or \code{"white"}, chosen for contrast against the background), and
+\code{background}, the accent color as a hex string.
 }
 \description{
-Generate a background color and font color for a step based on its index
+Maps a step index to a reproducible accent color (with a readable
+foreground color) drawn from the khroma "smooth rainbow" palette, so each
+workflow step gets a distinct, stable color for its accordion header and
+report border.
+}
+\examples{
+get_colors(1)
+get_colors(2)$background
 }

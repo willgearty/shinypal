@@ -15,3 +15,8 @@ Each call increments a server-side counter. The counter is initialised by
 \code{\link[=shinypal_setup]{shinypal_setup()}} and is deliberately never reset while the session is
 running.
 }
+\examples{
+\dontrun{
+ind <- next_step_index()
+}
+}

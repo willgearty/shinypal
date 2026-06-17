@@ -19,3 +19,9 @@ all currently-registered steps. Use this inside a reactive consumer
 (e.g., \code{renderPrint()}, \code{observeEvent()}) to display or copy a step's
 code. The chunk is rebuilt whenever any dependency changes.
 }
+\examples{
+\dontrun{
+# inside renderPrint() or observeEvent() in a module
+get_chunk(ind)
+}
+}

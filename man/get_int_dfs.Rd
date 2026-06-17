@@ -9,6 +9,18 @@ get_int_dfs(ind)
 \arguments{
 \item{ind}{The index of the step.}
 }
+\value{
+A character vector of intermediate dataset names in workflow order,
+or an empty character vector if none are available upstream.
+}
 \description{
-Get the names of all intermediate data.frames for a given step
+Returns the names of intermediate datasets produced by steps \emph{earlier} than
+\code{ind} in the current workflow order, so a step can only ever consume
+upstream output. Used to populate the dataset selectors.
+}
+\examples{
+\dontrun{
+# inside a reactive or observer in a module, after shinypal_setup()
+get_int_dfs(ind)
+}
 }

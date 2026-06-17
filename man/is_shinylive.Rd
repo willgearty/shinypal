@@ -15,3 +15,6 @@ compiled to WebAssembly via Emscripten) and \code{FALSE} in a normal R session.
 Useful for gating behaviour that can't run in the browser, such as loading
 packages with no WebAssembly build or bundling a downloadable zip.
 }
+\examples{
+is_shinylive()
+}

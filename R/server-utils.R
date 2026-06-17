@@ -3,6 +3,17 @@
 #' @title Get the names of all intermediate data.frames for a given step
 #' @param ind The index of the step.
 #' @importFrom shiny reactiveValuesToList isolate
+#' @description
+#'   Returns the names of intermediate datasets produced by steps *earlier* than
+#'   `ind` in the current workflow order, so a step can only ever consume
+#'   upstream output. Used to populate the dataset selectors.
+#' @returns A character vector of intermediate dataset names in workflow order,
+#'   or an empty character vector if none are available upstream.
+#' @examples
+#' \dontrun{
+#' # inside a reactive or observer in a module, after shinypal_setup()
+#' get_int_dfs(ind)
+#' }
 #' @export
 get_int_dfs <- function(ind) {
   check_setup()
@@ -38,6 +49,15 @@ get_int_dfs <- function(ind) {
 #' @importFrom shiny observeEvent showModal modalDialog
 #' @importFrom DT DTOutput renderDataTable datatable
 #' @importFrom shinycssloaders withSpinner
+#' @description
+#'   Installs an observer that opens a modal showing a [DT::datatable()] of the
+#'   named intermediate dataset when the step's "view data" button is clicked.
+#'   Pair with [df_modal_button()].
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' df_modal_observe(input, output, ind, paste0("occs_", ind))
+#' }
 #' @export
 df_modal_observe <- function(input, output, ind, df_name) {
   check_setup()
@@ -68,6 +88,16 @@ df_modal_observe <- function(input, output, ind, df_name) {
 #' @param ind The index of the step.
 #' @importFrom shiny req observe isolate updateSelectInput
 #' @importFrom rlang `%||%`
+#' @description
+#'   Installs an observer that keeps the step's dataset dropdown
+#'   (`dataset_<ind>`) populated with the available upstream datasets,
+#'   preserving the current selection where possible and otherwise defaulting to
+#'   the most recent one.
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' df_select_observe(input, ind)
+#' }
 #' @export
 df_select_observe <- function(input, ind) {
   check_setup()
@@ -95,6 +125,15 @@ df_select_observe <- function(input, ind) {
 #' @param inputId The id of the [shiny::varSelectInput()] object.
 #' @importFrom shiny req observe isolate updateVarSelectInput
 #' @importFrom rlang as_string
+#' @description
+#'   Installs an observer that keeps a [shiny::varSelectInput()] of column names
+#'   in sync with the dataset currently chosen in the step's `dataset_<ind>`
+#'   dropdown. Pair with [select_dataset_input()] and [select_column_input()].
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' column_select_observe(input, ind, paste0("column_", ind))
+#' }
 #' @export
 column_select_observe <- function(input, ind, inputId) {
   check_setup()
@@ -128,6 +167,11 @@ column_select_observe <- function(input, ind, inputId) {
 #'   [shinymeta::expandChain()].
 #' @importFrom shiny observeEvent
 #' @importFrom clipr write_clip
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' clip_observe(input, output, ind, rlang::expr(get_chunk(ind)))
+#' }
 #' @export
 clip_observe <- function(input, output, ind, code_expr) {
   observeEvent(input[[paste0("copy_", ind)]], {
@@ -137,10 +181,19 @@ clip_observe <- function(input, output, ind, code_expr) {
 
 #' @title Observe a file input to be included in the download bundle
 #' @param input The shiny input object.
-#' @param inputId The id of the [shiny::fileInput()] object.
-#'   of the file in the code.
+#' @param inputId The id of the [shiny::fileInput()] object whose uploaded file
+#'   should be included in the downloadable bundle.
 #' @importFrom shiny observeEvent isolate
 #' @importFrom rlang inject set_names
+#' @description
+#'   Installs an observer that records the file uploaded through `inputId` so it
+#'   is bundled into the downloadable report archive, keyed by the upload's
+#'   original file name.
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' file_observe(input, "user_file")
+#' }
 #' @export
 file_observe <- function(input, inputId) {
   check_setup()
@@ -160,6 +213,11 @@ file_observe <- function(input, inputId) {
 #' @param ind The index of the step.
 #' @returns A code object suitable for printing or passing to
 #'   [shinymeta::displayCodeModal()], or `NULL` if the step is not registered.
+#' @examples
+#' \dontrun{
+#' # inside renderPrint() or observeEvent() in a module
+#' get_chunk(ind)
+#' }
 #' @export
 get_chunk <- function(ind) {
   check_setup()
@@ -175,6 +233,12 @@ get_chunk <- function(ind) {
 #'   Returns `TRUE` if any step in the current workflow cannot be expanded into
 #'   the downloadable script due to failing `req()`/`validate()` checks.
 #' @returns A length-one logical.
+#' @examples
+#' \dontrun{
+#' if (workflow_has_errors()) {
+#'   shiny::showNotification("Some steps are incomplete.")
+#' }
+#' }
 #' @export
 workflow_has_errors <- function() {
   check_setup()
@@ -185,6 +249,15 @@ workflow_has_errors <- function() {
 #' @param obj A reactive data object to store.
 #' @param name A name to store data object as.
 #' @importFrom shiny req
+#' @description
+#'   Stores a reactive data object in shinypal's intermediate-data registry
+#'   under `name`, making it available to later steps and to the assembled
+#'   script. Usually called for you by [add_shinypal_data_step()].
+#' @returns Called for its side effects; invisibly returns `NULL`.
+#' @examples
+#' \dontrun{
+#' set_int_data(occs, paste0("occs_", ind))
+#' }
 #' @export
 set_int_data <- function(obj, name) {
   check_setup()
@@ -195,6 +268,15 @@ set_int_data <- function(obj, name) {
 #' @title Get an intermediate data object
 #' @param name The name of the data object to retrieve.
 #' @importFrom shiny req
+#' @description
+#'   Retrieves a stored intermediate data reactive by name (the counterpart to
+#'   [set_int_data()]). Call the returned reactive to obtain the data.
+#' @returns The stored reactive; call it (e.g. `get_int_data(name)()`) to get
+#'   the data. Propagates a `req()` failure if `name` is not registered.
+#' @examples
+#' \dontrun{
+#' df <- get_int_data(input[[paste0("dataset_", ind)]])()
+#' }
 #' @export
 get_int_data <- function(name) {
   check_setup()
@@ -211,6 +293,10 @@ get_int_data <- function(name) {
 #'   [shinypal_setup()] and is deliberately never reset while the session is
 #'   running.
 #' @returns A single positive integer to use as the new step's index.
+#' @examples
+#' \dontrun{
+#' ind <- next_step_index()
+#' }
 #' @export
 next_step_index <- function() {
   check_setup()

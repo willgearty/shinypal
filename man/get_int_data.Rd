@@ -9,6 +9,16 @@ get_int_data(name)
 \arguments{
 \item{name}{The name of the data object to retrieve.}
 }
+\value{
+The stored reactive; call it (e.g. \code{get_int_data(name)()}) to get
+the data. Propagates a \code{req()} failure if \code{name} is not registered.
+}
 \description{
-Get an intermediate data object
+Retrieves a stored intermediate data reactive by name (the counterpart to
+\code{\link[=set_int_data]{set_int_data()}}). Call the returned reactive to obtain the data.
+}
+\examples{
+\dontrun{
+df <- get_int_data(input[[paste0("dataset_", ind)]])()
+}
 }

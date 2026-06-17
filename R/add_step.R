@@ -23,6 +23,23 @@
 #' @param ec_subs An optional list of length 2, where the first element is a
 #'   metaReactive object and the second element is a callback function. This is
 #'   used to substitute expansion contexts in the code chain.
+#' @returns Called for its side effects and returns `NULL` invisibly. The step
+#'   is registered with shinypal's reactive state (its panel is inserted into
+#'   the workflow accordion, its block appended to the report, its quoted code
+#'   added to the code chain, and its packages recorded), and a remove-button
+#'   observer is installed for it.
+#' @examples
+#' \dontrun{
+#' # inside a module's server.R, which shinypal_setup() sources with local = TRUE
+#' ind <- next_step_index()
+#' add_shinypal_step(
+#'   input, ind,
+#'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Head"),
+#'   fun_report = function(ind) verbatimTextOutput_copy(ind),
+#'   code_chain_list = list(quote(head(mtcars))),
+#'   libs = "utils"
+#' )
+#' }
 #' @importFrom shiny req observeEvent showNotification
 #' @importFrom shiny reactiveValuesToList
 #' @importFrom htmltools div tags
@@ -173,6 +190,23 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
 #'   needs a [df_select_observe()] to keep its dataset dropdown current).
 #' @param column_ids A character vector of column-selector input ids to keep in
 #'   sync via [column_select_observe()] (one per [select_column_input()]).
+#' @returns Called for its side effects and returns `NULL` invisibly. Stores the
+#'   step's data reactive under `occs_<ind>`, wires its code output and
+#'   data-preview modal, registers the step via [add_shinypal_step()], and (when
+#'   requested) installs the dataset/column selector observers.
+#' @examples
+#' \dontrun{
+#' # inside a module's server.R
+#' ind <- next_step_index()
+#' occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+#'   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
+#' })
+#' add_shinypal_data_step(
+#'   input, output, ind, data = occs,
+#'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Subset"),
+#'   fun_report = function(ind) verbatimTextOutput_copy(ind)
+#' )
+#' }
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !!
 #' @export
@@ -238,6 +272,24 @@ add_shinypal_data_step <- function(input, output, ind, data,
 #'   needs a [df_select_observe()] to keep its dataset dropdown current).
 #' @param column_ids A character vector of column-selector input ids to keep in
 #'   sync via [column_select_observe()] (one per [select_column_input()]).
+#' @returns Called for its side effects and returns `NULL` invisibly. Assigns
+#'   the rendered plot to `output[[<output_prefix><ind>]]`, renders the step's
+#'   generated code, registers the step via [add_shinypal_step()], and (when
+#'   requested) installs the dataset/column selector observers.
+#' @examples
+#' \dontrun{
+#' # inside a module's server.R
+#' ind <- next_step_index()
+#' p <- shinymeta::metaRender2(shiny::renderPlot, {
+#'   df <- get_int_data(input[[paste0("dataset_", ind)]])()
+#'   shinymeta::metaExpr(plot(df))
+#' })
+#' add_shinypal_plot_step(
+#'   input, output, ind, plot = p,
+#'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Plot"),
+#'   fun_report = function(ind) shiny::plotOutput(paste0("plot_", ind))
+#' )
+#' }
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !!
 #' @export
@@ -277,10 +329,19 @@ add_shinypal_plot_step <- function(input, output, ind, plot,
 # https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#rainbow
 rainbow_palette <- khroma::color("smooth rainbow")(100, range = c(0.25, 1))
 
-#' Generate a background color and font color for a step based on its index
+#' @title Generate step colors from a step index
+#' @description
+#'   Maps a step index to a reproducible accent color (with a readable
+#'   foreground color) drawn from the khroma "smooth rainbow" palette, so each
+#'   workflow step gets a distinct, stable color for its accordion header and
+#'   report border.
 #' @param ind The index of the step.
-#' @returns A list containing the `color` and `background` CSS styles for the
-#'   step.
+#' @returns A list with two elements: `color`, the foreground color
+#'   (`"black"` or `"white"`, chosen for contrast against the background), and
+#'   `background`, the accent color as a hex string.
+#' @examples
+#' get_colors(1)
+#' get_colors(2)$background
 #' @importFrom grDevices col2rgb
 #' @export
 get_colors <- function(ind) {

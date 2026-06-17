@@ -13,3 +13,10 @@ A length-one logical.
 Returns \code{TRUE} if any step in the current workflow cannot be expanded into
 the downloadable script due to failing \code{req()}/\code{validate()} checks.
 }
+\examples{
+\dontrun{
+if (workflow_has_errors()) {
+  shiny::showNotification("Some steps are incomplete.")
+}
+}
+}

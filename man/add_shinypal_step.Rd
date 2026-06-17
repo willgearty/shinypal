@@ -33,6 +33,13 @@ code_chain().}
 metaReactive object and the second element is a callback function. This is
 used to substitute expansion contexts in the code chain.}
 }
+\value{
+Called for its side effects and returns \code{NULL} invisibly. The step
+is registered with shinypal's reactive state (its panel is inserted into
+the workflow accordion, its block appended to the report, its quoted code
+added to the code chain, and its packages recorded), and a remove-button
+observer is installed for it.
+}
 \description{
 Registers a single step with shinypal's reactive state. It inserts the
 step's panel into the workflow accordion, appends the step's block to
@@ -46,4 +53,17 @@ Most data-producing steps should instead use \code{\link[=add_shinypal_data_step
 which wraps this together with the data storage, code output, and selector
 boilerplate. Call \code{add_shinypal_step()} directly for steps that don't fit
 that pattern.
+}
+\examples{
+\dontrun{
+# inside a module's server.R, which shinypal_setup() sources with local = TRUE
+ind <- next_step_index()
+add_shinypal_step(
+  input, ind,
+  fun_workflow = function(ind) accordion_panel_remove_button(ind, "Head"),
+  fun_report = function(ind) verbatimTextOutput_copy(ind),
+  code_chain_list = list(quote(head(mtcars))),
+  libs = "utils"
+)
+}
 }

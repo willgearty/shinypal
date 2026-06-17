@@ -11,8 +11,14 @@ df_modal_button(ind, text = "View data")
 
 \item{text}{The text to display on the button.}
 }
+\value{
+A \code{\link[shiny:actionButton]{shiny::actionButton()}} with id \verb{df_modal_<ind>}.
+}
 \description{
 Generates a \code{\link[shiny:actionButton]{shiny::actionButton()}} that, when clicked, generates a modal
 for the resulting dataset for the specified step. Make sure to set up a
 corresponding observer using \code{\link[=df_modal_observe]{df_modal_observe()}}.
+}
+\examples{
+df_modal_button(1)
 }

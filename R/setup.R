@@ -14,7 +14,7 @@
 #'   clicks the download button.
 #' @param download_template The path to the Quarto markdown template file that
 #'   will be used to generate the report.
-#' @importFrom shinymeta newExpansionContext expandChain
+#' @importFrom shinymeta newExpansionContext expandChain formatCode
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
 #' @importFrom shiny downloadHandler actionButton icon showNotification
@@ -23,6 +23,18 @@
 #' @importFrom clipr write_clip
 #' @importFrom rlang inject !!!
 #' @importFrom htmltools div tagList
+#' @importFrom rmarkdown pandoc_available
+#' @returns Called for its side effects and returns `NULL` invisibly. It
+#'   initialises shinypal's shared reactive state, renders the live report and
+#'   wires the download handler and workflow observers, then sources each
+#'   module's `ui-aux.R` and `server.R` so their steps become available.
+#' @examples
+#' \dontrun{
+#' server <- function(input, output, session) {
+#'   modules <- list.dirs("./modules", recursive = FALSE)
+#'   shinypal_setup(input, output, session, modules)
+#' }
+#' }
 #' @export
 shinypal_setup <- function(input, output, session, modules,
                            download_filename = "shinypal_script.zip",
@@ -132,7 +144,7 @@ shinypal_setup <- function(input, output, session, modules,
             Filter(f = Negate(is.null)) |>
             list_flatten(),
           # need pandoc to render the rmarkdown file
-          render = rmarkdown::pandoc_available(),
+          render = pandoc_available(),
           render_args = list(output_format = c("html_document", "pdf_document"))
         )
 
@@ -205,6 +217,7 @@ shinypal_setup <- function(input, output, session, modules,
 
 # the following is copied from https://github.com/rstudio/shinymeta/blob/v0.2.1/R/report.R
 # modifications allow it to work with shinylive
+#' @importFrom shinymeta formatCode
 buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
                            include_files = list(), render = TRUE,
                            render_args = list()) {
@@ -244,6 +257,7 @@ buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
   })
 }
 
+#' @importFrom fs path
 build_bundle <- function(input_src, input_filename, output_zip_path,
                          include_files = list(), render = TRUE,
                          render_args = list(), progress) {
@@ -260,7 +274,7 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
 
   x <- shinymeta:::zip_archive()
 
-  dest_filename_full <- fs::path(shinymeta:::archive_basedir(x), input_filename)
+  dest_filename_full <- path(shinymeta:::archive_basedir(x), input_filename)
 
   # TODO: Verify UTF-8 encoding is preserved
   writeLines(input_src, dest_filename_full)
@@ -290,6 +304,8 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
 #'   Useful for gating behaviour that can't run in the browser, such as loading
 #'   packages with no WebAssembly build or bundling a downloadable zip.
 #' @return A length-1 logical: `TRUE` under shinylive/webR, otherwise `FALSE`.
+#' @examples
+#' is_shinylive()
 #' @export
 is_shinylive <- function() { R.Version()$os == "emscripten" }
 

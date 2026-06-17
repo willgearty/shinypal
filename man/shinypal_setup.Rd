@@ -28,6 +28,12 @@ clicks the download button.}
 \item{download_template}{The path to the Quarto markdown template file that
 will be used to generate the report.}
 }
+\value{
+Called for its side effects and returns \code{NULL} invisibly. It
+initialises shinypal's shared reactive state, renders the live report and
+wires the download handler and workflow observers, then sources each
+module's \code{ui-aux.R} and \code{server.R} so their steps become available.
+}
 \description{
 A function to set up the shinypal environment. This function should be
 called at the top of the server function of your shiny app.
@@ -36,4 +42,12 @@ called at the top of the server function of your shiny app.
 Each module should have a \code{ui-aux.R} file that defines the UI elements for
 that module in the "Workflow" accordion and a \code{server.R} file that defines
 the server-side logic for the module.
+}
+\examples{
+\dontrun{
+server <- function(input, output, session) {
+  modules <- list.dirs("./modules", recursive = FALSE)
+  shinypal_setup(input, output, session, modules)
+}
+}
 }
