@@ -47,4 +47,9 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-docs
+
+# local files
+doc/
+
+# quarto files
+/.quarto/
