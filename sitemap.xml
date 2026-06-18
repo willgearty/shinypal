@@ -1,6 +1,8 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>http://williamgearty.com/shinypal/404.html</loc></url>
 <url><loc>http://williamgearty.com/shinypal/LICENSE.html</loc></url>
+<url><loc>http://williamgearty.com/shinypal/articles/index.html</loc></url>
+<url><loc>http://williamgearty.com/shinypal/articles/shinypal.html</loc></url>
 <url><loc>http://williamgearty.com/shinypal/authors.html</loc></url>
 <url><loc>http://williamgearty.com/shinypal/index.html</loc></url>
 <url><loc>http://williamgearty.com/shinypal/reference/accordion_panel_remove_button.html</loc></url>

@@ -44,6 +44,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="articles/shinypal.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -83,7 +84,7 @@
 <li>A small <strong>host app</strong> that calls <code><a href="reference/shinypal_ui.html">shinypal_ui()</a></code> in its UI and <code><a href="reference/shinypal_setup.html">shinypal_setup()</a></code> at the top of its server function, pointing both at a directory of modules.</li>
 <li>One <strong>module</strong> per group of analysis steps. A module is a folder with at least three files: <code>ui-main.R</code> (the panel advertising the steps), <code>ui-aux.R</code> (the interactive workflow components related to those steps), and <code>server.R</code> (which builds the steps’ <a href="https://rstudio.github.io/shinymeta/" class="external-link">shinymeta</a> reactives and registers them via shinypal).</li>
 </ul>
-<p>As steps are added, shinypal keeps a reactive <em>code chain</em> in workflow order, renders each step’s generated code, and assembles a downloadable script or report. See <code>vignette("shinypal")</code> for a walkthrough of building your own app.</p>
+<p>As steps are added, shinypal keeps a reactive <em>code chain</em> in workflow order, renders each step’s generated code, and assembles a downloadable script or report. See <code><a href="articles/shinypal.html">vignette("shinypal")</a></code> for a walkthrough of building your own app.</p>
 </div>
 <div class="section level2">
 <h2 id="funding-and-acknowledgements">Funding and acknowledgements<a class="anchor" aria-label="anchor" href="#funding-and-acknowledgements"></a>

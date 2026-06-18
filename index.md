@@ -38,8 +38,9 @@ A shinypal app has two halves:
 
 As steps are added, shinypal keeps a reactive *code chain* in workflow
 order, renders each step’s generated code, and assembles a downloadable
-script or report. See `vignette("shinypal")` for a walkthrough of
-building your own app.
+script or report. See
+[`vignette("shinypal")`](http://williamgearty.com/shinypal/articles/shinypal.md)
+for a walkthrough of building your own app.
 
 ## Funding and acknowledgements
 
