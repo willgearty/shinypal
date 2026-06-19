@@ -37,7 +37,7 @@ As steps are added, shinypal keeps a reactive *code chain* in workflow order,
 renders each step's generated code, and assembles a downloadable script or
 report. See `vignette("shinypal")` for a walkthrough of building your own app.
 
-## Funding and acknowledgements
+## Funding and acknowledgments
 
 Development of shinypal has been supported by:
 

@@ -25,7 +25,7 @@
 #' @importFrom htmltools div tagList
 #' @importFrom rmarkdown pandoc_available
 #' @returns Called for its side effects and returns `NULL` invisibly. It
-#'   initialises shinypal's shared reactive state, renders the live report and
+#'   initializes shinypal's shared reactive state, renders the live report and
 #'   wires the download handler and workflow observers, then sources each
 #'   module's `ui-aux.R` and `server.R` so their steps become available.
 #' @examples
@@ -301,7 +301,7 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
 #' @description
 #'   Returns `TRUE` when the app is running in a shinylive/webR session (i.e.
 #'   compiled to WebAssembly via Emscripten) and `FALSE` in a normal R session.
-#'   Useful for gating behaviour that can't run in the browser, such as loading
+#'   Useful for gating behavior that can't run in the browser, such as loading
 #'   packages with no WebAssembly build or bundling a downloadable zip.
 #' @return A length-1 logical: `TRUE` under shinylive/webR, otherwise `FALSE`.
 #' @examples

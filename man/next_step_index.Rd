@@ -11,7 +11,7 @@ A single positive integer to use as the new step's index.
 }
 \description{
 Returns a unique, monotonically increasing index for a new workflow step.
-Each call increments a server-side counter. The counter is initialised by
+Each call increments a server-side counter. The counter is initialized by
 \code{\link[=shinypal_setup]{shinypal_setup()}} and is deliberately never reset while the session is
 running.
 }

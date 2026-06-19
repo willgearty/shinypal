@@ -6,6 +6,8 @@
 \alias{shinypal-package}
 \title{shinypal: Tools to Make Modular and Interactive R Workflow Builders}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Provides the building blocks for modular, interactive shiny applications that turn point-and-click pipelines into reproducible R and R Markdown code. Using shinymeta, shinypal assembles code modules into a draggable workflow, shows the equivalent code as the user builds it, and lets them export the whole pipeline as a runnable script or rendered report.
 }
 \seealso{

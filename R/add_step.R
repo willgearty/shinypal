@@ -231,7 +231,7 @@ add_shinypal_data_step <- function(input, output, ind, data,
   clip_observe(input, output, ind, expr(get_chunk(ind)))
   df_modal_observe(input, output, ind, name)
 
-  # register the step with the standard "materialise this step's data" preview
+  # register the step with the standard "materialize this step's data" preview
   add_shinypal_step(
     input, ind, fun_workflow, fun_report,
     list(inject(quote(invisible(get_int_data(paste0("occs_", !!ind))())))),

@@ -289,7 +289,7 @@ get_int_data <- function(name) {
 #' @title Get the next workflow step index
 #' @description
 #'   Returns a unique, monotonically increasing index for a new workflow step.
-#'   Each call increments a server-side counter. The counter is initialised by
+#'   Each call increments a server-side counter. The counter is initialized by
 #'   [shinypal_setup()] and is deliberately never reset while the session is
 #'   running.
 #' @returns A single positive integer to use as the new step's index.

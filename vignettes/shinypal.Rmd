@@ -23,7 +23,7 @@ This vignette walks through building your own.
 
 A shinypal app has two parts:
 
-1. a thin **host app** that lays out the shinypal interface and initialises it,
+1. a thin **host app** that lays out the shinypal interface and initializes it,
    and
 2. a directory of **modules**, one per grouping of analysis steps, that you write.
 
@@ -57,7 +57,7 @@ shiny::shinyApp(ui, server)
 
 `shinypal_ui()` renders two cards (the menu of *possible* steps on the left and
 the draggable *workflow* on the right) plus a sidebar holding the live report
-and a download button. `shinypal_setup()` initialises the shared reactive
+and a download button. `shinypal_setup()` initializes the shared reactive
 state, wires the report and download handler, and sources each module's
 `ui-aux.R` and `server.R`.
 
@@ -67,7 +67,7 @@ Each module is a folder containing at least three files:
 
 | File         | Sourced by          | Purpose                                                           |
 |--------------|---------------------|-------------------------------------------------------------------|
-| `ui-main.R`  | `shinypal_ui()`     | the panel advetising the possible steps included in the module    |
+| `ui-main.R`  | `shinypal_ui()`     | the panel advertising the possible steps included in the module    |
 | `ui-aux.R`   | `shinypal_setup()`  | defines the `fun_workflow` and `fun_report` helpers for the steps |
 | `server.R`   | `shinypal_setup()`  | defines the server logic for each step to the workflow            |
 
@@ -186,7 +186,7 @@ shinypal apps can be exported with
 [shinylive](https://posit-dev.github.io/r-shinylive/) so they run entirely in
 the browser via webR. Because some things behave differently there (e.g., no
 system `zip`, and packages without a WebAssembly build can't load), use
-`is_shinylive()` to gate that behaviour:
+`is_shinylive()` to gate that behavior:
 
 ```{r shinylive}
 # only attempt to load a package that has no WebAssembly build outside webR

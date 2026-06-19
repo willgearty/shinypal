@@ -68,7 +68,7 @@ select_column_input <- function(ind, label = "Choose a column:",
   df_names <- get_int_dfs(ind)
   # guard against being added before any dataset exists
   data <- if (length(df_names) > 0) {
-    # initialise the column choices from the most recent dataset
+    # initialize the column choices from the most recent dataset
     shinypal_env$intermediate_list[[df_names[[length(df_names)]]]]()
   } else {
     data.frame()

@@ -30,7 +30,7 @@ will be used to generate the report.}
 }
 \value{
 Called for its side effects and returns \code{NULL} invisibly. It
-initialises shinypal's shared reactive state, renders the live report and
+initializes shinypal's shared reactive state, renders the live report and
 wires the download handler and workflow observers, then sources each
 module's \code{ui-aux.R} and \code{server.R} so their steps become available.
 }
