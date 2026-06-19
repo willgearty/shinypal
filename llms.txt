@@ -42,7 +42,7 @@ script or report. See
 [`vignette("shinypal")`](http://williamgearty.com/shinypal/articles/shinypal.md)
 for a walkthrough of building your own app.
 
-## Funding and acknowledgements
+## Funding and acknowledgments
 
 Development of shinypal has been supported by:
 

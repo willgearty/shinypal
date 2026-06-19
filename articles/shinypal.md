@@ -9,7 +9,7 @@ vignette walks through building your own.
 A shinypal app has two parts:
 
 1.  a thin **host app** that lays out the shinypal interface and
-    initialises it, and
+    initializes it, and
 2.  a directory of **modules**, one per grouping of analysis steps, that
     you write.
 
@@ -52,7 +52,7 @@ renders two cards (the menu of *possible* steps on the left and the
 draggable *workflow* on the right) plus a sidebar holding the live
 report and a download button.
 [`shinypal_setup()`](http://williamgearty.com/shinypal/reference/shinypal_setup.md)
-initialises the shared reactive state, wires the report and download
+initializes the shared reactive state, wires the report and download
 handler, and sources each module’s `ui-aux.R` and `server.R`.
 
 ## Anatomy of a module
@@ -61,7 +61,7 @@ Each module is a folder containing at least three files:
 
 | File | Sourced by | Purpose |
 |----|----|----|
-| `ui-main.R` | [`shinypal_ui()`](http://williamgearty.com/shinypal/reference/shinypal_ui.md) | the panel advetising the possible steps included in the module |
+| `ui-main.R` | [`shinypal_ui()`](http://williamgearty.com/shinypal/reference/shinypal_ui.md) | the panel advertising the possible steps included in the module |
 | `ui-aux.R` | [`shinypal_setup()`](http://williamgearty.com/shinypal/reference/shinypal_setup.md) | defines the `fun_workflow` and `fun_report` helpers for the steps |
 | `server.R` | [`shinypal_setup()`](http://williamgearty.com/shinypal/reference/shinypal_setup.md) | defines the server logic for each step to the workflow |
 
@@ -193,7 +193,7 @@ entirely in the browser via webR. Because some things behave differently
 there (e.g., no system `zip`, and packages without a WebAssembly build
 can’t load), use
 [`is_shinylive()`](http://williamgearty.com/shinypal/reference/is_shinylive.md)
-to gate that behaviour:
+to gate that behavior:
 
 ``` r
 

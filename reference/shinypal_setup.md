@@ -46,7 +46,7 @@ shinypal_setup(
 
 ## Value
 
-Called for its side effects and returns `NULL` invisibly. It initialises
+Called for its side effects and returns `NULL` invisibly. It initializes
 shinypal's shared reactive state, renders the live report and wires the
 download handler and workflow observers, then sources each module's
 `ui-aux.R` and `server.R` so their steps become available.

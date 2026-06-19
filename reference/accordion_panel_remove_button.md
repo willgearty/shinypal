@@ -35,12 +35,12 @@ tag with `value = "step_<ind>"` and a matching `data-rank-id` attribute.
 accordion_panel_remove_button(1, "My step")
 #> <div class="accordion-item" data-value="step_1" data-rank-id="step_1">
 #>   <div class="accordion-header">
-#>     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bslib-accordion-panel-8188" aria-expanded="false" aria-controls="bslib-accordion-panel-8188">
+#>     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bslib-accordion-panel-2300" aria-expanded="false" aria-controls="bslib-accordion-panel-2300">
 #>       <div class="accordion-icon"></div>
 #>       <div class="accordion-title">My step</div>
 #>     </button>
 #>   </div>
-#>   <div id="bslib-accordion-panel-8188" class="accordion-collapse collapse">
+#>   <div id="bslib-accordion-panel-2300" class="accordion-collapse collapse">
 #>     <div class="accordion-body">
 #>       <button id="remove_step_1" type="button" class="btn btn-default action-button"><span class="action-label">Remove this step</span></button>
 #>     </div>
