@@ -45,7 +45,6 @@
 #' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
-#' @importFrom rlang inject !!
 #' @export
 add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
                               code_chain_list, libs, ec_subs = NULL) {
@@ -84,7 +83,7 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
   # add the packages to the libraries chain
   tmp_list <- shinypal_env$libraries_chain()
   tmp_list[[paste0("step_", ind)]] <-
-    lapply(libs, function(lib) inject(quote(quote(library(!!lib)))))
+    lapply(libs, function(lib) call("library", as.symbol(lib)))
   shinypal_env$libraries_chain(tmp_list)
 
   # add the expansion context substitutions

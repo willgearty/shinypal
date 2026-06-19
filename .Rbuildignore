@@ -4,5 +4,6 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
+^doc$
 ^pkgdown$
 ^\.Rhistory$
