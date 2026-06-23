@@ -7,6 +7,7 @@
 
 # Expand an Rmd template against vars, optionally render it, and zip
 # the result with any include_files.
+#' @keywords internal
 buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
                            include_files = list(), render = TRUE,
                            render_args = list()) {
@@ -40,6 +41,7 @@ buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
 }
 
 # Stage the report and any included files in a private temp dir, then zip it.
+#' @keywords internal
 build_bundle <- function(input_src, input_filename, output_zip_path,
                          include_files = list(), render = TRUE,
                          render_args = list(), progress) {
@@ -84,6 +86,7 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
 # Copy include_files into the staging dir. include_files is a named list whose
 # names are the relative destination paths in the bundle and whose values are
 # the source paths on disk (an empty value means destination == source).
+#' @keywords internal
 add_items <- function(basedir, include_files) {
   if (length(include_files) == 0) {
     return(invisible(basedir))
@@ -104,6 +107,7 @@ add_items <- function(basedir, include_files) {
 
 # Copy a single file or directory to the relative path `target_file` inside the
 # staging dir. A trailing slash on target_file means "into this directory".
+#' @keywords internal
 add_item <- function(basedir, source_file, target_file) {
   stopifnot(is.character(source_file), length(source_file) == 1,
             is.character(target_file), length(target_file) == 1)
@@ -133,6 +137,7 @@ add_item <- function(basedir, source_file, target_file) {
 
 # Zip the staging dir's contents (paths relative to the dir) into output_file.
 #' @importFrom zip zip
+#' @keywords internal
 build_archive <- function(basedir, output_file) {
   zip(
     zipfile = fs::path_abs(output_file),
@@ -145,6 +150,7 @@ build_archive <- function(basedir, output_file) {
 # Render input_file in its own directory so the outputs land beside it. When
 # fork = TRUE, render in a separate process (via callr) so the report's code
 # can't pollute the running app's session; see rstudio/rmarkdown#1204.
+#' @keywords internal
 render_report <- function(input_file, render_args = list(), fork = TRUE) {
   old_wd <- setwd(fs::path_dir(input_file))
   on.exit(setwd(old_wd))
@@ -162,6 +168,7 @@ render_report <- function(input_file, render_args = list(), fork = TRUE) {
 # Run callback(progress) with a shiny Progress object (or a no-op stand-in when
 # there is no reactive session). Closes any stale progress left from a previous
 # failed run, shows errors in the progress bar, then re-raises.
+#' @keywords internal
 with_progress_obj <- function(callback) {
   # Note that `session` may be NULL.
   session <- shiny::getDefaultReactiveDomain()
@@ -184,6 +191,7 @@ with_progress_obj <- function(callback) {
 }
 
 # A shiny::Progress when there is a session, otherwise a no-op stand-in.
+#' @keywords internal
 make_progress <- function(...) {
   session <- shiny::getDefaultReactiveDomain()
   if (!is.null(session)) {
@@ -206,6 +214,7 @@ make_progress <- function(...) {
 #   /foo/report.Rmd.in => report.Rmd
 #   /foo/report.Rmd    => report.Rmd
 #   /foo/report        => report.Rmd
+#' @keywords internal
 template_rename <- function(input_template, extension = "Rmd") {
   stopifnot(is.character(extension), length(extension) == 1, nzchar(extension))
 
@@ -221,6 +230,7 @@ template_rename <- function(input_template, extension = "Rmd") {
 # global env and (2) refuses to expand if doing so adds or removes a knitr
 # code-chunk delimiter, so user-supplied values can't inject new chunks.
 # Adapted from shinymeta:::knit_expand_safe().
+#' @keywords internal
 knit_expand_safe <- function(file, vars = list(),
                              text = xfun::read_utf8(file),
                              delim = c("{{", "}}")) {
@@ -254,6 +264,7 @@ knit_expand_safe <- function(file, vars = list(),
 
 # Total matches of each `pattern` across the character vector `string`. A base-
 # regex equivalent of shinymeta:::count_matches_by_pattern().
+#' @keywords internal
 count_matches_by_pattern <- function(string, pattern) {
   vapply(pattern, function(regex) {
     hits <- gregexpr(regex, string)
