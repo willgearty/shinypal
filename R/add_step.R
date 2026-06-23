@@ -326,7 +326,8 @@ add_shinypal_plot_step <- function(input, output, ind, plot,
 
 # Start at purple instead of off-white
 # https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#rainbow
-rainbow_palette <- khroma::color("smooth rainbow")(100, range = c(0.25, 1))
+#' @importFrom khroma color
+rainbow_palette <- color("smooth rainbow")(100, range = c(0.25, 1))
 
 #' @title Generate step colors from a step index
 #' @description

@@ -16,7 +16,9 @@ Imports:
     grDevices,
     shinycssloaders,
     fs,
-    rmarkdown
+    rmarkdown,
+    callr,
+    xfun
 Suggests:
     knitr,
     testthat (>= 3.0.0)
