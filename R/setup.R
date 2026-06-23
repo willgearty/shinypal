@@ -39,6 +39,10 @@
 shinypal_setup <- function(input, output, session, modules,
                            download_filename = "shinypal_script.zip",
                            download_template = "./modules/test_report.qmd") {
+  # set up per-session state store
+  session$userData$shinypal <- new.env(parent = emptyenv())
+  shinypal_env <- session$userData$shinypal
+
   # shared server objects ####
 
   # a named list of quoted library() calls that go at the very top of the report

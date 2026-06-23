@@ -48,7 +48,7 @@
 #' @export
 add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
                               code_chain_list, libs, ec_subs = NULL) {
-  check_setup()
+  shinypal_env <- check_setup()
   # this is broken for some reason???
   # probably want to use check_required instead
   #req(input, ind, fun_workflow, fun_report, code_chain_list, libs)

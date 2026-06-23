@@ -16,7 +16,7 @@
 #' }
 #' @export
 get_int_dfs <- function(ind) {
-  check_setup()
+  shinypal_env <- check_setup()
   req(ind)
   # we only want two reactive dependencies here: the set of stored names and the
   # workflow order (code_chain). each stored reactive is evaluated inside
@@ -60,7 +60,7 @@ get_int_dfs <- function(ind) {
 #' }
 #' @export
 df_modal_observe <- function(input, output, ind, df_name) {
-  check_setup()
+  shinypal_env <- check_setup()
   req(input, output, ind, df_name)
   observeEvent(input[[paste0("df_modal_", ind)]], {
     showModal(modalDialog(
@@ -196,7 +196,7 @@ clip_observe <- function(input, output, ind, code_expr) {
 #' }
 #' @export
 file_observe <- function(input, inputId) {
-  check_setup()
+  shinypal_env <- check_setup()
   observeEvent(input[[inputId]], {
     file_obj <- isolate(input[[inputId]])
     shinypal_env$include_files[[inputId]] <-
@@ -220,7 +220,7 @@ file_observe <- function(input, inputId) {
 #' }
 #' @export
 get_chunk <- function(ind) {
-  check_setup()
+  shinypal_env <- check_setup()
   chunk <- shinypal_env$chunks()[[paste0("step_", ind)]]
   # re-throw any per-step error so the consuming reactive's req()/validate()
   # semantics handle it normally (silent errors stay silent, etc.)
@@ -241,7 +241,7 @@ get_chunk <- function(ind) {
 #' }
 #' @export
 workflow_has_errors <- function() {
-  check_setup()
+  shinypal_env <- check_setup()
   any(vapply(shinypal_env$chunks(), inherits, logical(1), "condition"))
 }
 
@@ -260,7 +260,7 @@ workflow_has_errors <- function() {
 #' }
 #' @export
 set_int_data <- function(obj, name) {
-  check_setup()
+  shinypal_env <- check_setup()
   req(obj, name)
   shinypal_env$intermediate_list[[name]] <- obj
 }
@@ -279,7 +279,7 @@ set_int_data <- function(obj, name) {
 #' }
 #' @export
 get_int_data <- function(name) {
-  check_setup()
+  shinypal_env <- check_setup()
   req(name)
   # make sure the item still exists in the list
   req(shinypal_env$intermediate_list[[name]])
@@ -299,13 +299,13 @@ get_int_data <- function(name) {
 #' }
 #' @export
 next_step_index <- function() {
-  check_setup()
+  shinypal_env <- check_setup()
   shinypal_env$step_counter <- shinypal_env$step_counter + 1
   shinypal_env$step_counter
 }
 
 clear_workflow <- function() {
-  check_setup()
+  shinypal_env <- check_setup()
   shinypal_env$report_list(tagList())
   shinypal_env$code_chain(list())
   shinypal_env$libraries_chain(list())
