@@ -5,9 +5,8 @@
 # Carson Sievert, and RStudio (now Posit Software, PBC);
 # released under the MIT license
 
-# Expand an Rmd template against vars, then render it and zip the
-# result with any include_files. On shinylive the expanded template
-# is written out directly, because system zip is unavailable.
+# Expand an Rmd template against vars, optionally render it, and zip
+# the result with any include_files.
 buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
                            include_files = list(), render = TRUE,
                            render_args = list()) {
@@ -34,16 +33,9 @@ buildRmdBundle <- function(report_template, output_zip_path, vars = list(),
     rmd_source <- knit_expand_safe(report_template, vars = vars)
     rmd_filename <- template_rename(report_template, "Rmd")
 
-    # WG: can't bundle with shinylive because system(zip) doesn't work
-    if (is_shinylive()) {
-      progress$set(value = 1)
-      writeLines(rmd_source, output_zip_path)
-      return(invisible(output_zip_path))
-    } else {
-      build_bundle(rmd_source, rmd_filename, output_zip_path,
-                   include_files = include_files, render = render,
-                   render_args = render_args, progress = progress)
-    }
+    build_bundle(rmd_source, rmd_filename, output_zip_path,
+                 include_files = include_files, render = render,
+                 render_args = render_args, progress = progress)
   })
 }
 
@@ -140,11 +132,13 @@ add_item <- function(basedir, source_file, target_file) {
 }
 
 # Zip the staging dir's contents (paths relative to the dir) into output_file.
+#' @importFrom zip zip
 build_archive <- function(basedir, output_file) {
-  olddir <- getwd()
-  setwd(basedir)
-  on.exit(setwd(olddir))
-  utils::zip(fs::path_abs(output_file, olddir), ".")
+  zip(
+    zipfile = fs::path_abs(output_file),
+    files = list.files(basedir),
+    root = basedir
+  )
   invisible(output_file)
 }
 

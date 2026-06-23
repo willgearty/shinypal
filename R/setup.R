@@ -113,10 +113,7 @@ shinypal_setup <- function(input, output, session, modules,
   # report download ####
   # handle downloading a zip folder with the markdown script and rendered files
   output$download_script <- downloadHandler(
-    # can't bundle with shinylive because system(zip) doesn't work
-    filename = ifelse(is_shinylive(),
-                      template_rename(download_filename, "Rmd"),
-                      download_filename),
+    filename = download_filename,
     content = function(file) {
       # any unexpected failure (e.g., rendering) is reported to the user instead
       # of producing a broken or empty download
