@@ -11,14 +11,10 @@ and
 ## Usage
 
 ``` r
-column_select_observe(input, ind, inputId)
+column_select_observe(ind, inputId)
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
 
 - ind:
 
@@ -38,6 +34,6 @@ Called for its side effects; invisibly returns the observer.
 
 ``` r
 if (FALSE) { # \dontrun{
-column_select_observe(input, ind, paste0("column_", ind))
+column_select_observe(ind, paste0("column_", ind))
 } # }
 ```

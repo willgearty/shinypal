@@ -7,14 +7,10 @@ upload's original file name.
 ## Usage
 
 ``` r
-file_observe(input, inputId)
+file_observe(inputId)
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
 
 - inputId:
 
@@ -31,6 +27,6 @@ Called for its side effects; invisibly returns the observer.
 
 ``` r
 if (FALSE) { # \dontrun{
-file_observe(input, "user_file")
+file_observe("user_file")
 } # }
 ```

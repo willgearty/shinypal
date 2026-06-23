@@ -17,8 +17,6 @@ data-preview modal; its result is a figure, not a selectable data.frame.
 
 ``` r
 add_shinypal_plot_step(
-  input,
-  output,
   ind,
   plot,
   fun_workflow,
@@ -32,14 +30,6 @@ add_shinypal_plot_step(
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
-
-- output:
-
-  The shiny output object.
 
 - ind:
 
@@ -109,7 +99,7 @@ p <- shinymeta::metaRender2(shiny::renderPlot, {
   shinymeta::metaExpr(plot(df))
 })
 add_shinypal_plot_step(
-  input, output, ind, plot = p,
+  ind, plot = p,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Plot"),
   fun_report = function(ind) shiny::plotOutput(paste0("plot_", ind))
 )

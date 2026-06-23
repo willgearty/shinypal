@@ -9,18 +9,10 @@ clicked. Pair with
 ## Usage
 
 ``` r
-df_modal_observe(input, output, ind, df_name)
+df_modal_observe(ind, df_name)
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
-
-- output:
-
-  The shiny output object.
 
 - ind:
 
@@ -38,6 +30,6 @@ Called for its side effects; invisibly returns the observer.
 
 ``` r
 if (FALSE) { # \dontrun{
-df_modal_observe(input, output, ind, paste0("occs_", ind))
+df_modal_observe(ind, paste0("occs_", ind))
 } # }
 ```

@@ -12,8 +12,6 @@ functions.
 
 ``` r
 add_shinypal_data_step(
-  input,
-  output,
   ind,
   data,
   fun_workflow,
@@ -27,14 +25,6 @@ add_shinypal_data_step(
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
-
-- output:
-
-  The shiny output object.
 
 - ind:
 
@@ -107,7 +97,7 @@ occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 })
 add_shinypal_data_step(
-  input, output, ind, data = occs,
+  ind, data = occs,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Subset"),
   fun_report = function(ind) verbatimTextOutput_copy(ind)
 )

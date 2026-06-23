@@ -133,7 +133,7 @@ shiny::observeEvent(input$add_filter, {
   })
 
   add_shinypal_data_step(
-    input, output, ind,
+    ind,
     data         = data,
     fun_workflow = filter_workflow,
     fun_report   = filter_report,
@@ -167,7 +167,7 @@ plot_render <- shinymeta::metaRender2(shiny::renderPlot, {
 })
 
 add_shinypal_plot_step(
-  input, output, ind,
+  ind,
   plot          = plot_render,
   fun_workflow  = plot_workflow,
   fun_report    = function(ind) shiny::plotOutput(paste0("plot_", ind)),

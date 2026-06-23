@@ -66,8 +66,6 @@ not a selectable data.frame.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_shinypal_plot_step</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  <span class="va">output</span>,</span>
 <span>  <span class="va">ind</span>,</span>
 <span>  <span class="va">plot</span>,</span>
 <span>  <span class="va">fun_workflow</span>,</span>
@@ -84,15 +82,7 @@ not a selectable data.frame.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>The shiny input object.</p></dd>
-
-
-<dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
-<dd><p>The shiny output object.</p></dd>
-
-
-<dt id="arg-ind">ind<a class="anchor" aria-label="anchor" href="#arg-ind"></a></dt>
+<dl><dt id="arg-ind">ind<a class="anchor" aria-label="anchor" href="#arg-ind"></a></dt>
 <dd><p>The index of the step.</p></dd>
 
 
@@ -153,7 +143,7 @@ requested) installs the dataset/column selector observers.</p>
 <span class="r-in"><span>  <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaExpr.html" class="external-link">metaExpr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">add_shinypal_plot_step</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">input</span>, <span class="va">output</span>, <span class="va">ind</span>, plot <span class="op">=</span> <span class="va">p</span>,</span></span>
+<span class="r-in"><span>  <span class="va">ind</span>, plot <span class="op">=</span> <span class="va">p</span>,</span></span>
 <span class="r-in"><span>  fun_workflow <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ind</span><span class="op">)</span> <span class="fu"><a href="accordion_panel_remove_button.html">accordion_panel_remove_button</a></span><span class="op">(</span><span class="va">ind</span>, <span class="st">"Plot"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fun_report <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ind</span><span class="op">)</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"plot_"</span>, <span class="va">ind</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>

@@ -8,18 +8,10 @@ clipboard using
 ## Usage
 
 ``` r
-clip_observe(input, output, ind, code_expr)
+clip_observe(ind, code_expr)
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
-
-- output:
-
-  The shiny output object.
 
 - ind:
 
@@ -40,6 +32,6 @@ Called for its side effects; invisibly returns the observer.
 
 ``` r
 if (FALSE) { # \dontrun{
-clip_observe(input, output, ind, rlang::expr(get_chunk(ind)))
+clip_observe(ind, rlang::expr(get_chunk(ind)))
 } # }
 ```

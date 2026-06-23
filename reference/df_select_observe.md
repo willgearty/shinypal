@@ -8,14 +8,10 @@ to the most recent one.
 ## Usage
 
 ``` r
-df_select_observe(input, ind)
+df_select_observe(ind)
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
 
 - ind:
 
@@ -29,6 +25,6 @@ Called for its side effects; invisibly returns the observer.
 
 ``` r
 if (FALSE) { # \dontrun{
-df_select_observe(input, ind)
+df_select_observe(ind)
 } # }
 ```

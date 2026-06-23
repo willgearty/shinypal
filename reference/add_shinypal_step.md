@@ -18,7 +18,6 @@ don't fit that pattern.
 
 ``` r
 add_shinypal_step(
-  input,
   ind,
   fun_workflow,
   fun_report,
@@ -29,10 +28,6 @@ add_shinypal_step(
 ```
 
 ## Arguments
-
-- input:
-
-  The shiny input object.
 
 - ind:
 
@@ -75,7 +70,7 @@ if (FALSE) { # \dontrun{
 # inside a module's server.R, which shinypal_setup() sources with local = TRUE
 ind <- next_step_index()
 add_shinypal_step(
-  input, ind,
+  ind,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Head"),
   fun_report = function(ind) verbatimTextOutput_copy(ind),
   code_chain_list = list(quote(head(mtcars))),

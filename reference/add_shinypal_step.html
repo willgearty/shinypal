@@ -75,7 +75,6 @@ that pattern.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_shinypal_step</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
 <span>  <span class="va">ind</span>,</span>
 <span>  <span class="va">fun_workflow</span>,</span>
 <span>  <span class="va">fun_report</span>,</span>
@@ -89,11 +88,7 @@ that pattern.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-input">input<a class="anchor" aria-label="anchor" href="#arg-input"></a></dt>
-<dd><p>The shiny input object.</p></dd>
-
-
-<dt id="arg-ind">ind<a class="anchor" aria-label="anchor" href="#arg-ind"></a></dt>
+<dl><dt id="arg-ind">ind<a class="anchor" aria-label="anchor" href="#arg-ind"></a></dt>
 <dd><p>The index of the step.</p></dd>
 
 
@@ -136,7 +131,7 @@ observer is installed for it.</p>
 <span class="r-in"><span><span class="co"># inside a module's server.R, which shinypal_setup() sources with local = TRUE</span></span></span>
 <span class="r-in"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="next_step_index.html">next_step_index</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">add_shinypal_step</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">input</span>, <span class="va">ind</span>,</span></span>
+<span class="r-in"><span>  <span class="va">ind</span>,</span></span>
 <span class="r-in"><span>  fun_workflow <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ind</span><span class="op">)</span> <span class="fu"><a href="accordion_panel_remove_button.html">accordion_panel_remove_button</a></span><span class="op">(</span><span class="va">ind</span>, <span class="st">"Head"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  fun_report <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">ind</span><span class="op">)</span> <span class="fu"><a href="verbatimTextOutput_copy.html">verbatimTextOutput_copy</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  code_chain_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
