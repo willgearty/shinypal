@@ -4,11 +4,9 @@
 \alias{column_select_observe}
 \title{Keep a \code{varSelectInput} of data.frame column names up-to-date}
 \usage{
-column_select_observe(input, ind, inputId)
+column_select_observe(ind, inputId)
 }
 \arguments{
-\item{input}{The shiny input object.}
-
 \item{ind}{The index of the step.}
 
 \item{inputId}{The id of the \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}} object.}
@@ -23,6 +21,6 @@ dropdown. Pair with \code{\link[=select_dataset_input]{select_dataset_input()}} 
 }
 \examples{
 \dontrun{
-column_select_observe(input, ind, paste0("column_", ind))
+column_select_observe(ind, paste0("column_", ind))
 }
 }

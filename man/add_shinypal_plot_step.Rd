@@ -5,8 +5,6 @@
 \title{Register a complete plot-producing step}
 \usage{
 add_shinypal_plot_step(
-  input,
-  output,
   ind,
   plot,
   fun_workflow,
@@ -19,10 +17,6 @@ add_shinypal_plot_step(
 )
 }
 \arguments{
-\item{input}{The shiny input object.}
-
-\item{output}{The shiny output object.}
-
 \item{ind}{The index of the step.}
 
 \item{plot}{A \code{\link[shinymeta:metaRender2]{shinymeta::metaRender2()}} object that renders the plot.}
@@ -74,7 +68,7 @@ p <- shinymeta::metaRender2(shiny::renderPlot, {
   shinymeta::metaExpr(plot(df))
 })
 add_shinypal_plot_step(
-  input, output, ind, plot = p,
+  ind, plot = p,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Plot"),
   fun_report = function(ind) shiny::plotOutput(paste0("plot_", ind))
 )

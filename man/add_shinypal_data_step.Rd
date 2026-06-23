@@ -5,8 +5,6 @@
 \title{Register a complete data-producing step}
 \usage{
 add_shinypal_data_step(
-  input,
-  output,
   ind,
   data,
   fun_workflow,
@@ -19,10 +17,6 @@ add_shinypal_data_step(
 )
 }
 \arguments{
-\item{input}{The shiny input object.}
-
-\item{output}{The shiny output object.}
-
 \item{ind}{The index of the step.}
 
 \item{data}{A \code{\link[shinymeta:metaReactive2]{shinymeta::metaReactive2()}} object produced by the step. It
@@ -73,7 +67,7 @@ occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 })
 add_shinypal_data_step(
-  input, output, ind, data = occs,
+  ind, data = occs,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Subset"),
   fun_report = function(ind) verbatimTextOutput_copy(ind)
 )

@@ -12,7 +12,6 @@
 #'   which wraps this together with the data storage, code output, and selector
 #'   boilerplate. Call `add_shinypal_step()` directly for steps that don't fit
 #'   that pattern.
-#' @param input The shiny input object.
 #' @param ind The index of the step.
 #' @param fun_workflow A function that generates the UI elements for the
 #'   workflow.
@@ -33,7 +32,7 @@
 #' # inside a module's server.R, which shinypal_setup() sources with local = TRUE
 #' ind <- next_step_index()
 #' add_shinypal_step(
-#'   input, ind,
+#'   ind,
 #'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Head"),
 #'   fun_report = function(ind) verbatimTextOutput_copy(ind),
 #'   code_chain_list = list(quote(head(mtcars))),
@@ -46,9 +45,10 @@
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
 #' @export
-add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
+add_shinypal_step <- function(ind, fun_workflow, fun_report,
                               code_chain_list, libs, ec_subs = NULL) {
   shinypal_env <- check_setup()
+  input <- shinypal_env$input
   # this is broken for some reason???
   # probably want to use check_required instead
   #req(input, ind, fun_workflow, fun_report, code_chain_list, libs)
@@ -168,8 +168,6 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
 #'   and (optionally) keeps the dataset dropdown and column selectors in
 #'   sync. A module only supplies the `data` reactive and its UI/report
 #'   functions.
-#' @param input The shiny input object.
-#' @param output The shiny output object.
 #' @param ind The index of the step.
 #' @param data A [shinymeta::metaReactive2()] object produced by the step. It
 #'   should use `varname = paste0("occs_", ind)` so its generated variable name
@@ -201,7 +199,7 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
 #'   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 #' })
 #' add_shinypal_data_step(
-#'   input, output, ind, data = occs,
+#'   ind, data = occs,
 #'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Subset"),
 #'   fun_report = function(ind) verbatimTextOutput_copy(ind)
 #' )
@@ -209,12 +207,13 @@ add_shinypal_step <- function(input, ind, fun_workflow, fun_report,
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !!
 #' @export
-add_shinypal_data_step <- function(input, output, ind, data,
+add_shinypal_data_step <- function(ind, data,
                                    fun_workflow, fun_report,
                                    libs = character(0), code_guard = NULL,
                                    ec_subs = NULL, select_dataset = FALSE,
                                    column_ids = character(0)) {
-  check_setup()
+  shinypal_env <- check_setup()
+  output <- shinypal_env$output
   # every data step stores its result under occs_<ind> and previews it the same
   # way
   name <- paste0("occs_", ind)
@@ -227,19 +226,19 @@ add_shinypal_data_step <- function(input, output, ind, data,
     get_chunk(ind)
   })
 
-  clip_observe(input, output, ind, expr(get_chunk(ind)))
-  df_modal_observe(input, output, ind, name)
+  clip_observe(ind, expr(get_chunk(ind)))
+  df_modal_observe(ind, name)
 
   # register the step with the standard "materialize this step's data" preview
   add_shinypal_step(
-    input, ind, fun_workflow, fun_report,
+    ind, fun_workflow, fun_report,
     list(inject(quote(invisible(get_int_data(paste0("occs_", !!ind))())))),
     libs, ec_subs
   )
 
   # keep the dataset dropdown and any column selectors up to date
-  if (select_dataset) df_select_observe(input, ind)
-  for (id in column_ids) column_select_observe(input, ind, id)
+  if (select_dataset) df_select_observe(ind)
+  for (id in column_ids) column_select_observe(ind, id)
 }
 
 #' @title Register a complete plot-producing step
@@ -253,8 +252,6 @@ add_shinypal_data_step <- function(input, output, ind, data,
 #'   Unlike [add_shinypal_data_step()], a plot step does not store an
 #'   intermediate dataset or show a data-preview modal; its result is a figure,
 #'   not a selectable data.frame.
-#' @param input The shiny input object.
-#' @param output The shiny output object.
 #' @param ind The index of the step.
 #' @param plot A [shinymeta::metaRender2()] object that renders the plot.
 #' @param fun_workflow A function that generates the UI elements for the
@@ -284,7 +281,7 @@ add_shinypal_data_step <- function(input, output, ind, data,
 #'   shinymeta::metaExpr(plot(df))
 #' })
 #' add_shinypal_plot_step(
-#'   input, output, ind, plot = p,
+#'   ind, plot = p,
 #'   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Plot"),
 #'   fun_report = function(ind) shiny::plotOutput(paste0("plot_", ind))
 #' )
@@ -292,13 +289,14 @@ add_shinypal_data_step <- function(input, output, ind, data,
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !!
 #' @export
-add_shinypal_plot_step <- function(input, output, ind, plot,
+add_shinypal_plot_step <- function(ind, plot,
                                    fun_workflow, fun_report,
                                    libs = character(0), code_guard = NULL,
                                    output_prefix = "plot_",
                                    select_dataset = TRUE,
                                    column_ids = character(0)) {
-  check_setup()
+  shinypal_env <- check_setup()
+  output <- shinypal_env$output
   # the rendered plot lives in output[[<output_prefix><ind>]]; the report's
   # plotOutput() and the code chain reference that same slot
   output[[paste0(output_prefix, ind)]] <- plot
@@ -310,18 +308,18 @@ add_shinypal_plot_step <- function(input, output, ind, plot,
     get_chunk(ind)
   })
 
-  clip_observe(input, output, ind, expr(get_chunk(ind)))
+  clip_observe(ind, expr(get_chunk(ind)))
 
   # register the step; the code chain renders this step's plot output
   add_shinypal_step(
-    input, ind, fun_workflow, fun_report,
+    ind, fun_workflow, fun_report,
     list(inject(quote(output[[paste0(!!output_prefix, !!ind)]]()))),
     libs
   )
 
   # keep the dataset dropdown and any column selectors up to date
-  if (select_dataset) df_select_observe(input, ind)
-  for (id in column_ids) column_select_observe(input, ind, id)
+  if (select_dataset) df_select_observe(ind)
+  for (id in column_ids) column_select_observe(ind, id)
 }
 
 # Start at purple instead of off-white

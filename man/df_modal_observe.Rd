@@ -4,13 +4,9 @@
 \alias{df_modal_observe}
 \title{Show a modal with a reactable data.frame}
 \usage{
-df_modal_observe(input, output, ind, df_name)
+df_modal_observe(ind, df_name)
 }
 \arguments{
-\item{input}{The shiny input object.}
-
-\item{output}{The shiny output object.}
-
 \item{ind}{The index of the step.}
 
 \item{df_name}{The name of the data.frame to be displayed.}
@@ -25,6 +21,6 @@ Pair with \code{\link[=df_modal_button]{df_modal_button()}}.
 }
 \examples{
 \dontrun{
-df_modal_observe(input, output, ind, paste0("occs_", ind))
+df_modal_observe(ind, paste0("occs_", ind))
 }
 }

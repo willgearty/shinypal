@@ -4,11 +4,9 @@
 \alias{df_select_observe}
 \title{Keep a \code{selectInput} of intermediate data.frames up-to-date}
 \usage{
-df_select_observe(input, ind)
+df_select_observe(ind)
 }
 \arguments{
-\item{input}{The shiny input object.}
-
 \item{ind}{The index of the step.}
 }
 \value{
@@ -22,6 +20,6 @@ the most recent one.
 }
 \examples{
 \dontrun{
-df_select_observe(input, ind)
+df_select_observe(ind)
 }
 }

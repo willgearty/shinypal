@@ -4,11 +4,9 @@
 \alias{file_observe}
 \title{Observe a file input to be included in the download bundle}
 \usage{
-file_observe(input, inputId)
+file_observe(inputId)
 }
 \arguments{
-\item{input}{The shiny input object.}
-
 \item{inputId}{The id of the \code{\link[shiny:fileInput]{shiny::fileInput()}} object whose uploaded file
 should be included in the downloadable bundle.}
 }
@@ -22,6 +20,6 @@ original file name.
 }
 \examples{
 \dontrun{
-file_observe(input, "user_file")
+file_observe("user_file")
 }
 }

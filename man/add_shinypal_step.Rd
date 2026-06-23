@@ -5,7 +5,6 @@
 \title{Add a step to the report, workflow, and the code chain}
 \usage{
 add_shinypal_step(
-  input,
   ind,
   fun_workflow,
   fun_report,
@@ -15,8 +14,6 @@ add_shinypal_step(
 )
 }
 \arguments{
-\item{input}{The shiny input object.}
-
 \item{ind}{The index of the step.}
 
 \item{fun_workflow}{A function that generates the UI elements for the
@@ -59,7 +56,7 @@ that pattern.
 # inside a module's server.R, which shinypal_setup() sources with local = TRUE
 ind <- next_step_index()
 add_shinypal_step(
-  input, ind,
+  ind,
   fun_workflow = function(ind) accordion_panel_remove_button(ind, "Head"),
   fun_report = function(ind) verbatimTextOutput_copy(ind),
   code_chain_list = list(quote(head(mtcars))),

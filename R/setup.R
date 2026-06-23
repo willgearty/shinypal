@@ -43,6 +43,11 @@ shinypal_setup <- function(input, output, session, modules,
   session$userData$shinypal <- new.env(parent = emptyenv())
   shinypal_env <- session$userData$shinypal
 
+  # stash input/output so the helpers can read them from the env instead of
+  # taking them as arguments
+  shinypal_env$input <- input
+  shinypal_env$output <- output
+
   # shared server objects ####
 
   # a named list of quoted library() calls that go at the very top of the report
