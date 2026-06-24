@@ -47,7 +47,8 @@
 #' @importFrom bslib accordion_panel_remove
 #' @export
 add_shinypal_step <- function(ind, fun_workflow, fun_report,
-                              code_chain_list, libs, ec_subs = NULL) {
+                              code_chain_list, libs = character(0),
+                              ec_subs = NULL) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
   check_required(ind)
@@ -208,7 +209,7 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #' )
 #' }
 #' @importFrom shiny renderPrint
-#' @importFrom rlang expr inject !!
+#' @importFrom rlang expr inject !! check_required
 #' @export
 add_shinypal_data_step <- function(ind, data,
                                    fun_workflow, fun_report,
@@ -217,6 +218,11 @@ add_shinypal_data_step <- function(ind, data,
                                    column_ids = character(0)) {
   shinypal_env <- check_setup()
   output <- shinypal_env$output
+  # validate that the required args were supplied
+  check_required(ind)
+  check_required(data)
+  check_required(fun_workflow)
+  check_required(fun_report)
   # every data step stores its result under occs_<ind> and previews it the same
   # way
   name <- paste0("occs_", ind)
@@ -290,7 +296,7 @@ add_shinypal_data_step <- function(ind, data,
 #' )
 #' }
 #' @importFrom shiny renderPrint
-#' @importFrom rlang expr inject !!
+#' @importFrom rlang expr inject !! check_required
 #' @export
 add_shinypal_plot_step <- function(ind, plot,
                                    fun_workflow, fun_report,
@@ -300,6 +306,11 @@ add_shinypal_plot_step <- function(ind, plot,
                                    column_ids = character(0)) {
   shinypal_env <- check_setup()
   output <- shinypal_env$output
+  # validate that the required args were supplied
+  check_required(ind)
+  check_required(plot)
+  check_required(fun_workflow)
+  check_required(fun_report)
   # the rendered plot lives in output[[<output_prefix><ind>]]; the report's
   # plotOutput() and the code chain reference that same slot
   output[[paste0(output_prefix, ind)]] <- plot
