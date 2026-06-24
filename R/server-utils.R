@@ -7,8 +7,10 @@
 #'   Returns the names of intermediate datasets produced by steps *earlier* than
 #'   `ind` in the current workflow order, so a step can only ever consume
 #'   upstream output. Used to populate the dataset selectors.
-#' @returns A character vector of intermediate dataset names in workflow order,
-#'   or an empty character vector if none are available upstream.
+#' @returns A named character vector of intermediate datasets in workflow
+#'   order: values are the stable internal ids (`occs_<ind>`) and names are the
+#'   display labels (a custom name if set, otherwise the id). Empty if none are
+#'   available upstream.
 #' @examples
 #' \dontrun{
 #' # inside a reactive or observer in a module, after shinypal_setup()
@@ -18,10 +20,11 @@
 get_int_dfs <- function(ind) {
   shinypal_env <- check_setup()
   req(ind)
-  # we only want two reactive dependencies here: the set of stored names and the
-  # workflow order (code_chain). each stored reactive is evaluated inside
-  # isolate() so refreshing the dataset choices neither depends on every
-  # dataset's value nor recomputes it.
+  # we want a small, intentional set of reactive dependencies here: the set of
+  # stored names, the workflow order (code_chain), and the custom display names
+  # (var_names, read below). each stored reactive is evaluated inside isolate()
+  # so refreshing the dataset choices neither depends on every dataset's value
+  # nor recomputes it.
   lst <- reactiveValuesToList(shinypal_env$intermediate_list)
   # restrict choices to datasets produced by steps *earlier* than this one in
   # the current workflow order, so a step can never consume a later step's (or
@@ -37,8 +40,16 @@ get_int_dfs <- function(ind) {
     Filter(f = Negate(is.null)) |>
     Filter(f = function(el) is.data.frame(isolate(el()))) |>
     names()
-  # return the names in workflow order
-  dfs[order(match(sub(".*_(\\d+)$", "\\1", dfs), earlier_inds))]
+  # put the ids in workflow order
+  dfs <- dfs[order(match(sub(".*_(\\d+)$", "\\1", dfs), earlier_inds))]
+  # attach display labels: a custom name from var_names if set, otherwise the
+  # id itself
+  labels <- vapply(dfs, function(id) {
+    nm <- shinypal_env$var_names[[id]]
+    if (is.null(nm) || !nzchar(nm)) id else nm
+  }, character(1))
+  names(dfs) <- labels
+  dfs
 }
 
 #' @title Show a modal with a reactable data.frame
@@ -315,5 +326,8 @@ clear_workflow <- function() {
   }
   for (name in names(reactiveValuesToList(shinypal_env$include_files))) {
     shinypal_env$include_files[[name]] <- NULL
+  }
+  for (name in names(reactiveValuesToList(shinypal_env$var_names))) {
+    shinypal_env$var_names[[name]] <- NULL
   }
 }

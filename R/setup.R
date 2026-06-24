@@ -72,6 +72,9 @@ shinypal_setup <- function(input, output, session, modules,
   # unordered, named list of files to include in the download bundle
   shinypal_env$include_files <- reactiveValues()
 
+  # custom display/script names for intermediate datasets
+  shinypal_env$var_names <- reactiveValues()
+
   # monotonically increasing counter that hands out unique step indices via
   # next_step_index()
   shinypal_env$step_counter <- 0
