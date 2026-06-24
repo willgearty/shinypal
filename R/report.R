@@ -52,7 +52,6 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
   force(render)
   force(render_args)
 
-  # TODO: validate args
   progress$set(value = 0.2)
   progress$set(message = "Adding items to zip archive")
 
@@ -63,8 +62,7 @@ build_bundle <- function(input_src, input_filename, output_zip_path,
 
   dest_filename_full <- fs::path(basedir, input_filename)
 
-  # TODO: Verify UTF-8 encoding is preserved
-  writeLines(input_src, dest_filename_full)
+  xfun::write_utf8(input_src, dest_filename_full)
 
   add_items(basedir, include_files)
 
