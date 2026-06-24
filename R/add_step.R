@@ -39,8 +39,9 @@
 #'   libs = "utils"
 #' )
 #' }
-#' @importFrom shiny req observeEvent showNotification
+#' @importFrom shiny observeEvent showNotification
 #' @importFrom shiny reactiveValuesToList
+#' @importFrom rlang check_required
 #' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
@@ -49,9 +50,11 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
                               code_chain_list, libs, ec_subs = NULL) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
-  # this is broken for some reason???
-  # probably want to use check_required instead
-  #req(input, ind, fun_workflow, fun_report, code_chain_list, libs)
+  check_required(ind)
+  check_required(fun_workflow)
+  check_required(fun_report)
+  check_required(code_chain_list)
+  check_required(libs)
 
   colors <- get_colors(ind)
 
