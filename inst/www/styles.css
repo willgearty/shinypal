@@ -94,3 +94,16 @@ pre.shiny-text-output {
     display: none;
   }
 }
+
+/* Pin the download button to the top of the (scrolling) sidebar so it stays
+   reachable as the report grows. */
+.shinypal-download {
+  position: sticky;
+  top: 5px;
+  z-index: 5;
+  text-align: center;
+  padding-block: 0.5rem;
+  margin-top: -65px;
+  margin-left: 35px;
+  margin-right: 35px;
+}

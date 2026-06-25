@@ -67,7 +67,10 @@ shinypal_ui <- function(modules) {
         style = css(grid_template_columns = "1fr 2fr")
       ),
       sidebar = sidebar(
-        downloadButton("download_script", "Download script"),
+        div(
+          downloadButton("download_script", "Download script"),
+          class = "shinypal-download" # sticky
+        ),
         uiOutput("report"),
         width = "30%", position = "right",
         # use a custom resizable handle instead of the bslib built-in option
