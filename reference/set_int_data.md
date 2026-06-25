@@ -25,6 +25,12 @@ set_int_data(obj, name)
 
 Called for its side effects; invisibly returns `NULL`.
 
+## See also
+
+Other intermediate data:
+[`get_int_data()`](http://williamgearty.com/shinypal/reference/get_int_data.md),
+[`get_int_dfs()`](http://williamgearty.com/shinypal/reference/get_int_dfs.md)
+
 ## Examples
 
 ``` r

@@ -23,6 +23,11 @@ A code object suitable for printing or passing to
 [`shinymeta::displayCodeModal()`](https://rstudio.github.io/shinymeta/reference/displayCodeModal.html),
 or `NULL` if the step is not registered.
 
+## See also
+
+Other generated code:
+[`workflow_has_errors()`](http://williamgearty.com/shinypal/reference/workflow_has_errors.md)
+
 ## Examples
 
 ``` r

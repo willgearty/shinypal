@@ -16,6 +16,11 @@ is_shinylive()
 
 A length-1 logical: `TRUE` under shinylive/webR, otherwise `FALSE`.
 
+## See also
+
+Other utilities:
+[`get_colors()`](http://williamgearty.com/shinypal/reference/get_colors.md)
+
 ## Examples
 
 ``` r

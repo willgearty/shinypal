@@ -28,6 +28,18 @@ clip_observe(ind, code_expr)
 
 Called for its side effects; invisibly returns the observer.
 
+## See also
+
+[`verbatimTextOutput_copy()`](http://williamgearty.com/shinypal/reference/verbatimTextOutput_copy.md),
+whose copy button it wires.
+
+Other step observers:
+[`column_select_observe()`](http://williamgearty.com/shinypal/reference/column_select_observe.md),
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+[`df_select_observe()`](http://williamgearty.com/shinypal/reference/df_select_observe.md),
+[`file_observe()`](http://williamgearty.com/shinypal/reference/file_observe.md),
+[`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md)
+
 ## Examples
 
 ``` r

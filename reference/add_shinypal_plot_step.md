@@ -88,6 +88,13 @@ generated code, registers the step via
 [`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md),
 and (when requested) installs the dataset/column selector observers.
 
+## See also
+
+Other workflow steps:
+[`add_shinypal_data_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_data_step.md),
+[`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md),
+[`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md)
+
 ## Examples
 
 ``` r

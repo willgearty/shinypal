@@ -23,6 +23,12 @@ values are the stable internal ids (`occs_<ind>`) and names are the
 display labels (a custom name if set, otherwise the id). Empty if none
 are available upstream.
 
+## See also
+
+Other intermediate data:
+[`get_int_data()`](http://williamgearty.com/shinypal/reference/get_int_data.md),
+[`set_int_data()`](http://williamgearty.com/shinypal/reference/set_int_data.md)
+
 ## Examples
 
 ``` r

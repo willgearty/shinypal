@@ -28,6 +28,18 @@ A
 [`shiny::actionButton()`](https://rdrr.io/pkg/shiny/man/actionButton.html)
 with id `df_modal_<ind>`.
 
+## See also
+
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+which opens the modal this button triggers.
+
+Other step UI:
+[`accordion_panel_remove_button()`](http://williamgearty.com/shinypal/reference/accordion_panel_remove_button.md),
+[`select_column_input()`](http://williamgearty.com/shinypal/reference/select_column_input.md),
+[`select_dataset_input()`](http://williamgearty.com/shinypal/reference/select_dataset_input.md),
+[`varname_input()`](http://williamgearty.com/shinypal/reference/varname_input.md),
+[`verbatimTextOutput_copy()`](http://williamgearty.com/shinypal/reference/verbatimTextOutput_copy.md)
+
 ## Examples
 
 ``` r

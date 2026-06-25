@@ -22,6 +22,12 @@ get_int_data(name)
 The stored reactive; call it (e.g. `get_int_data(name)()`) to get the
 data. Propagates a `req()` failure if `name` is not registered.
 
+## See also
+
+Other intermediate data:
+[`get_int_dfs()`](http://williamgearty.com/shinypal/reference/get_int_dfs.md),
+[`set_int_data()`](http://williamgearty.com/shinypal/reference/set_int_data.md)
+
 ## Examples
 
 ``` r

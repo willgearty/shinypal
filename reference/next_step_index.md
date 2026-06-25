@@ -16,6 +16,13 @@ next_step_index()
 
 A single positive integer to use as the new step's index.
 
+## See also
+
+Other workflow steps:
+[`add_shinypal_data_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_data_step.md),
+[`add_shinypal_plot_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_plot_step.md),
+[`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md)
+
 ## Examples
 
 ``` r

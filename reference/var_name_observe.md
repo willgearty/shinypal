@@ -22,6 +22,18 @@ var_name_observe(ind)
 
 Called for its side effects; invisibly returns the observer.
 
+## See also
+
+[`varname_input()`](http://williamgearty.com/shinypal/reference/varname_input.md),
+the input this observer watches.
+
+Other step observers:
+[`clip_observe()`](http://williamgearty.com/shinypal/reference/clip_observe.md),
+[`column_select_observe()`](http://williamgearty.com/shinypal/reference/column_select_observe.md),
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+[`df_select_observe()`](http://williamgearty.com/shinypal/reference/df_select_observe.md),
+[`file_observe()`](http://williamgearty.com/shinypal/reference/file_observe.md)
+
 ## Examples
 
 ``` r

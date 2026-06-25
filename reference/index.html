@@ -37,9 +37,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="setting-up-an-app">Setting up an app<a class="anchor" aria-label="anchor" href="#setting-up-an-app"></a></h2>
 
-
+      <div class="section-desc"><p>Entry points you call once to build the interface and wire its server.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -48,12 +48,28 @@
 
       <dl><dt>
 
-          <code><a href="accordion_panel_remove_button.html">accordion_panel_remove_button()</a></code>
+          <code><a href="shinypal_setup.html">shinypal_setup()</a></code>
 
         </dt>
-        <dd>Accordion panel that includes a remove button</dd>
+        <dd>Setup shinypal</dd>
 
         <dt>
+
+          <code><a href="shinypal_ui.html">shinypal_ui()</a></code>
+
+        </dt>
+        <dd>UI for ShinyPal</dd>
+      </dl></div><div class="section level2">
+      <h2 id="defining-workflow-steps">Defining workflow steps<a class="anchor" aria-label="anchor" href="#defining-workflow-steps"></a></h2>
+
+      <div class="section-desc"><p>The builder API for registering a step, plus the per-step index helper.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="add_shinypal_data_step.html">add_shinypal_data_step()</a></code>
 
@@ -76,6 +92,73 @@
 
         <dt>
 
+          <code><a href="next_step_index.html">next_step_index()</a></code>
+
+        </dt>
+        <dd>Get the next workflow step index</dd>
+      </dl></div><div class="section level2">
+      <h2 id="step-ui-components">Step UI components<a class="anchor" aria-label="anchor" href="#step-ui-components"></a></h2>
+
+      <div class="section-desc"><p>Inputs and buttons a module drops into a step’s panel.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="accordion_panel_remove_button.html">accordion_panel_remove_button()</a></code>
+
+        </dt>
+        <dd>Accordion panel that includes a remove button</dd>
+
+        <dt>
+
+          <code><a href="df_modal_button.html">df_modal_button()</a></code>
+
+        </dt>
+        <dd>Button to show dataframe modal</dd>
+
+        <dt>
+
+          <code><a href="select_column_input.html">select_column_input()</a></code>
+
+        </dt>
+        <dd>Select input to choose a column from a specified dataset</dd>
+
+        <dt>
+
+          <code><a href="select_dataset_input.html">select_dataset_input()</a></code>
+
+        </dt>
+        <dd>Select input to choose a shinypal intermediate dataset</dd>
+
+        <dt>
+
+          <code><a href="varname_input.html">varname_input()</a></code>
+
+        </dt>
+        <dd>Text input to give a step's dataset a custom name</dd>
+
+        <dt>
+
+          <code><a href="verbatimTextOutput_copy.html">verbatimTextOutput_copy()</a></code>
+
+        </dt>
+        <dd>Text element with a button to copy the code to the clipboard</dd>
+      </dl></div><div class="section level2">
+      <h2 id="step-server-observers">Step server observers<a class="anchor" aria-label="anchor" href="#step-server-observers"></a></h2>
+
+      <div class="section-desc"><p>Wiring that keeps each component live and in sync.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
           <code><a href="clip_observe.html">clip_observe()</a></code>
 
         </dt>
@@ -87,13 +170,6 @@
 
         </dt>
         <dd>Keep a <code>varSelectInput</code> of data.frame column names up-to-date</dd>
-
-        <dt>
-
-          <code><a href="df_modal_button.html">df_modal_button()</a></code>
-
-        </dt>
-        <dd>Button to show dataframe modal</dd>
 
         <dt>
 
@@ -118,19 +194,21 @@
 
         <dt>
 
-          <code><a href="get_chunk.html">get_chunk()</a></code>
+          <code><a href="var_name_observe.html">var_name_observe()</a></code>
 
         </dt>
-        <dd>Get the expanded code chunk for a registered step</dd>
+        <dd>Validate and store a custom name for a step's dataset</dd>
+      </dl></div><div class="section level2">
+      <h2 id="intermediate-data">Intermediate data<a class="anchor" aria-label="anchor" href="#intermediate-data"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Storing and retrieving the datasets passed between steps.</p></div>
 
-          <code><a href="get_colors.html">get_colors()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Generate step colors from a step index</dd>
 
-        <dt>
+
+
+      <dl><dt>
 
           <code><a href="get_int_data.html">get_int_data()</a></code>
 
@@ -146,73 +224,26 @@
 
         <dt>
 
-          <code><a href="is_shinylive.html">is_shinylive()</a></code>
-
-        </dt>
-        <dd>Detect a shinylive (webR) session</dd>
-
-        <dt>
-
-          <code><a href="next_step_index.html">next_step_index()</a></code>
-
-        </dt>
-        <dd>Get the next workflow step index</dd>
-
-        <dt>
-
-          <code><a href="select_column_input.html">select_column_input()</a></code>
-
-        </dt>
-        <dd>Select input to choose a column from a specified dataset</dd>
-
-        <dt>
-
-          <code><a href="select_dataset_input.html">select_dataset_input()</a></code>
-
-        </dt>
-        <dd>Select input to choose a shinypal intermediate dataset</dd>
-
-        <dt>
-
           <code><a href="set_int_data.html">set_int_data()</a></code>
 
         </dt>
         <dd>Set an intermediate data object</dd>
+      </dl></div><div class="section level2">
+      <h2 id="generated-code-reports">Generated code &amp; reports<a class="anchor" aria-label="anchor" href="#generated-code-reports"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Inspecting the code a workflow produces.</p></div>
 
-          <code><a href="shinypal_setup.html">shinypal_setup()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Setup shinypal</dd>
 
-        <dt>
 
-          <code><a href="shinypal_ui.html">shinypal_ui()</a></code>
 
-        </dt>
-        <dd>UI for ShinyPal</dd>
+      <dl><dt>
 
-        <dt>
-
-          <code><a href="var_name_observe.html">var_name_observe()</a></code>
+          <code><a href="get_chunk.html">get_chunk()</a></code>
 
         </dt>
-        <dd>Validate and store a custom name for a step's dataset</dd>
-
-        <dt>
-
-          <code><a href="varname_input.html">varname_input()</a></code>
-
-        </dt>
-        <dd>Text input to give a step's dataset a custom name</dd>
-
-        <dt>
-
-          <code><a href="verbatimTextOutput_copy.html">verbatimTextOutput_copy()</a></code>
-
-        </dt>
-        <dd>Text element with a button to copy the code to the clipboard</dd>
+        <dd>Get the expanded code chunk for a registered step</dd>
 
         <dt>
 
@@ -220,8 +251,32 @@
 
         </dt>
         <dd>Check whether the workflow has incomplete or errored steps</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
+
+      <div class="section-desc"><p>Environment detection and other helpers.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="get_colors.html">get_colors()</a></code>
+
+        </dt>
+        <dd>Generate step colors from a step index</dd>
+
+        <dt>
+
+          <code><a href="is_shinylive.html">is_shinylive()</a></code>
+
+        </dt>
+        <dd>Detect a shinylive (webR) session</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

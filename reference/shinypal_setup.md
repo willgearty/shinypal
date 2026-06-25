@@ -57,6 +57,11 @@ Each module should have a `ui-aux.R` file that defines the UI elements
 for that module in the "Workflow" accordion and a `server.R` file that
 defines the server-side logic for the module.
 
+## See also
+
+Other app setup:
+[`shinypal_ui()`](http://williamgearty.com/shinypal/reference/shinypal_ui.md)
+
 ## Examples
 
 ``` r

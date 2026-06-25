@@ -21,6 +21,18 @@ df_select_observe(ind)
 
 Called for its side effects; invisibly returns the observer.
 
+## See also
+
+[`select_dataset_input()`](http://williamgearty.com/shinypal/reference/select_dataset_input.md),
+the dropdown this observer updates.
+
+Other step observers:
+[`clip_observe()`](http://williamgearty.com/shinypal/reference/clip_observe.md),
+[`column_select_observe()`](http://williamgearty.com/shinypal/reference/column_select_observe.md),
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+[`file_observe()`](http://williamgearty.com/shinypal/reference/file_observe.md),
+[`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md)
+
 ## Examples
 
 ``` r

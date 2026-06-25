@@ -23,6 +23,11 @@ A list with two elements: `color`, the foreground color (`"black"` or
 `"white"`, chosen for contrast against the background), and
 `background`, the accent color as a hex string.
 
+## See also
+
+Other utilities:
+[`is_shinylive()`](http://williamgearty.com/shinypal/reference/is_shinylive.md)
+
 ## Examples
 
 ``` r

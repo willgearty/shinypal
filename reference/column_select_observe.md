@@ -30,6 +30,18 @@ column_select_observe(ind, inputId)
 
 Called for its side effects; invisibly returns the observer.
 
+## See also
+
+[`select_column_input()`](http://williamgearty.com/shinypal/reference/select_column_input.md),
+the selector this observer updates.
+
+Other step observers:
+[`clip_observe()`](http://williamgearty.com/shinypal/reference/clip_observe.md),
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+[`df_select_observe()`](http://williamgearty.com/shinypal/reference/df_select_observe.md),
+[`file_observe()`](http://williamgearty.com/shinypal/reference/file_observe.md),
+[`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md)
+
 ## Examples
 
 ``` r

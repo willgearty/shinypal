@@ -31,6 +31,18 @@ wrapping a
 [`shiny::actionButton()`](https://rdrr.io/pkg/shiny/man/actionButton.html)
 (id `copy_<ind>`).
 
+## See also
+
+[`clip_observe()`](http://williamgearty.com/shinypal/reference/clip_observe.md),
+which copies the displayed code to the clipboard.
+
+Other step UI:
+[`accordion_panel_remove_button()`](http://williamgearty.com/shinypal/reference/accordion_panel_remove_button.md),
+[`df_modal_button()`](http://williamgearty.com/shinypal/reference/df_modal_button.md),
+[`select_column_input()`](http://williamgearty.com/shinypal/reference/select_column_input.md),
+[`select_dataset_input()`](http://williamgearty.com/shinypal/reference/select_dataset_input.md),
+[`varname_input()`](http://williamgearty.com/shinypal/reference/varname_input.md)
+
 ## Examples
 
 ``` r

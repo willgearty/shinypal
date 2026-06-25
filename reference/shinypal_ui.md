@@ -31,6 +31,11 @@ panel.
 Each module should have a `ui-main.R` file that defines the UI elements
 for that module in the "Steps" accordion.
 
+## See also
+
+Other app setup:
+[`shinypal_setup()`](http://williamgearty.com/shinypal/reference/shinypal_setup.md)
+
 ## Examples
 
 ``` r

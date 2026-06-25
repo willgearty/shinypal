@@ -13,6 +13,11 @@ workflow_has_errors()
 
 A length-one logical.
 
+## See also
+
+Other generated code:
+[`get_chunk()`](http://williamgearty.com/shinypal/reference/get_chunk.md)
+
 ## Examples
 
 ``` r

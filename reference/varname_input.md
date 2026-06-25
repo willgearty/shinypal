@@ -30,6 +30,18 @@ varname_input(ind, label = "Name this dataset (optional):")
 A [`shiny::textInput()`](https://rdrr.io/pkg/shiny/man/textInput.html)
 tag with id `varname_<ind>`.
 
+## See also
+
+[`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md),
+which validates and stores the entry.
+
+Other step UI:
+[`accordion_panel_remove_button()`](http://williamgearty.com/shinypal/reference/accordion_panel_remove_button.md),
+[`df_modal_button()`](http://williamgearty.com/shinypal/reference/df_modal_button.md),
+[`select_column_input()`](http://williamgearty.com/shinypal/reference/select_column_input.md),
+[`select_dataset_input()`](http://williamgearty.com/shinypal/reference/select_dataset_input.md),
+[`verbatimTextOutput_copy()`](http://williamgearty.com/shinypal/reference/verbatimTextOutput_copy.md)
+
 ## Examples
 
 ``` r

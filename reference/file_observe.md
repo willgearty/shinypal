@@ -23,6 +23,15 @@ file_observe(inputId)
 
 Called for its side effects; invisibly returns the observer.
 
+## See also
+
+Other step observers:
+[`clip_observe()`](http://williamgearty.com/shinypal/reference/clip_observe.md),
+[`column_select_observe()`](http://williamgearty.com/shinypal/reference/column_select_observe.md),
+[`df_modal_observe()`](http://williamgearty.com/shinypal/reference/df_modal_observe.md),
+[`df_select_observe()`](http://williamgearty.com/shinypal/reference/df_select_observe.md),
+[`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md)
+
 ## Examples
 
 ``` r
