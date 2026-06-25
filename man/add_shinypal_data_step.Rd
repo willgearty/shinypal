@@ -13,7 +13,8 @@ add_shinypal_data_step(
   code_guard = NULL,
   ec_subs = NULL,
   select_dataset = FALSE,
-  column_ids = character(0)
+  column_ids = character(0),
+  rename = TRUE
 )
 }
 \arguments{
@@ -44,12 +45,18 @@ needs a \code{\link[=df_select_observe]{df_select_observe()}} to keep its datase
 
 \item{column_ids}{A character vector of column-selector input ids to keep in
 sync via \code{\link[=column_select_observe]{column_select_observe()}} (one per \code{\link[=select_column_input]{select_column_input()}}).}
+
+\item{rename}{Whether to render a \code{\link[=varname_input]{varname_input()}} text field in the step's
+panel (and install \code{\link[=var_name_observe]{var_name_observe()}}) so the user can give this step's
+dataset a custom name, used as its label in later selectors and its
+variable name in the generated script. Defaults to \code{TRUE}.}
 }
 \value{
 Called for its side effects and returns \code{NULL} invisibly. Stores the
 step's data reactive under \verb{occs_<ind>}, wires its code output and
 data-preview modal, registers the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}}, and (when
-requested) installs the dataset/column selector observers.
+requested) installs the dataset/column selector observers and, when
+\code{rename = TRUE}, the dataset-rename field and its observer.
 }
 \description{
 Convenience wrapper around the boilerplate shared by every step that

@@ -113,3 +113,24 @@ verbatimTextOutput_copy <- function(ind) {
     class = "code_wrapper"
   )
 }
+
+#' @title Text input to give a step's dataset a custom name
+#' @param ind The index of the step.
+#' @param label The label for the text input.
+#' @importFrom shiny textInput
+#' @description
+#'   A [shiny::textInput()] (id `varname_<ind>`) for naming the dataset a step
+#'   produces. The name becomes the dataset's label in later selectors and its
+#'   variable name in the generated script. Pair with [var_name_observe()], which validates
+#'   the entry; [add_shinypal_data_step()] inserts both automatically when
+#'   `rename = TRUE`.
+#' @returns A [shiny::textInput()] tag with id `varname_<ind>`.
+#' @examples
+#' \dontrun{
+#' varname_input(ind)
+#' }
+#' @export
+varname_input <- function(ind, label = "Name this dataset (optional):") {
+  req(ind)
+  textInput(paste0("varname_", ind), label, value = "")
+}

@@ -1,3 +1,23 @@
+# Recursively swap symbols in an expanded code object (from expandChain()):
+# any symbol whose name is a key of `map` becomes as.symbol(map[[name]]). Used
+# to apply user-supplied variable names to the generated script while keeping
+# the code object's structure (and class) intact so formatCode() still prints
+# it.
+rename_symbols <- function(code, map) {
+  if (length(map) == 0) return(code)
+  if (is.symbol(code)) {
+    nm <- as.character(code)
+    if (nzchar(nm) && !is.null(map[[nm]])) return(as.symbol(map[[nm]]))
+    return(code)
+  }
+  if (is.call(code)) {
+    out <- as.call(lapply(code, rename_symbols, map = map))
+    oldClass(out) <- oldClass(code)
+    return(out)
+  }
+  code
+}
+
 #' @title Setup shinypal
 #' @description
 #'   A function to set up the shinypal environment. This function should be
@@ -84,9 +104,9 @@ shinypal_setup <- function(input, output, session, modules,
   # render dynamic UI ####
   # add libraries to load at the beginning of the report
   libraries_expr <- reactive({
-    inject(expandChain(
-      !!!shinypal_env$libraries_chain() |> unname() |> list_flatten() |> unique()
-    ))
+    lib_calls <- shinypal_env$libraries_chain() |>
+      unname() |> list_flatten() |> unique()
+    inject(expandChain(!!!lapply(lib_calls, function(cl) call("quote", cl))))
   })
   output$libraries <- renderPrint({ libraries_expr() })
 
@@ -206,6 +226,11 @@ shinypal_setup <- function(input, output, session, modules,
       inject(ec$substituteMetaReactive(!!!ec_sub))
     }
     chain <- shinypal_env$code_chain()
+    # custom variable names to swap into the generated code, mapping each
+    # internal id (occs_<k>) to its user-supplied name. applied to every chunk
+    # so a renamed dataset's definition and all its downstream references stay
+    # consistent.
+    rename_map <- reactiveValuesToList(shinypal_env$var_names)
 
     result <- list()
     for (step_name in names(chain)) {
@@ -214,7 +239,10 @@ shinypal_setup <- function(input, output, session, modules,
       # individually by the consuming output, rather than invalidating
       # the whole chunks reactive
       result[[step_name]] <- tryCatch(
-        inject(expandChain(!!!step_code, .expansionContext = ec)),
+        rename_symbols(
+          inject(expandChain(!!!step_code, .expansionContext = ec)),
+          rename_map
+        ),
         error = function(e) e
       )
     }

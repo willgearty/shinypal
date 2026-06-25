@@ -215,6 +215,63 @@ file_observe <- function(inputId) {
   }, ignoreInit = TRUE)
 }
 
+#' @title Validate and store a custom name for a step's dataset
+#' @param ind The index of the step.
+#' @importFrom shiny req observeEvent showNotification reactiveValuesToList
+#' @description
+#'   Installs an observer on the step's `varname_<ind>` text input. A valid,
+#'   unique R variable name is recorded in shinypal's `var_names` registry,
+#'   becoming the dataset's label in later selectors and its symbol in the
+#'   generated script. Pair with [varname_input()].
+#' @returns Called for its side effects; invisibly returns the observer.
+#' @examples
+#' \dontrun{
+#' var_name_observe(ind)
+#' }
+#' @export
+var_name_observe <- function(ind) {
+  shinypal_env <- check_setup()
+  input <- shinypal_env$input
+  req(ind)
+  id <- paste0("occs_", ind)
+  observeEvent(input[[paste0("varname_", ind)]], {
+    proposed <- input[[paste0("varname_", ind)]]
+    # an empty entry means "no custom name": fall back to the internal id
+    if (is.null(proposed) || !nzchar(trimws(proposed))) {
+      shinypal_env$var_names[[id]] <- NULL
+      return()
+    }
+    proposed <- trimws(proposed)
+    # must be a syntactically valid R name so the renamed script still parses
+    if (make.names(proposed) != proposed) {
+      showNotification(
+        paste0("\"", proposed, "\" isn't a valid R variable name; ",
+               "the name was not applied."),
+        type = "error"
+      )
+      return()
+    }
+    # must be unique among the other datasets' names (custom or default id) so
+    # the generated script never declares two variables with the same name
+    others <- setdiff(
+      names(reactiveValuesToList(shinypal_env$intermediate_list)), id
+    )
+    taken <- vapply(others, function(other_id) {
+      nm <- shinypal_env$var_names[[other_id]]
+      if (is.null(nm) || !nzchar(nm)) other_id else nm
+    }, character(1))
+    if (proposed %in% taken) {
+      showNotification(
+        paste0("The name \"", proposed, "\" is already used by another step; ",
+               "choose a unique name."),
+        type = "error"
+      )
+      return()
+    }
+    shinypal_env$var_names[[id]] <- proposed
+  }, ignoreInit = TRUE)
+}
+
 #' @title Get the expanded code chunk for a registered step
 #' @description
 #'   Returns the code chunk for `ind`, expanded with a shared context across

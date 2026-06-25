@@ -10,8 +10,10 @@ get_int_dfs(ind)
 \item{ind}{The index of the step.}
 }
 \value{
-A character vector of intermediate dataset names in workflow order,
-or an empty character vector if none are available upstream.
+A named character vector of intermediate datasets in workflow
+order: values are the stable internal ids (\verb{occs_<ind>}) and names are the
+display labels (a custom name if set, otherwise the id). Empty if none are
+available upstream.
 }
 \description{
 Returns the names of intermediate datasets produced by steps \emph{earlier} than

@@ -157,6 +157,12 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
                       value = TRUE)) {
       shinypal_env$include_files[[name]] <- NULL
     }
+    # remove any custom name recorded for this step
+    for (name in grep(paste0("_", ind, "$"),
+                      names(reactiveValuesToList(shinypal_env$var_names)),
+                      value = TRUE)) {
+      shinypal_env$var_names[[name]] <- NULL
+    }
     # if there are no steps left, clear the workflow as a final precaution
     if (length(shinypal_env$report_list()) == 0) {
       clear_workflow()
@@ -191,10 +197,15 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #'   needs a [df_select_observe()] to keep its dataset dropdown current).
 #' @param column_ids A character vector of column-selector input ids to keep in
 #'   sync via [column_select_observe()] (one per [select_column_input()]).
+#' @param rename Whether to render a [varname_input()] text field in the step's
+#'   panel (and install [var_name_observe()]) so the user can give this step's
+#'   dataset a custom name, used as its label in later selectors and its
+#'   variable name in the generated script. Defaults to `TRUE`.
 #' @returns Called for its side effects and returns `NULL` invisibly. Stores the
 #'   step's data reactive under `occs_<ind>`, wires its code output and
 #'   data-preview modal, registers the step via [add_shinypal_step()], and (when
-#'   requested) installs the dataset/column selector observers.
+#'   requested) installs the dataset/column selector observers and, when
+#'   `rename = TRUE`, the dataset-rename field and its observer.
 #' @examples
 #' \dontrun{
 #' # inside a module's server.R
@@ -210,12 +221,13 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #' }
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !! check_required
+#' @importFrom htmltools tagQuery
 #' @export
 add_shinypal_data_step <- function(ind, data,
                                    fun_workflow, fun_report,
                                    libs = character(0), code_guard = NULL,
                                    ec_subs = NULL, select_dataset = FALSE,
-                                   column_ids = character(0)) {
+                                   column_ids = character(0), rename = TRUE) {
   shinypal_env <- check_setup()
   output <- shinypal_env$output
   # validate that the required args were supplied
@@ -223,6 +235,17 @@ add_shinypal_data_step <- function(ind, data,
   check_required(data)
   check_required(fun_workflow)
   check_required(fun_report)
+  # optionally let the user name this step's output dataset: inject a name field
+  # into the panel body and install the observer that validates it and records
+  # the name
+  if (rename) {
+    inner_fun_workflow <- fun_workflow
+    fun_workflow <- function(ind) {
+      q <- tagQuery(inner_fun_workflow(ind))
+      q$find(".accordion-body")$append(varname_input(ind))$allTags()
+    }
+    var_name_observe(ind)
+  }
   # every data step stores its result under occs_<ind> and previews it the same
   # way
   name <- paste0("occs_", ind)
