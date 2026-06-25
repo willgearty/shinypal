@@ -244,7 +244,11 @@ add_shinypal_data_step <- function(ind, data,
     inner_fun_workflow <- fun_workflow
     fun_workflow <- function(ind) {
       q <- tagQuery(inner_fun_workflow(ind))
-      q$find(".accordion-body")$append(varname_input(ind))$allTags()
+      anchor <- paste0("#df_modal_", ind)
+      if (length(q$find(anchor)$selectedTags()) == 0) {
+        anchor <- paste0("#remove_step_", ind)
+      }
+      q$resetSelected()$find(anchor)$before(varname_input(ind))$allTags()
     }
     var_name_observe(ind)
   }
