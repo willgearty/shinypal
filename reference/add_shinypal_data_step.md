@@ -20,7 +20,8 @@ add_shinypal_data_step(
   code_guard = NULL,
   ec_subs = NULL,
   select_dataset = FALSE,
-  column_ids = character(0)
+  column_ids = character(0),
+  rename = TRUE
 )
 ```
 
@@ -79,13 +80,24 @@ add_shinypal_data_step(
   (one per
   [`select_column_input()`](http://williamgearty.com/shinypal/reference/select_column_input.md)).
 
+- rename:
+
+  Whether to render a
+  [`varname_input()`](http://williamgearty.com/shinypal/reference/varname_input.md)
+  text field in the step's panel (and install
+  [`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md))
+  so the user can give this step's dataset a custom name, used as its
+  label in later selectors and its variable name in the generated
+  script. Defaults to `TRUE`.
+
 ## Value
 
 Called for its side effects and returns `NULL` invisibly. Stores the
 step's data reactive under `occs_<ind>`, wires its code output and
 data-preview modal, registers the step via
 [`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md),
-and (when requested) installs the dataset/column selector observers.
+and (when requested) installs the dataset/column selector observers and,
+when `rename = TRUE`, the dataset-rename field and its observer.
 
 ## Examples
 

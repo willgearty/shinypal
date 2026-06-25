@@ -68,7 +68,8 @@ functions.</p>
 <span>  code_guard <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ec_subs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  select_dataset <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  column_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  column_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  rename <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,13 +122,21 @@ needs a <code><a href="df_select_observe.html">df_select_observe()</a></code> to
 <dd><p>A character vector of column-selector input ids to keep in
 sync via <code><a href="column_select_observe.html">column_select_observe()</a></code> (one per <code><a href="select_column_input.html">select_column_input()</a></code>).</p></dd>
 
+
+<dt id="arg-rename">rename<a class="anchor" aria-label="anchor" href="#arg-rename"></a></dt>
+<dd><p>Whether to render a <code><a href="varname_input.html">varname_input()</a></code> text field in the step's
+panel (and install <code><a href="var_name_observe.html">var_name_observe()</a></code>) so the user can give this step's
+dataset a custom name, used as its label in later selectors and its
+variable name in the generated script. Defaults to <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Called for its side effects and returns <code>NULL</code> invisibly. Stores the
 step's data reactive under <code>occs_&lt;ind&gt;</code>, wires its code output and
 data-preview modal, registers the step via <code><a href="add_shinypal_step.html">add_shinypal_step()</a></code>, and (when
-requested) installs the dataset/column selector observers.</p>
+requested) installs the dataset/column selector observers and, when
+<code>rename = TRUE</code>, the dataset-rename field and its observer.</p>
     </div>
 
     <div class="section level2">

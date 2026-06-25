@@ -69,6 +69,12 @@
 - [`shinypal_ui()`](http://williamgearty.com/shinypal/reference/shinypal_ui.md)
   : UI for ShinyPal
 
+- [`var_name_observe()`](http://williamgearty.com/shinypal/reference/var_name_observe.md)
+  : Validate and store a custom name for a step's dataset
+
+- [`varname_input()`](http://williamgearty.com/shinypal/reference/varname_input.md)
+  : Text input to give a step's dataset a custom name
+
 - [`verbatimTextOutput_copy()`](http://williamgearty.com/shinypal/reference/verbatimTextOutput_copy.md)
   : Text element with a button to copy the code to the clipboard
 

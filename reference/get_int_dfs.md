@@ -18,8 +18,10 @@ get_int_dfs(ind)
 
 ## Value
 
-A character vector of intermediate dataset names in workflow order, or
-an empty character vector if none are available upstream.
+A named character vector of intermediate datasets in workflow order:
+values are the stable internal ids (`occs_<ind>`) and names are the
+display labels (a custom name if set, otherwise the id). Empty if none
+are available upstream.
 
 ## Examples
 

@@ -22,7 +22,7 @@ add_shinypal_step(
   fun_workflow,
   fun_report,
   code_chain_list,
-  libs,
+  libs = character(0),
   ec_subs = NULL
 )
 ```
