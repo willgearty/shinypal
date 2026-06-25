@@ -143,5 +143,6 @@ verbatimTextOutput_copy <- function(ind) {
 #' @export
 varname_input <- function(ind, label = "Name this dataset (optional):") {
   req(ind)
-  textInput(paste0("varname_", ind), label, value = "")
+  textInput(paste0("varname_", ind), label, value = "",
+            placeholder = paste0("occs_", ind))
 }
