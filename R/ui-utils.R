@@ -13,6 +13,7 @@
 #'   matching `data-rank-id` attribute.
 #' @examples
 #' accordion_panel_remove_button(1, "My step")
+#' @family step UI
 #' @export
 accordion_panel_remove_button <- function(ind, ...) {
   req(ind)
@@ -39,6 +40,8 @@ accordion_panel_remove_button <- function(ind, ...) {
 #' \dontrun{
 #' select_dataset_input(ind)
 #' }
+#' @seealso [df_select_observe()], which keeps this dropdown populated.
+#' @family step UI
 #' @export
 select_dataset_input <- function(ind, label = "Choose a dataset:") {
   req(ind, label)
@@ -61,6 +64,8 @@ select_dataset_input <- function(ind, label = "Choose a dataset:") {
 #' \dontrun{
 #' select_column_input(ind)
 #' }
+#' @seealso [column_select_observe()], which keeps this selector in sync.
+#' @family step UI
 #' @export
 select_column_input <- function(ind, label = "Choose a column:",
                                 default = NULL, ...) {
@@ -89,6 +94,8 @@ select_column_input <- function(ind, label = "Choose a column:",
 #' @returns A [shiny::actionButton()] with id `df_modal_<ind>`.
 #' @examples
 #' df_modal_button(1)
+#' @seealso [df_modal_observe()], which opens the modal this button triggers.
+#' @family step UI
 #' @export
 df_modal_button <- function(ind, text = "View data") {
   actionButton(paste0("df_modal_", ind), text)
@@ -105,6 +112,8 @@ df_modal_button <- function(ind, text = "View data") {
 #'   `code_<ind>`) and a copy [shiny::actionButton()] (id `copy_<ind>`).
 #' @examples
 #' verbatimTextOutput_copy(1)
+#' @seealso [clip_observe()], which copies the displayed code to the clipboard.
+#' @family step UI
 #' @export
 verbatimTextOutput_copy <- function(ind) {
   div(
@@ -129,6 +138,8 @@ verbatimTextOutput_copy <- function(ind) {
 #' \dontrun{
 #' varname_input(ind)
 #' }
+#' @seealso [var_name_observe()], which validates and stores the entry.
+#' @family step UI
 #' @export
 varname_input <- function(ind, label = "Name this dataset (optional):") {
   req(ind)

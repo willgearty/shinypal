@@ -31,3 +31,8 @@ ui <- function() {
 }
 }
 }
+\seealso{
+Other app setup:
+\code{\link[=shinypal_setup]{shinypal_setup()}}
+}
+\concept{app setup}

@@ -45,6 +45,7 @@
 #' @importFrom htmltools div tags
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
+#' @family workflow steps
 #' @export
 add_shinypal_step <- function(ind, fun_workflow, fun_report,
                               code_chain_list, libs = character(0),
@@ -222,6 +223,7 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !! check_required
 #' @importFrom htmltools tagQuery
+#' @family workflow steps
 #' @export
 add_shinypal_data_step <- function(ind, data,
                                    fun_workflow, fun_report,
@@ -320,6 +322,7 @@ add_shinypal_data_step <- function(ind, data,
 #' }
 #' @importFrom shiny renderPrint
 #' @importFrom rlang expr inject !! check_required
+#' @family workflow steps
 #' @export
 add_shinypal_plot_step <- function(ind, plot,
                                    fun_workflow, fun_report,
@@ -378,6 +381,7 @@ rainbow_palette <- color("smooth rainbow")(100, range = c(0.25, 1))
 #' get_colors(1)
 #' get_colors(2)$background
 #' @importFrom grDevices col2rgb
+#' @family utilities
 #' @export
 get_colors <- function(ind) {
   # get last two digits of the index

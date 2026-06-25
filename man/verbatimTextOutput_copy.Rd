@@ -22,3 +22,14 @@ sure to set up a corresponding observer using \code{\link[=clip_observe]{clip_ob
 \examples{
 verbatimTextOutput_copy(1)
 }
+\seealso{
+\code{\link[=clip_observe]{clip_observe()}}, which copies the displayed code to the clipboard.
+
+Other step UI:
+\code{\link[=accordion_panel_remove_button]{accordion_panel_remove_button()}},
+\code{\link[=df_modal_button]{df_modal_button()}},
+\code{\link[=select_column_input]{select_column_input()}},
+\code{\link[=select_dataset_input]{select_dataset_input()}},
+\code{\link[=varname_input]{varname_input()}}
+}
+\concept{step UI}

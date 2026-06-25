@@ -20,3 +20,10 @@ running.
 ind <- next_step_index()
 }
 }
+\seealso{
+Other workflow steps:
+\code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}},
+\code{\link[=add_shinypal_plot_step]{add_shinypal_plot_step()}},
+\code{\link[=add_shinypal_step]{add_shinypal_step()}}
+}
+\concept{workflow steps}

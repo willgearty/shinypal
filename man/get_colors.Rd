@@ -24,3 +24,8 @@ report border.
 get_colors(1)
 get_colors(2)$background
 }
+\seealso{
+Other utilities:
+\code{\link[=is_shinylive]{is_shinylive()}}
+}
+\concept{utilities}

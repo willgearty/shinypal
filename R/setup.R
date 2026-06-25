@@ -55,6 +55,7 @@ rename_symbols <- function(code, map) {
 #'   shinypal_setup(input, output, session, modules)
 #' }
 #' }
+#' @family app setup
 #' @export
 shinypal_setup <- function(input, output, session, modules,
                            download_filename = "shinypal_script.zip",
@@ -261,6 +262,7 @@ shinypal_setup <- function(input, output, session, modules,
 #' @return A length-1 logical: `TRUE` under shinylive/webR, otherwise `FALSE`.
 #' @examples
 #' is_shinylive()
+#' @family utilities
 #' @export
 is_shinylive <- function() { R.Version()$os == "emscripten" }
 

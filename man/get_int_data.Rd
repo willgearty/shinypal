@@ -22,3 +22,9 @@ Retrieves a stored intermediate data reactive by name (the counterpart to
 df <- get_int_data(input[[paste0("dataset_", ind)]])()
 }
 }
+\seealso{
+Other intermediate data:
+\code{\link[=get_int_dfs]{get_int_dfs()}},
+\code{\link[=set_int_data]{set_int_data()}}
+}
+\concept{intermediate data}

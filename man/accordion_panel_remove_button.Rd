@@ -23,3 +23,12 @@ the panel returned by a step's \code{fun_workflow}.
 \examples{
 accordion_panel_remove_button(1, "My step")
 }
+\seealso{
+Other step UI:
+\code{\link[=df_modal_button]{df_modal_button()}},
+\code{\link[=select_column_input]{select_column_input()}},
+\code{\link[=select_dataset_input]{select_dataset_input()}},
+\code{\link[=varname_input]{varname_input()}},
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}
+}
+\concept{step UI}

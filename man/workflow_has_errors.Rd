@@ -20,3 +20,8 @@ if (workflow_has_errors()) {
 }
 }
 }
+\seealso{
+Other generated code:
+\code{\link[=get_chunk]{get_chunk()}}
+}
+\concept{generated code}

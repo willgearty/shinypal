@@ -26,3 +26,14 @@ the entry; \code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}} inser
 varname_input(ind)
 }
 }
+\seealso{
+\code{\link[=var_name_observe]{var_name_observe()}}, which validates and stores the entry.
+
+Other step UI:
+\code{\link[=accordion_panel_remove_button]{accordion_panel_remove_button()}},
+\code{\link[=df_modal_button]{df_modal_button()}},
+\code{\link[=select_column_input]{select_column_input()}},
+\code{\link[=select_dataset_input]{select_dataset_input()}},
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}
+}
+\concept{step UI}

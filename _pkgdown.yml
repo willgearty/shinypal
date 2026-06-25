@@ -16,3 +16,33 @@ template:
          gtag('config', 'G-B48C68KGQJ');
        </script>
 
+reference:
+- title: Setting up an app
+  desc: Entry points you call once to build the interface and wire its server.
+  contents:
+  - has_concept("app setup")
+- title: Defining workflow steps
+  desc: The builder API for registering a step, plus the per-step index helper.
+  contents:
+  - has_concept("workflow steps")
+- title: Step UI components
+  desc: Inputs and buttons a module drops into a step's panel.
+  contents:
+  - has_concept("step UI")
+- title: Step server observers
+  desc: Wiring that keeps each component live and in sync.
+  contents:
+  - has_concept("step observers")
+- title: Intermediate data
+  desc: Storing and retrieving the datasets passed between steps.
+  contents:
+  - has_concept("intermediate data")
+- title: Generated code & reports
+  desc: Inspecting the code a workflow produces.
+  contents:
+  - has_concept("generated code")
+- title: Utilities
+  desc: Environment detection and other helpers.
+  contents:
+  - has_concept("utilities")
+

@@ -16,6 +16,7 @@
 #' # inside a reactive or observer in a module, after shinypal_setup()
 #' get_int_dfs(ind)
 #' }
+#' @family intermediate data
 #' @export
 get_int_dfs <- function(ind) {
   shinypal_env <- check_setup()
@@ -67,6 +68,8 @@ get_int_dfs <- function(ind) {
 #' \dontrun{
 #' df_modal_observe(ind, paste0("occs_", ind))
 #' }
+#' @seealso [df_modal_button()], the button that opens this modal.
+#' @family step observers
 #' @export
 df_modal_observe <- function(ind, df_name) {
   shinypal_env <- check_setup()
@@ -108,6 +111,8 @@ df_modal_observe <- function(ind, df_name) {
 #' \dontrun{
 #' df_select_observe(ind)
 #' }
+#' @seealso [select_dataset_input()], the dropdown this observer updates.
+#' @family step observers
 #' @export
 df_select_observe <- function(ind) {
   shinypal_env <- check_setup()
@@ -144,6 +149,8 @@ df_select_observe <- function(ind) {
 #' \dontrun{
 #' column_select_observe(ind, paste0("column_", ind))
 #' }
+#' @seealso [select_column_input()], the selector this observer updates.
+#' @family step observers
 #' @export
 column_select_observe <- function(ind, inputId) {
   shinypal_env <- check_setup()
@@ -181,6 +188,8 @@ column_select_observe <- function(ind, inputId) {
 #' \dontrun{
 #' clip_observe(ind, rlang::expr(get_chunk(ind)))
 #' }
+#' @seealso [verbatimTextOutput_copy()], whose copy button it wires.
+#' @family step observers
 #' @export
 clip_observe <- function(ind, code_expr) {
   shinypal_env <- check_setup()
@@ -204,6 +213,7 @@ clip_observe <- function(ind, code_expr) {
 #' \dontrun{
 #' file_observe("user_file")
 #' }
+#' @family step observers
 #' @export
 file_observe <- function(inputId) {
   shinypal_env <- check_setup()
@@ -228,6 +238,8 @@ file_observe <- function(inputId) {
 #' \dontrun{
 #' var_name_observe(ind)
 #' }
+#' @seealso [varname_input()], the input this observer watches.
+#' @family step observers
 #' @export
 var_name_observe <- function(ind) {
   shinypal_env <- check_setup()
@@ -286,6 +298,7 @@ var_name_observe <- function(ind) {
 #' # inside renderPrint() or observeEvent() in a module
 #' get_chunk(ind)
 #' }
+#' @family generated code
 #' @export
 get_chunk <- function(ind) {
   shinypal_env <- check_setup()
@@ -307,6 +320,7 @@ get_chunk <- function(ind) {
 #'   shiny::showNotification("Some steps are incomplete.")
 #' }
 #' }
+#' @family generated code
 #' @export
 workflow_has_errors <- function() {
   shinypal_env <- check_setup()
@@ -326,6 +340,7 @@ workflow_has_errors <- function() {
 #' \dontrun{
 #' set_int_data(occs, paste0("occs_", ind))
 #' }
+#' @family intermediate data
 #' @export
 set_int_data <- function(obj, name) {
   shinypal_env <- check_setup()
@@ -345,6 +360,7 @@ set_int_data <- function(obj, name) {
 #' \dontrun{
 #' df <- get_int_data(input[[paste0("dataset_", ind)]])()
 #' }
+#' @family intermediate data
 #' @export
 get_int_data <- function(name) {
   shinypal_env <- check_setup()
@@ -365,6 +381,7 @@ get_int_data <- function(name) {
 #' \dontrun{
 #' ind <- next_step_index()
 #' }
+#' @family workflow steps
 #' @export
 next_step_index <- function() {
   shinypal_env <- check_setup()

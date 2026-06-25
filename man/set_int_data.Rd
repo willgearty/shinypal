@@ -24,3 +24,9 @@ script. Usually called for you by \code{\link[=add_shinypal_data_step]{add_shiny
 set_int_data(occs, paste0("occs_", ind))
 }
 }
+\seealso{
+Other intermediate data:
+\code{\link[=get_int_data]{get_int_data()}},
+\code{\link[=get_int_dfs]{get_int_dfs()}}
+}
+\concept{intermediate data}

@@ -22,6 +22,7 @@
 #'   bslib::page_navbar(title = "My app", bslib::nav_panel("Build", shinypal_ui(modules)))
 #' }
 #' }
+#' @family app setup
 #' @export
 shinypal_ui <- function(modules) {
   tagList(

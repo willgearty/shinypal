@@ -51,3 +51,8 @@ server <- function(input, output, session) {
 }
 }
 }
+\seealso{
+Other app setup:
+\code{\link[=shinypal_ui]{shinypal_ui()}}
+}
+\concept{app setup}

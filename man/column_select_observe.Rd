@@ -24,3 +24,14 @@ dropdown. Pair with \code{\link[=select_dataset_input]{select_dataset_input()}} 
 column_select_observe(ind, paste0("column_", ind))
 }
 }
+\seealso{
+\code{\link[=select_column_input]{select_column_input()}}, the selector this observer updates.
+
+Other step observers:
+\code{\link[=clip_observe]{clip_observe()}},
+\code{\link[=df_modal_observe]{df_modal_observe()}},
+\code{\link[=df_select_observe]{df_select_observe()}},
+\code{\link[=file_observe]{file_observe()}},
+\code{\link[=var_name_observe]{var_name_observe()}}
+}
+\concept{step observers}

@@ -18,3 +18,8 @@ packages with no WebAssembly build or bundling a downloadable zip.
 \examples{
 is_shinylive()
 }
+\seealso{
+Other utilities:
+\code{\link[=get_colors]{get_colors()}}
+}
+\concept{utilities}

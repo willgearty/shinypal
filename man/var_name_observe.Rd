@@ -23,3 +23,14 @@ generated script. Pair with \code{\link[=varname_input]{varname_input()}}.
 var_name_observe(ind)
 }
 }
+\seealso{
+\code{\link[=varname_input]{varname_input()}}, the input this observer watches.
+
+Other step observers:
+\code{\link[=clip_observe]{clip_observe()}},
+\code{\link[=column_select_observe]{column_select_observe()}},
+\code{\link[=df_modal_observe]{df_modal_observe()}},
+\code{\link[=df_select_observe]{df_select_observe()}},
+\code{\link[=file_observe]{file_observe()}}
+}
+\concept{step observers}

@@ -25,3 +25,8 @@ code. The chunk is rebuilt whenever any dependency changes.
 get_chunk(ind)
 }
 }
+\seealso{
+Other generated code:
+\code{\link[=workflow_has_errors]{workflow_has_errors()}}
+}
+\concept{generated code}

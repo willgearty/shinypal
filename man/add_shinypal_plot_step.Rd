@@ -74,3 +74,10 @@ add_shinypal_plot_step(
 )
 }
 }
+\seealso{
+Other workflow steps:
+\code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}},
+\code{\link[=add_shinypal_step]{add_shinypal_step()}},
+\code{\link[=next_step_index]{next_step_index()}}
+}
+\concept{workflow steps}

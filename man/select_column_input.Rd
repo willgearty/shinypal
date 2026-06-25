@@ -26,3 +26,14 @@ This should be paired with \code{\link[=select_dataset_input]{select_dataset_inp
 select_column_input(ind)
 }
 }
+\seealso{
+\code{\link[=column_select_observe]{column_select_observe()}}, which keeps this selector in sync.
+
+Other step UI:
+\code{\link[=accordion_panel_remove_button]{accordion_panel_remove_button()}},
+\code{\link[=df_modal_button]{df_modal_button()}},
+\code{\link[=select_dataset_input]{select_dataset_input()}},
+\code{\link[=varname_input]{varname_input()}},
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}
+}
+\concept{step UI}

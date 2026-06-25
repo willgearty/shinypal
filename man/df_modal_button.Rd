@@ -22,3 +22,14 @@ corresponding observer using \code{\link[=df_modal_observe]{df_modal_observe()}}
 \examples{
 df_modal_button(1)
 }
+\seealso{
+\code{\link[=df_modal_observe]{df_modal_observe()}}, which opens the modal this button triggers.
+
+Other step UI:
+\code{\link[=accordion_panel_remove_button]{accordion_panel_remove_button()}},
+\code{\link[=select_column_input]{select_column_input()}},
+\code{\link[=select_dataset_input]{select_dataset_input()}},
+\code{\link[=varname_input]{varname_input()}},
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}
+}
+\concept{step UI}

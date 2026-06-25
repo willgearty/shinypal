@@ -26,3 +26,9 @@ upstream output. Used to populate the dataset selectors.
 get_int_dfs(ind)
 }
 }
+\seealso{
+Other intermediate data:
+\code{\link[=get_int_data]{get_int_data()}},
+\code{\link[=set_int_data]{set_int_data()}}
+}
+\concept{intermediate data}

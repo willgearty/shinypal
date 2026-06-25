@@ -26,3 +26,14 @@ using \code{\link[clipr:write_clip]{clipr::write_clip()}}.
 clip_observe(ind, rlang::expr(get_chunk(ind)))
 }
 }
+\seealso{
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}, whose copy button it wires.
+
+Other step observers:
+\code{\link[=column_select_observe]{column_select_observe()}},
+\code{\link[=df_modal_observe]{df_modal_observe()}},
+\code{\link[=df_select_observe]{df_select_observe()}},
+\code{\link[=file_observe]{file_observe()}},
+\code{\link[=var_name_observe]{var_name_observe()}}
+}
+\concept{step observers}

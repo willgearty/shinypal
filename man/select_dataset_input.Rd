@@ -24,3 +24,14 @@ recent. Keep its choices current with \code{\link[=df_select_observe]{df_select_
 select_dataset_input(ind)
 }
 }
+\seealso{
+\code{\link[=df_select_observe]{df_select_observe()}}, which keeps this dropdown populated.
+
+Other step UI:
+\code{\link[=accordion_panel_remove_button]{accordion_panel_remove_button()}},
+\code{\link[=df_modal_button]{df_modal_button()}},
+\code{\link[=select_column_input]{select_column_input()}},
+\code{\link[=varname_input]{varname_input()}},
+\code{\link[=verbatimTextOutput_copy]{verbatimTextOutput_copy()}}
+}
+\concept{step UI}

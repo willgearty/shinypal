@@ -24,3 +24,14 @@ Pair with \code{\link[=df_modal_button]{df_modal_button()}}.
 df_modal_observe(ind, paste0("occs_", ind))
 }
 }
+\seealso{
+\code{\link[=df_modal_button]{df_modal_button()}}, the button that opens this modal.
+
+Other step observers:
+\code{\link[=clip_observe]{clip_observe()}},
+\code{\link[=column_select_observe]{column_select_observe()}},
+\code{\link[=df_select_observe]{df_select_observe()}},
+\code{\link[=file_observe]{file_observe()}},
+\code{\link[=var_name_observe]{var_name_observe()}}
+}
+\concept{step observers}
