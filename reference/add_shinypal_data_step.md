@@ -36,8 +36,8 @@ add_shinypal_data_step(
   A
   [`shinymeta::metaReactive2()`](https://rstudio.github.io/shinymeta/reference/metaReactive.html)
   object produced by the step. It should use
-  `varname = paste0("occs_", ind)` so its generated variable name
-  matches the stored name.
+  `varname = step_varname(ind)` so its generated variable name matches
+  the stored name.
 
 - fun_workflow:
 
@@ -93,8 +93,10 @@ add_shinypal_data_step(
 ## Value
 
 Called for its side effects and returns `NULL` invisibly. Stores the
-step's data reactive under `occs_<ind>`, wires its code output and
-data-preview modal, registers the step via
+step's data reactive under its
+[`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md)
+id (e.g. `data_1`), wires its code output and data-preview modal,
+registers the step via
 [`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md),
 and (when requested) installs the dataset/column selector observers and,
 when `rename = TRUE`, the dataset-rename field and its observer.
@@ -104,7 +106,8 @@ when `rename = TRUE`, the dataset-rename field and its observer.
 Other workflow steps:
 [`add_shinypal_plot_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_plot_step.md),
 [`add_shinypal_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_step.md),
-[`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md)
+[`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md),
+[`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md)
 
 ## Examples
 
@@ -112,7 +115,7 @@ Other workflow steps:
 if (FALSE) { # \dontrun{
 # inside a module's server.R
 ind <- next_step_index()
-occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+occs <- shinymeta::metaReactive2(varname = step_varname(ind), {
   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 })
 add_shinypal_data_step(

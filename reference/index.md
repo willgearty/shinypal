@@ -21,6 +21,8 @@ The builder API for registering a step, plus the per-step index helper.
   : Add a step to the report, workflow, and the code chain
 - [`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md)
   : Get the next workflow step index
+- [`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md)
+  : Build a data step's internal id and generated variable name
 
 ## Step UI components
 

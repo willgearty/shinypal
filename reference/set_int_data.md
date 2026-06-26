@@ -35,6 +35,6 @@ Other intermediate data:
 
 ``` r
 if (FALSE) { # \dontrun{
-set_int_data(occs, paste0("occs_", ind))
+set_int_data(occs, step_varname(ind))
 } # }
 ```

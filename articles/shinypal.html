@@ -204,8 +204,9 @@ that produced it, then register everything with
 <span>  <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/next_step_index.html">next_step_index</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># metaReactive2 returns the data when called, and its code when expanded.</span></span>
-<span>  <span class="co"># Name it occs_&lt;ind&gt; so shinypal can find it as an intermediate dataset.</span></span>
-<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaReactive.html" class="external-link">metaReactive2</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"occs_"</span>, <span class="va">ind</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>  <span class="co"># Use step_varname(ind) for the variable name so it matches the id shinypal</span></span>
+<span>  <span class="co"># stores this step's dataset under.</span></span>
+<span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaReactive.html" class="external-link">metaReactive2</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="fu"><a href="../reference/step_varname.html">step_varname</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span>, <span class="op">{</span></span>
 <span>    <span class="va">df</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_int_data.html">get_int_data</a></span><span class="op">(</span><span class="va">input</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"dataset_"</span>, <span class="va">ind</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="va">col</span> <span class="op">&lt;-</span> <span class="va">input</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"column_"</span>, <span class="va">ind</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span>    <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="va">col</span><span class="op">)</span></span>
@@ -225,11 +226,13 @@ that produced it, then register everything with
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/add_shinypal_data_step.html">add_shinypal_data_step()</a></code> stores the result under
-<code>occs_&lt;ind&gt;</code>, renders its generated code into the
-report, wires the “view data” modal, and (because
-<code>select_dataset = TRUE</code>) keeps the dataset dropdown in sync
-as other steps come and go. A later step can then consume this step’s
-output by calling <code><a href="../reference/get_int_data.html">get_int_data()</a></code>.</p>
+<code>step_varname(ind)</code> (the <code>prefix</code> set in
+<code><a href="../reference/shinypal_setup.html">shinypal_setup()</a></code> plus the step index; e.g.,
+<code>data_1</code>), renders its generated code into the report, wires
+the “view data” modal, and (because <code>select_dataset = TRUE</code>)
+keeps the dataset dropdown in sync as other steps come and go. A later
+step can then consume this step’s output by calling
+<code><a href="../reference/get_int_data.html">get_int_data()</a></code>.</p>
 </div>
 </div>
 <div class="section level2">

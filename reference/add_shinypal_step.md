@@ -68,7 +68,8 @@ remove-button observer is installed for it.
 Other workflow steps:
 [`add_shinypal_data_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_data_step.md),
 [`add_shinypal_plot_step()`](http://williamgearty.com/shinypal/reference/add_shinypal_plot_step.md),
-[`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md)
+[`next_step_index()`](http://williamgearty.com/shinypal/reference/next_step_index.md),
+[`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md)
 
 ## Examples
 

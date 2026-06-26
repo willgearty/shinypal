@@ -42,6 +42,6 @@ Other step observers:
 
 ``` r
 if (FALSE) { # \dontrun{
-df_modal_observe(ind, paste0("occs_", ind))
+df_modal_observe(ind, step_varname(ind))
 } # }
 ```

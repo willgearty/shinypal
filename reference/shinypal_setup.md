@@ -12,7 +12,8 @@ shinypal_setup(
   session,
   modules,
   download_filename = "shinypal_script.zip",
-  download_template = "./modules/test_report.qmd"
+  download_template = "./modules/test_report.qmd",
+  prefix = "data_"
 )
 ```
 
@@ -43,6 +44,13 @@ shinypal_setup(
 
   The path to the Quarto markdown template file that will be used to
   generate the report.
+
+- prefix:
+
+  Prefix for each data step's internal id and the variable name it gets
+  in the generated script (default `"data_"`). Use
+  [`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md)
+  to retrieve the full value for a given step index.
 
 ## Value
 

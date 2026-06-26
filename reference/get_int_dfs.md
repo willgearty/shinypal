@@ -19,9 +19,10 @@ get_int_dfs(ind)
 ## Value
 
 A named character vector of intermediate datasets in workflow order:
-values are the stable internal ids (`occs_<ind>`) and names are the
-display labels (a custom name if set, otherwise the id). Empty if none
-are available upstream.
+values are the stable internal ids
+([`step_varname()`](http://williamgearty.com/shinypal/reference/step_varname.md),
+e.g. `data_1`) and names are the display labels (a custom name if set,
+otherwise the id). Empty if none are available upstream.
 
 ## See also
 

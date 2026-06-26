@@ -83,7 +83,7 @@ functions.</p>
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A <code><a href="https://rstudio.github.io/shinymeta/reference/metaReactive.html" class="external-link">shinymeta::metaReactive2()</a></code> object produced by the step. It
-should use <code>varname = paste0("occs_", ind)</code> so its generated variable name
+should use <code>varname = step_varname(ind)</code> so its generated variable name
 matches the stored name.</p></dd>
 
 
@@ -133,17 +133,19 @@ variable name in the generated script. Defaults to <code>TRUE</code>.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Called for its side effects and returns <code>NULL</code> invisibly. Stores the
-step's data reactive under <code>occs_&lt;ind&gt;</code>, wires its code output and
-data-preview modal, registers the step via <code><a href="add_shinypal_step.html">add_shinypal_step()</a></code>, and (when
-requested) installs the dataset/column selector observers and, when
-<code>rename = TRUE</code>, the dataset-rename field and its observer.</p>
+step's data reactive under its <code><a href="step_varname.html">step_varname()</a></code> id (e.g. <code>data_1</code>), wires
+its code output and data-preview modal, registers the step via
+<code><a href="add_shinypal_step.html">add_shinypal_step()</a></code>, and (when requested) installs the dataset/column
+selector observers and, when <code>rename = TRUE</code>, the dataset-rename field and
+its observer.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other workflow steps:
 <code><a href="add_shinypal_plot_step.html">add_shinypal_plot_step()</a></code>,
 <code><a href="add_shinypal_step.html">add_shinypal_step()</a></code>,
-<code><a href="next_step_index.html">next_step_index()</a></code></p></div>
+<code><a href="next_step_index.html">next_step_index()</a></code>,
+<code><a href="step_varname.html">step_varname()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -151,7 +153,7 @@ requested) installs the dataset/column selector observers and, when
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># inside a module's server.R</span></span></span>
 <span class="r-in"><span><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="next_step_index.html">next_step_index</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">occs</span> <span class="op">&lt;-</span> <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaReactive.html" class="external-link">metaReactive2</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"occs_"</span>, <span class="va">ind</span><span class="op">)</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">occs</span> <span class="op">&lt;-</span> <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaReactive.html" class="external-link">metaReactive2</a></span><span class="op">(</span>varname <span class="op">=</span> <span class="fu"><a href="step_varname.html">step_varname</a></span><span class="op">(</span><span class="va">ind</span><span class="op">)</span>, <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="fu">shinymeta</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/shinymeta/reference/metaExpr.html" class="external-link">metaExpr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">input</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"n_"</span>, <span class="va">ind</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">add_shinypal_data_step</span><span class="op">(</span></span></span>
