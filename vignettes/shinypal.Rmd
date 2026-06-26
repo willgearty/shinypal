@@ -123,8 +123,9 @@ shiny::observeEvent(input$add_filter, {
   ind <- next_step_index()
 
   # metaReactive2 returns the data when called, and its code when expanded.
-  # Name it occs_<ind> so shinypal can find it as an intermediate dataset.
-  data <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+  # Use step_varname(ind) for the variable name so it matches the id shinypal
+  # stores this step's dataset under.
+  data <- shinymeta::metaReactive2(varname = step_varname(ind), {
     df  <- get_int_data(input[[paste0("dataset_", ind)]])()
     col <- input[[paste0("column_", ind)]]
     shiny::req(col)
@@ -145,10 +146,11 @@ shiny::observeEvent(input$add_filter, {
 })
 ```
 
-`add_shinypal_data_step()` stores the result under `occs_<ind>`, renders its
-generated code into the report, wires the "view data" modal, and (because
-`select_dataset = TRUE`) keeps the dataset dropdown in sync as other steps come
-and go. A later step can then consume this step's output by calling
+`add_shinypal_data_step()` stores the result under `step_varname(ind)` (the
+`prefix` set in `shinypal_setup()` plus the step index; e.g., `data_1`), renders
+its generated code into the report, wires the "view data" modal, and (because
+`select_dataset = TRUE`) keeps the dataset dropdown in sync as other steps
+come and go. A later step can then consume this step's output by calling
 `get_int_data()`.
 
 ## Plot steps

@@ -21,7 +21,7 @@ Pair with \code{\link[=df_modal_button]{df_modal_button()}}.
 }
 \examples{
 \dontrun{
-df_modal_observe(ind, paste0("occs_", ind))
+df_modal_observe(ind, step_varname(ind))
 }
 }
 \seealso{

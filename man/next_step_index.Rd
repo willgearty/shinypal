@@ -24,6 +24,7 @@ ind <- next_step_index()
 Other workflow steps:
 \code{\link[=add_shinypal_data_step]{add_shinypal_data_step()}},
 \code{\link[=add_shinypal_plot_step]{add_shinypal_plot_step()}},
-\code{\link[=add_shinypal_step]{add_shinypal_step()}}
+\code{\link[=add_shinypal_step]{add_shinypal_step()}},
+\code{\link[=step_varname]{step_varname()}}
 }
 \concept{workflow steps}

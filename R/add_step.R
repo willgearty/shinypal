@@ -181,7 +181,7 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #'   functions.
 #' @param ind The index of the step.
 #' @param data A [shinymeta::metaReactive2()] object produced by the step. It
-#'   should use `varname = paste0("occs_", ind)` so its generated variable name
+#'   should use `varname = step_varname(ind)` so its generated variable name
 #'   matches the stored name.
 #' @param fun_workflow A function that generates the UI elements for the
 #'   workflow.
@@ -203,15 +203,16 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
 #'   dataset a custom name, used as its label in later selectors and its
 #'   variable name in the generated script. Defaults to `TRUE`.
 #' @returns Called for its side effects and returns `NULL` invisibly. Stores the
-#'   step's data reactive under `occs_<ind>`, wires its code output and
-#'   data-preview modal, registers the step via [add_shinypal_step()], and (when
-#'   requested) installs the dataset/column selector observers and, when
-#'   `rename = TRUE`, the dataset-rename field and its observer.
+#'   step's data reactive under its [step_varname()] id (e.g. `data_1`), wires
+#'   its code output and data-preview modal, registers the step via
+#'   [add_shinypal_step()], and (when requested) installs the dataset/column
+#'   selector observers and, when `rename = TRUE`, the dataset-rename field and
+#'   its observer.
 #' @examples
 #' \dontrun{
 #' # inside a module's server.R
 #' ind <- next_step_index()
-#' occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+#' occs <- shinymeta::metaReactive2(varname = step_varname(ind), {
 #'   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 #' })
 #' add_shinypal_data_step(
@@ -252,9 +253,9 @@ add_shinypal_data_step <- function(ind, data,
     }
     var_name_observe(ind)
   }
-  # every data step stores its result under occs_<ind> and previews it the same
-  # way
-  name <- paste0("occs_", ind)
+  # every data step stores its result under step_varname(ind) and previews it
+  # the same way
+  name <- step_varname(ind)
   set_int_data(data, name)
 
   # render the step's generated code; run the optional guard first so any
@@ -270,7 +271,7 @@ add_shinypal_data_step <- function(ind, data,
   # register the step with the standard "materialize this step's data" preview
   add_shinypal_step(
     ind, fun_workflow, fun_report,
-    list(inject(quote(invisible(get_int_data(paste0("occs_", !!ind))())))),
+    list(inject(quote(invisible(get_int_data(!!name)())))),
     libs, ec_subs
   )
 

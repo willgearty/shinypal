@@ -21,7 +21,7 @@ script. Usually called for you by \code{\link[=add_shinypal_data_step]{add_shiny
 }
 \examples{
 \dontrun{
-set_int_data(occs, paste0("occs_", ind))
+set_int_data(occs, step_varname(ind))
 }
 }
 \seealso{

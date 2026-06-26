@@ -34,6 +34,9 @@ rename_symbols <- function(code, map) {
 #'   clicks the download button.
 #' @param download_template The path to the Quarto markdown template file that
 #'   will be used to generate the report.
+#' @param prefix Prefix for each data step's internal id and the variable name it
+#'   gets in the generated script (default `"data_"`). Use [step_varname()] to
+#'   retrieve the full value for a given step index.
 #' @importFrom shinymeta newExpansionContext expandChain formatCode
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
@@ -59,7 +62,8 @@ rename_symbols <- function(code, map) {
 #' @export
 shinypal_setup <- function(input, output, session, modules,
                            download_filename = "shinypal_script.zip",
-                           download_template = "./modules/test_report.qmd") {
+                           download_template = "./modules/test_report.qmd",
+                           prefix = "data_") {
   # set up per-session state store
   session$userData$shinypal <- new.env(parent = emptyenv())
   shinypal_env <- session$userData$shinypal
@@ -68,6 +72,14 @@ shinypal_setup <- function(input, output, session, modules,
   # taking them as arguments
   shinypal_env$input <- input
   shinypal_env$output <- output
+
+  # validate prefix
+  if (!is.character(prefix) || length(prefix) != 1L ||
+      make.names(paste0(prefix, "1")) != paste0(prefix, "1")) {
+    stop("`prefix` must be a single string that yields syntactic R names ",
+         "(e.g. \"data_\").", call. = FALSE)
+  }
+  shinypal_env$prefix <- prefix
 
   # shared server objects ####
 
@@ -228,9 +240,9 @@ shinypal_setup <- function(input, output, session, modules,
     }
     chain <- shinypal_env$code_chain()
     # custom variable names to swap into the generated code, mapping each
-    # internal id (occs_<k>) to its user-supplied name. applied to every chunk
-    # so a renamed dataset's definition and all its downstream references stay
-    # consistent.
+    # internal id (e.g., data_2) to its user-supplied name. applied to every
+    # chunk so a renamed dataset's definition and all its downstream references
+    # stay consistent.
     rename_map <- reactiveValuesToList(shinypal_env$var_names)
 
     result <- list()

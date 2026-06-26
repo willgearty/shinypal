@@ -8,9 +8,9 @@
 #'   `ind` in the current workflow order, so a step can only ever consume
 #'   upstream output. Used to populate the dataset selectors.
 #' @returns A named character vector of intermediate datasets in workflow
-#'   order: values are the stable internal ids (`occs_<ind>`) and names are the
-#'   display labels (a custom name if set, otherwise the id). Empty if none are
-#'   available upstream.
+#'   order: values are the stable internal ids ([step_varname()], e.g. `data_1`)
+#'   and names are the display labels (a custom name if set, otherwise the id).
+#'   Empty if none are available upstream.
 #' @examples
 #' \dontrun{
 #' # inside a reactive or observer in a module, after shinypal_setup()
@@ -66,7 +66,7 @@ get_int_dfs <- function(ind) {
 #' @returns Called for its side effects; invisibly returns the observer.
 #' @examples
 #' \dontrun{
-#' df_modal_observe(ind, paste0("occs_", ind))
+#' df_modal_observe(ind, step_varname(ind))
 #' }
 #' @seealso [df_modal_button()], the button that opens this modal.
 #' @family step observers
@@ -245,7 +245,7 @@ var_name_observe <- function(ind) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
   req(ind)
-  id <- paste0("occs_", ind)
+  id <- step_varname(ind)
   observeEvent(input[[paste0("varname_", ind)]], {
     proposed <- input[[paste0("varname_", ind)]]
     # an empty entry means "no custom name": fall back to the internal id
@@ -338,7 +338,7 @@ workflow_has_errors <- function() {
 #' @returns Called for its side effects; invisibly returns `NULL`.
 #' @examples
 #' \dontrun{
-#' set_int_data(occs, paste0("occs_", ind))
+#' set_int_data(occs, step_varname(ind))
 #' }
 #' @family intermediate data
 #' @export
@@ -387,6 +387,28 @@ next_step_index <- function() {
   shinypal_env <- check_setup()
   shinypal_env$step_counter <- shinypal_env$step_counter + 1
   shinypal_env$step_counter
+}
+
+#' @title Build a data step's internal id and generated variable name
+#' @description
+#'   Returns the name shinypal uses both as a data step's stored-dataset id and
+#'   as the variable it is assigned in the generated script (set `prefix` in
+#'   [shinypal_setup()]). A module should pass this as the `varname` of its
+#'   [shinymeta::metaReactive2()] so the emitted variable name matches the id
+#'   shinypal stores and renames.
+#' @param ind The index of the step.
+#' @returns A length-1 character string, the prefix followed by `ind`
+#'   (e.g., `"data_1"`).
+#' @examples
+#' \dontrun{
+#' # inside a module's add-step observer, after shinypal_setup()
+#' step_varname(ind)
+#' }
+#' @family workflow steps
+#' @export
+step_varname <- function(ind) {
+  shinypal_env <- check_setup()
+  paste0(shinypal_env$prefix, ind)
 }
 
 clear_workflow <- function() {

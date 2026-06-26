@@ -21,7 +21,7 @@ add_shinypal_data_step(
 \item{ind}{The index of the step.}
 
 \item{data}{A \code{\link[shinymeta:metaReactive2]{shinymeta::metaReactive2()}} object produced by the step. It
-should use \code{varname = paste0("occs_", ind)} so its generated variable name
+should use \code{varname = step_varname(ind)} so its generated variable name
 matches the stored name.}
 
 \item{fun_workflow}{A function that generates the UI elements for the
@@ -53,10 +53,11 @@ variable name in the generated script. Defaults to \code{TRUE}.}
 }
 \value{
 Called for its side effects and returns \code{NULL} invisibly. Stores the
-step's data reactive under \verb{occs_<ind>}, wires its code output and
-data-preview modal, registers the step via \code{\link[=add_shinypal_step]{add_shinypal_step()}}, and (when
-requested) installs the dataset/column selector observers and, when
-\code{rename = TRUE}, the dataset-rename field and its observer.
+step's data reactive under its \code{\link[=step_varname]{step_varname()}} id (e.g. \code{data_1}), wires
+its code output and data-preview modal, registers the step via
+\code{\link[=add_shinypal_step]{add_shinypal_step()}}, and (when requested) installs the dataset/column
+selector observers and, when \code{rename = TRUE}, the dataset-rename field and
+its observer.
 }
 \description{
 Convenience wrapper around the boilerplate shared by every step that
@@ -70,7 +71,7 @@ functions.
 \dontrun{
 # inside a module's server.R
 ind <- next_step_index()
-occs <- shinymeta::metaReactive2(varname = paste0("occs_", ind), {
+occs <- shinymeta::metaReactive2(varname = step_varname(ind), {
   shinymeta::metaExpr(head(mtcars, input[[paste0("n_", ind)]]))
 })
 add_shinypal_data_step(
@@ -84,6 +85,7 @@ add_shinypal_data_step(
 Other workflow steps:
 \code{\link[=add_shinypal_plot_step]{add_shinypal_plot_step()}},
 \code{\link[=add_shinypal_step]{add_shinypal_step()}},
-\code{\link[=next_step_index]{next_step_index()}}
+\code{\link[=next_step_index]{next_step_index()}},
+\code{\link[=step_varname]{step_varname()}}
 }
 \concept{workflow steps}
