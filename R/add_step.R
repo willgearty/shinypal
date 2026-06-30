@@ -88,7 +88,20 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
   # add the UI elements to the report
   tmp_list <- shinypal_env$report_list()
   tmp_list[[paste0("step_", ind)]] <- div(
+    id = paste0("report_step_", ind),
     fun_report(ind),
+    # scroll this step's report block into view
+    tags$script(HTML(paste0(
+      "(function(){",
+      "var seen=window.__shinypalReportScrolled=",
+      "window.__shinypalReportScrolled||{};",
+      "if(seen[", ind, "])return;seen[", ind, "]=1;",
+      "var el=document.getElementById('report_step_", ind, "');if(!el)return;",
+      "var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;",
+      "requestAnimationFrame(function(){",
+      "el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});});",
+      "})();"
+    ))),
     style = paste0("border-left: 5px solid ", colors$background, "; ",
                    "border-radius: 0.375rem;")
   )
