@@ -99,11 +99,15 @@ pre.shiny-text-output {
    reachable as the report grows. */
 .shinypal-download {
   position: sticky;
-  top: 5px;
+  top: 0px;
   z-index: 5;
+  background-color: var(--bs-body-bg, #fff);
+  background-image: linear-gradient(rgba(var(--bs-body-color-rgb), 0.03), rgba(var(--bs-body-color-rgb), 0.03));
   text-align: center;
-  padding-block: 0.5rem;
+  padding-block: 0.3rem;
   margin-top: -65px;
-  margin-left: 35px;
-  margin-right: 35px;
+  margin-bottom: var(--bslib-spacer, 1rem);
+  margin-left: calc(-1 * var(--_padding));
+  margin-right: calc(-1 * var(--_padding));
+  border-bottom: var(--bs-border-width) solid var(--bs-border-color-translucent);
 }
