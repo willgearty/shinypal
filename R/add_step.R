@@ -42,7 +42,7 @@
 #' @importFrom shiny observeEvent showNotification
 #' @importFrom shiny reactiveValuesToList
 #' @importFrom rlang check_required
-#' @importFrom htmltools div tags
+#' @importFrom htmltools div tags HTML
 #' @importFrom bslib accordion_panel_insert accordion_panel_open
 #' @importFrom bslib accordion_panel_remove
 #' @family workflow steps
@@ -63,11 +63,25 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
   # add the UI elements to the workflow
   accordion_panel_insert("workflow_accordion", panel = tagList(
     fun_workflow(ind),
-    tags$script(paste0(
+    # color this step's header, then scroll the freshly inserted panel into view
+    tags$script(HTML(paste0(
       "$('[data-rank-id=step_", ind, "] .accordion-button')",
       ".css('background-color', '", colors$background, "')",
-      ".css('color', '", colors$color, "');"
-    ))
+      ".css('color', '", colors$color, "');",
+      "(function(){",
+      "var item=$('[data-rank-id=step_", ind, "]')[0];if(!item)return;",
+      "var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;",
+      "var go=function(){item.scrollIntoView(",
+      "{behavior:reduce?'auto':'smooth',block:'start'});};",
+      "var box=item.querySelector('.accordion-collapse');",
+      "if(reduce||!box){requestAnimationFrame(go);return;}",
+      "var done=false,finish=function(){if(!done){done=true;go();}};",
+      "box.addEventListener('transitionend',function h(e){",
+      "if(e.target===box&&e.propertyName==='height'){",
+      "box.removeEventListener('transitionend',h);finish();}});",
+      "setTimeout(finish,500);",
+      "})();"
+    )))
   ))
   accordion_panel_open("workflow_accordion", values = paste0("step_", ind))
 
