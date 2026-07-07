@@ -39,7 +39,7 @@ rename_symbols <- function(code, map) {
 #'   retrieve the full value for a given step index.
 #' @importFrom shinymeta newExpansionContext expandChain formatCode
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
-#' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent
+#' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent observe
 #' @importFrom shiny downloadHandler actionButton icon showNotification
 #' @importFrom bslib accordion_panel_remove accordion_panel_close
 #' @importFrom purrr list_flatten
@@ -219,6 +219,16 @@ shinypal_setup <- function(input, output, session, modules,
   observeEvent(input$close_steps, {
     accordion_panel_close("workflow_accordion", values = TRUE)
   }, ignoreInit = TRUE)
+
+  # keep every intermediate dataset warm so downstream reads stay shallow
+  observe({
+    ids <- paste0(shinypal_env$prefix,
+                  sub("^step_", "", names(shinypal_env$code_chain())))
+    for (id in ids) {
+      dat <- shinypal_env$intermediate_list[[id]]
+      if (!is.null(dat)) tryCatch(dat(), error = function(e) NULL)
+    }
+  }, priority = 1000)
 
   # load the dynamic bits for each module (ui-aux.R and server.R)
   # make sure local = TRUE so they all share a namespace with the main app
