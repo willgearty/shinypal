@@ -111,3 +111,12 @@ pre.shiny-text-output {
   margin-right: calc(-1 * var(--_padding));
   border-bottom: var(--bs-border-width) solid var(--bs-border-color-translucent);
 }
+
+@media (max-width: 575.98px) {
+  .bslib-sidebar-layout[data-collapsible-mobile="true"]>.sidebar {
+    padding-top: 0;
+  }
+  .shinypal-download {
+    margin-bottom: calc(var(--_padding-icon) + var(--bslib-spacer, 1rem));
+  }
+}
