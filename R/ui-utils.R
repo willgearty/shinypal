@@ -74,8 +74,15 @@ select_column_input <- function(ind, label = "Choose a column:",
   shinypal_env <- check_setup()
   # guard against being added before any dataset exists
   data <- if (length(df_names) > 0) {
-    # initialize the column choices from the most recent dataset
-    shinypal_env$intermediate_list[[df_names[[length(df_names)]]]]()
+    # initialize the column choices from the most recent dataset; if it can't be
+    # evaluated synchronously right now (e.g., a long upstream chain whose cache
+    # was just invalidated would recurse too deeply to recompute here), start
+    # with no columns and let column_select_observe() populate them on the next
+    # reactive flush rather than aborting the panel
+    tryCatch(
+      shinypal_env$intermediate_list[[df_names[[length(df_names)]]]](),
+      error = function(e) data.frame()
+    )
   } else {
     data.frame()
   }

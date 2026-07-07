@@ -2,7 +2,7 @@
 
 #' @title Get the names of all intermediate data.frames for a given step
 #' @param ind The index of the step.
-#' @importFrom shiny reactiveValuesToList isolate
+#' @importFrom shiny reactiveValuesToList
 #' @description
 #'   Returns the names of intermediate datasets produced by steps *earlier* than
 #'   `ind` in the current workflow order, so a step can only ever consume
@@ -23,9 +23,10 @@ get_int_dfs <- function(ind) {
   req(ind)
   # we want a small, intentional set of reactive dependencies here: the set of
   # stored names, the workflow order (code_chain), and the custom display names
-  # (var_names, read below). each stored reactive is evaluated inside isolate()
-  # so refreshing the dataset choices neither depends on every dataset's value
-  # nor recomputes it.
+  # (var_names, read below). crucially we list the stored datasets by *name* and
+  # never call the reactives: a stored dataset reactive is the tip of its
+  # upstream chain, so forcing it would synchronously recompute every earlier
+  # step.
   lst <- reactiveValuesToList(shinypal_env$intermediate_list)
   # restrict choices to datasets produced by steps *earlier* than this one in
   # the current workflow order, so a step can never consume a later step's (or
@@ -39,7 +40,6 @@ get_int_dfs <- function(ind) {
   lst <- lst[sub(".*_(\\d+)$", "\\1", names(lst)) %in% earlier_inds]
   dfs <- lst |>
     Filter(f = Negate(is.null)) |>
-    Filter(f = function(el) is.data.frame(isolate(el()))) |>
     names()
   # put the ids in workflow order
   dfs <- dfs[order(match(sub(".*_(\\d+)$", "\\1", dfs), earlier_inds))]
