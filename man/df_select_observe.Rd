@@ -16,7 +16,8 @@ Called for its side effects; invisibly returns the observer.
 Installs an observer that keeps the step's dataset dropdown
 (\verb{dataset_<ind>}) populated with the available upstream datasets,
 preserving the current selection where possible and otherwise defaulting to
-the most recent one.
+the most recent one. Updates that wouldn't change the choices or selection
+are not sent.
 }
 \examples{
 \dontrun{

@@ -17,7 +17,8 @@ Called for its side effects; invisibly returns the observer.
 \description{
 Installs an observer that keeps a \code{\link[shiny:varSelectInput]{shiny::varSelectInput()}} of column names
 in sync with the dataset currently chosen in the step's \verb{dataset_<ind>}
-dropdown. Pair with \code{\link[=select_dataset_input]{select_dataset_input()}} and \code{\link[=select_column_input]{select_column_input()}}.
+dropdown. Updates that wouldn't change the column names or selection are
+not sent. Pair with \code{\link[=select_dataset_input]{select_dataset_input()}} and \code{\link[=select_column_input]{select_column_input()}}.
 }
 \examples{
 \dontrun{
