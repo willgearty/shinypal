@@ -35,7 +35,10 @@ Called for its side effects and returns \code{NULL} invisibly. The step
 is registered with shinypal's reactive state (its panel is inserted into
 the workflow accordion, its block appended to the report, its quoted code
 added to the code chain, and its packages recorded), and a remove-button
-observer is installed for it.
+observer is installed for it. Removing the step destroys the observers and
+outputs that shinypal's helpers created for it (such as
+\code{\link[=df_select_observe]{df_select_observe()}} and the step's code output); observers or outputs a
+module creates on its own are not tracked.
 }
 \description{
 Registers a single step with shinypal's reactive state. It inserts the

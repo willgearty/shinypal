@@ -108,6 +108,11 @@ shinypal_setup <- function(input, output, session, modules,
   # custom display/script names for intermediate datasets
   shinypal_env$var_names <- reactiveValues()
 
+  # observers and output ids created for each step, so removing a step can
+  # destroy them (see release_step())
+  shinypal_env$step_observers <- list()
+  shinypal_env$step_outputs <- list()
+
   # monotonically increasing counter that hands out unique step indices via
   # next_step_index()
   shinypal_env$step_counter <- 0

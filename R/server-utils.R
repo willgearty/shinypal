@@ -76,7 +76,7 @@ df_modal_observe <- function(ind, df_name) {
   input <- shinypal_env$input
   output <- shinypal_env$output
   req(ind, df_name)
-  observeEvent(input[[paste0("df_modal_", ind)]], {
+  obs <- observeEvent(input[[paste0("df_modal_", ind)]], {
     showModal(modalDialog(
       withSpinner(DTOutput(paste0("df_", ind))),
       size = "l", easyClose = TRUE
@@ -94,7 +94,9 @@ df_modal_observe <- function(ind, df_name) {
         pageLength = 25
       )
     ))
+    track_step_output(ind, paste0("df_", ind))
   }, ignoreInit = TRUE)
+  track_step_observer(ind, obs)
 }
 
 #' @title Keep a `selectInput` of intermediate data.frames up-to-date
@@ -123,7 +125,7 @@ df_select_observe <- function(ind) {
   # skipped (each update makes selectize rebuild its options)
   last_sent <- NULL
   # choices should always include all intermediate data.frames
-  observe({
+  obs <- observe({
     choices <- get_int_dfs(ind) %||% character(0)
     # try to preserve the old selected dataset name
     old_df <- isolate(input[[paste0("dataset_", ind)]])
@@ -140,6 +142,7 @@ df_select_observe <- function(ind) {
     updateSelectInput(inputId = paste0("dataset_", ind), choices = choices,
                       selected = selected)
   })
+  track_step_observer(ind, obs)
 }
 
 #' @title Keep a `varSelectInput` of data.frame column names up-to-date
@@ -167,7 +170,7 @@ column_select_observe <- function(ind, inputId) {
   # the last column names/selection sent to the client, so recomputing the
   # upstream data without changing its columns doesn't resend them
   last_sent <- NULL
-  observe({
+  obs <- observe({
     df_name <- input[[paste0("dataset_", ind)]]
     req(df_name)
     df <- get_int_data(df_name)()
@@ -184,6 +187,7 @@ column_select_observe <- function(ind, inputId) {
     last_sent <<- sent
     updateVarSelectInput(inputId = inputId, data = df, selected = selected)
   })
+  track_step_observer(ind, obs)
 }
 
 #' @title Add an observer to a copy button
@@ -208,9 +212,10 @@ column_select_observe <- function(ind, inputId) {
 clip_observe <- function(ind, code_expr) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
-  observeEvent(input[[paste0("copy_", ind)]], {
+  obs <- observeEvent(input[[paste0("copy_", ind)]], {
     write_clip(eval(code_expr), allow_non_interactive = TRUE)
   })
+  track_step_observer(ind, obs)
 }
 
 #' @title Observe a file input to be included in the download bundle
@@ -260,7 +265,7 @@ var_name_observe <- function(ind) {
   input <- shinypal_env$input
   req(ind)
   id <- step_varname(ind)
-  observeEvent(input[[paste0("varname_", ind)]], {
+  obs <- observeEvent(input[[paste0("varname_", ind)]], {
     proposed <- input[[paste0("varname_", ind)]]
     # an empty entry means "no custom name": fall back to the internal id
     if (is.null(proposed) || !nzchar(trimws(proposed))) {
@@ -296,6 +301,7 @@ var_name_observe <- function(ind) {
     }
     shinypal_env$var_names[[id]] <- proposed
   }, ignoreInit = TRUE)
+  track_step_observer(ind, obs)
 }
 
 #' @title Get the expanded code chunk for a registered step
@@ -440,4 +446,48 @@ clear_workflow <- function() {
   for (name in names(reactiveValuesToList(shinypal_env$var_names))) {
     shinypal_env$var_names[[name]] <- NULL
   }
+  # stop every remaining step's observers and outputs
+  for (step_name in union(names(shinypal_env$step_observers),
+                          names(shinypal_env$step_outputs))) {
+    release_step(sub("^step_", "", step_name))
+  }
+}
+
+# Record an observer created for step `ind` so release_step() can destroy it
+# when the step is removed; returns the observer invisibly
+#' @keywords internal
+#' @noRd
+track_step_observer <- function(ind, obs) {
+  shinypal_env <- check_setup()
+  step_name <- paste0("step_", ind)
+  shinypal_env$step_observers[[step_name]] <-
+    c(shinypal_env$step_observers[[step_name]], list(obs))
+  invisible(obs)
+}
+
+# Record an output id created for step `ind` so release_step() can drop it
+#' @keywords internal
+#' @noRd
+track_step_output <- function(ind, output_id) {
+  shinypal_env <- check_setup()
+  step_name <- paste0("step_", ind)
+  shinypal_env$step_outputs[[step_name]] <-
+    union(shinypal_env$step_outputs[[step_name]], output_id)
+  invisible(output_id)
+}
+
+# Destroy the observers and outputs recorded for step `ind`, so a removed step
+# stops reacting and its closures (cached data, plots) can be garbage collected
+#' @keywords internal
+#' @noRd
+release_step <- function(ind) {
+  shinypal_env <- check_setup()
+  step_name <- paste0("step_", ind)
+  for (obs in shinypal_env$step_observers[[step_name]]) obs$destroy()
+  # assigning NULL destroys the output's observer
+  for (output_id in shinypal_env$step_outputs[[step_name]]) {
+    shinypal_env$output[[output_id]] <- NULL
+  }
+  shinypal_env$step_observers[[step_name]] <- NULL
+  shinypal_env$step_outputs[[step_name]] <- NULL
 }

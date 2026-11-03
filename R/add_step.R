@@ -26,7 +26,10 @@
 #'   is registered with shinypal's reactive state (its panel is inserted into
 #'   the workflow accordion, its block appended to the report, its quoted code
 #'   added to the code chain, and its packages recorded), and a remove-button
-#'   observer is installed for it.
+#'   observer is installed for it. Removing the step destroys the observers and
+#'   outputs that shinypal's helpers created for it (such as
+#'   [df_select_observe()] and the step's code output); observers or outputs a
+#'   module creates on its own are not tracked.
 #' @examples
 #' \dontrun{
 #' # inside a module's server.R, which shinypal_setup() sources with local = TRUE
@@ -139,7 +142,7 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
   }
 
   # handle removing this step from the report and workflow
-  observeEvent(input[[paste0("remove_step_", ind)]], {
+  remove_obs <- observeEvent(input[[paste0("remove_step_", ind)]], {
     # refuse to remove a step whose output another step still consumes
     my_dfs <- grep(paste0("_", ind, "$"),
                    names(reactiveValuesToList(shinypal_env$intermediate_list)),
@@ -191,11 +194,14 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
                       value = TRUE)) {
       shinypal_env$var_names[[name]] <- NULL
     }
+    # stop this step's observers (including this one) and outputs
+    release_step(ind)
     # if there are no steps left, clear the workflow as a final precaution
     if (length(shinypal_env$report_list()) == 0) {
       clear_workflow()
     }
   }, ignoreInit = TRUE)
+  track_step_observer(ind, remove_obs)
 }
 
 #' @title Register a complete data-producing step
@@ -291,6 +297,7 @@ add_shinypal_data_step <- function(ind, data,
     if (!is.null(code_guard)) code_guard()
     get_chunk(ind)
   })
+  track_step_output(ind, paste0("code_", ind))
 
   clip_observe(ind, expr(get_chunk(ind)))
   df_modal_observe(ind, name)
@@ -372,6 +379,7 @@ add_shinypal_plot_step <- function(ind, plot,
   # the rendered plot lives in output[[<output_prefix><ind>]]; the report's
   # plotOutput() and the code chain reference that same slot
   output[[paste0(output_prefix, ind)]] <- plot
+  track_step_output(ind, paste0(output_prefix, ind))
 
   # render the step's generated code; run the optional guard first so any
   # step-specific validate() messages show before get_chunk() is reached
@@ -379,6 +387,7 @@ add_shinypal_plot_step <- function(ind, plot,
     if (!is.null(code_guard)) code_guard()
     get_chunk(ind)
   })
+  track_step_output(ind, paste0("code_", ind))
 
   clip_observe(ind, expr(get_chunk(ind)))
 
