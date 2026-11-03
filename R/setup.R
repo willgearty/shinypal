@@ -39,13 +39,13 @@ rename_symbols <- function(code, map) {
 #'   retrieve the full value for a given step index.
 #' @importFrom shinymeta newExpansionContext expandChain formatCode
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
-#' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent observe
-#' @importFrom shiny downloadHandler actionButton icon showNotification
+#' @importFrom shiny renderPrint observeEvent observe removeUI
+#' @importFrom shiny downloadHandler showNotification
 #' @importFrom bslib accordion_panel_remove accordion_panel_close
 #' @importFrom purrr list_flatten
 #' @importFrom clipr write_clip
 #' @importFrom rlang inject !!!
-#' @importFrom htmltools div tagList
+#' @importFrom htmltools tagList
 #' @importFrom rmarkdown pandoc_available
 #' @returns Called for its side effects and returns `NULL` invisibly. It
 #'   initializes shinypal's shared reactive state, renders the live report and
@@ -123,19 +123,6 @@ shinypal_setup <- function(input, output, session, modules,
   })
   output$libraries <- renderPrint({ libraries_expr() })
 
-  # render the report
-  output$report <- renderUI({
-    tagList(
-      div(
-        div(
-          verbatimTextOutput("libraries"),
-          actionButton("copy_libraries", icon("copy")),
-          class = "code_wrapper libraries_wrapper"
-        )
-      ),
-      shinypal_env$report_list()
-    )
-  })
   observeEvent(input$copy_libraries, {
     write_clip(libraries_expr(), allow_non_interactive = TRUE)
   })
@@ -153,6 +140,10 @@ shinypal_setup <- function(input, output, session, modules,
     }
     shinypal_env$report_list(reorder(shinypal_env$report_list()))
     shinypal_env$code_chain(reorder(shinypal_env$code_chain()))
+    # move the existing report blocks into the new order on the client rather
+    # than re-rendering them
+    session$sendCustomMessage("shinypal-reorder-report",
+                              as.list(names(shinypal_env$report_list())))
   }, ignoreInit = TRUE)
 
   # report download ####
@@ -213,6 +204,7 @@ shinypal_setup <- function(input, output, session, modules,
     sapply(names(shinypal_env$report_list()), function(el) {
       accordion_panel_remove("workflow_accordion", target = el)
     })
+    removeUI("#shinypal_report_steps > *", multiple = TRUE)
     clear_workflow()
   }, ignoreInit = TRUE)
 

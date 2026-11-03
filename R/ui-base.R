@@ -6,7 +6,8 @@
 #'   Each module should have a `ui-main.R` file that defines the UI elements for
 #'   that module in the "Steps" accordion.
 #' @param modules A character vector of paths to independent modules.
-#' @importFrom shiny actionButton includeCSS includeScript uiOutput tagList
+#' @importFrom shiny actionButton includeCSS includeScript tagList
+#' @importFrom shiny verbatimTextOutput icon
 #' @importFrom bslib card card_header layout_column_wrap layout_sidebar
 #' @importFrom bslib sidebar accordion
 #' @importFrom sortable sortable_js sortable_options sortable_js_capture_input
@@ -71,13 +72,23 @@ shinypal_ui <- function(modules) {
           downloadButton("download_script", "Download script"),
           class = "shinypal-download" # sticky
         ),
-        uiOutput("report"),
+        # the report: the libraries block, then one block per step that
+        # add_shinypal_step() inserts (and later removes or reorders) in place
+        div(
+          div(
+            verbatimTextOutput("libraries"),
+            actionButton("copy_libraries", icon("copy")),
+            class = "code_wrapper libraries_wrapper"
+          )
+        ),
+        div(id = "shinypal_report_steps"),
         width = "30%", position = "right",
         # use a custom resizable handle instead of the bslib built-in option
         resizable = FALSE, class = "shinypal-resizable"
       )
     ),
-    includeScript(system.file("www/resize-handle.js", package = "shinypal"))
+    includeScript(system.file("www/resize-handle.js", package = "shinypal")),
+    includeScript(system.file("www/report.js", package = "shinypal"))
   )
 }
 
