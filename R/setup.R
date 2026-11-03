@@ -37,7 +37,7 @@ rename_symbols <- function(code, map) {
 #' @param prefix Prefix for each data step's internal id and the variable name it
 #'   gets in the generated script (default `"data_"`). Use [step_varname()] to
 #'   retrieve the full value for a given step index.
-#' @importFrom shinymeta newExpansionContext expandChain formatCode
+#' @importFrom shinymeta newExpansionContext expandChain
 #' @importFrom shiny reactive reactiveVal reactiveValues reactiveValuesToList
 #' @importFrom shiny verbatimTextOutput renderUI renderPrint observeEvent observe
 #' @importFrom shiny downloadHandler actionButton icon showNotification
@@ -112,6 +112,14 @@ shinypal_setup <- function(input, output, session, modules,
   # next_step_index()
   shinypal_env$step_counter <- 0
 
+  # styled code keyed by its deparsed text, so styler runs once per distinct
+  # chunk (see format_chunk())
+  shinypal_env$fmt_cache <- new.env(parent = emptyenv())
+
+  # one reactiveVal per step holding that step's expanded code chunk, filled by
+  # the observer below the chunks reactive (see get_chunk())
+  shinypal_env$chunk_rvs <- list()
+
   options(spinner.type = 8)
 
   # render dynamic UI ####
@@ -121,7 +129,7 @@ shinypal_setup <- function(input, output, session, modules,
       unname() |> list_flatten() |> unique()
     inject(expandChain(!!!lapply(lib_calls, function(cl) call("quote", cl))))
   })
-  output$libraries <- renderPrint({ libraries_expr() })
+  output$libraries <- renderPrint({ print(format_chunk(libraries_expr())) })
 
   # render the report
   output$report <- renderUI({
@@ -170,7 +178,7 @@ shinypal_setup <- function(input, output, session, modules,
             paste("# --- step omitted: incomplete or errored;",
                   "fix or remove it in the app, then re-download ---")
           } else {
-            paste(formatCode(chunk), collapse = "\n")
+            paste(format_chunk(chunk), collapse = "\n")
           }
         }, character(1))
 
@@ -271,6 +279,24 @@ shinypal_setup <- function(input, output, session, modules,
     }
     result
   })
+
+  # copy each step's chunk into its own reactiveVal. reactiveVal() ignores
+  # identical values, so a step's code output only re-renders when that step's
+  # code actually changes, not whenever any step's dependencies change
+  observe({
+    chunks <- shinypal_env$chunks()
+    for (step_name in names(chunks)) {
+      rv <- shinypal_env$chunk_rvs[[step_name]]
+      if (is.null(rv)) {
+        shinypal_env$chunk_rvs[[step_name]] <- reactiveVal(chunks[[step_name]])
+      } else {
+        rv(chunks[[step_name]])
+      }
+    }
+    # drop the reactiveVals of removed steps
+    keep <- names(shinypal_env$chunk_rvs) %in% names(chunks)
+    shinypal_env$chunk_rvs <- shinypal_env$chunk_rvs[keep]
+  }, priority = 900)
 
   shinypal_env$setup <- TRUE
 }
