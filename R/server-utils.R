@@ -105,7 +105,8 @@ df_modal_observe <- function(ind, df_name) {
 #'   Installs an observer that keeps the step's dataset dropdown
 #'   (`dataset_<ind>`) populated with the available upstream datasets,
 #'   preserving the current selection where possible and otherwise defaulting to
-#'   the most recent one.
+#'   the most recent one. Updates that wouldn't change the choices or selection
+#'   are not sent.
 #' @returns Called for its side effects; invisibly returns the observer.
 #' @examples
 #' \dontrun{
@@ -118,6 +119,9 @@ df_select_observe <- function(ind) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
   req(ind)
+  # the last choices/selection sent to the client, so unchanged updates are
+  # skipped (each update makes selectize rebuild its options)
+  last_sent <- NULL
   # choices should always include all intermediate data.frames
   observe({
     choices <- get_int_dfs(ind) %||% character(0)
@@ -129,6 +133,9 @@ df_select_observe <- function(ind) {
       # otherwise default to the most recent dataset (closest above this step)
       selected <- if (length(choices)) choices[[length(choices)]] else NULL
     }
+    sent <- list(choices, selected)
+    if (identical(sent, last_sent)) return()
+    last_sent <<- sent
     # update choices but maintain selected
     updateSelectInput(inputId = paste0("dataset_", ind), choices = choices,
                       selected = selected)
@@ -143,7 +150,8 @@ df_select_observe <- function(ind) {
 #' @description
 #'   Installs an observer that keeps a [shiny::varSelectInput()] of column names
 #'   in sync with the dataset currently chosen in the step's `dataset_<ind>`
-#'   dropdown. Pair with [select_dataset_input()] and [select_column_input()].
+#'   dropdown. Updates that wouldn't change the column names or selection are
+#'   not sent. Pair with [select_dataset_input()] and [select_column_input()].
 #' @returns Called for its side effects; invisibly returns the observer.
 #' @examples
 #' \dontrun{
@@ -156,6 +164,9 @@ column_select_observe <- function(ind, inputId) {
   shinypal_env <- check_setup()
   input <- shinypal_env$input
   req(ind, inputId)
+  # the last column names/selection sent to the client, so recomputing the
+  # upstream data without changing its columns doesn't resend them
+  last_sent <- NULL
   observe({
     df_name <- input[[paste0("dataset_", ind)]]
     req(df_name)
@@ -168,6 +179,9 @@ column_select_observe <- function(ind, inputId) {
     } else {
       selected <- NULL
     }
+    sent <- list(choices, if (is.null(selected)) NULL else as_string(selected))
+    if (identical(sent, last_sent)) return()
+    last_sent <<- sent
     updateVarSelectInput(inputId = inputId, data = df, selected = selected)
   })
 }
