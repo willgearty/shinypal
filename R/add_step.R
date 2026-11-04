@@ -286,10 +286,11 @@ add_shinypal_data_step <- function(ind, data,
   set_int_data(data, name)
 
   # render the step's generated code; run the optional guard first so any
-  # step-specific validate() messages show before get_chunk() is reached
+  # step-specific validate() messages show before get_chunk() is reached, and
+  # reuse cached formatting so unchanged code isn't re-styled
   output[[paste0("code_", ind)]] <- renderPrint({
     if (!is.null(code_guard)) code_guard()
-    get_chunk(ind)
+    print(format_chunk(get_chunk(ind)))
   })
 
   clip_observe(ind, expr(get_chunk(ind)))
@@ -374,10 +375,11 @@ add_shinypal_plot_step <- function(ind, plot,
   output[[paste0(output_prefix, ind)]] <- plot
 
   # render the step's generated code; run the optional guard first so any
-  # step-specific validate() messages show before get_chunk() is reached
+  # step-specific validate() messages show before get_chunk() is reached, and
+  # reuse cached formatting so unchanged code isn't re-styled
   output[[paste0("code_", ind)]] <- renderPrint({
     if (!is.null(code_guard)) code_guard()
-    get_chunk(ind)
+    print(format_chunk(get_chunk(ind)))
   })
 
   clip_observe(ind, expr(get_chunk(ind)))

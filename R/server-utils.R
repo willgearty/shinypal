@@ -289,7 +289,8 @@ var_name_observe <- function(ind) {
 #'   Returns the code chunk for `ind`, expanded with a shared context across
 #'   all currently-registered steps. Use this inside a reactive consumer
 #'   (e.g., `renderPrint()`, `observeEvent()`) to display or copy a step's
-#'   code. The chunk is rebuilt whenever any dependency changes.
+#'   code. The consumer is only invalidated when this step's chunk changes, not
+#'   whenever another step's code is rebuilt.
 #' @param ind The index of the step.
 #' @returns A code object suitable for printing or passing to
 #'   [shinymeta::displayCodeModal()], or `NULL` if the step is not registered.
@@ -302,11 +303,32 @@ var_name_observe <- function(ind) {
 #' @export
 get_chunk <- function(ind) {
   shinypal_env <- check_setup()
-  chunk <- shinypal_env$chunks()[[paste0("step_", ind)]]
+  step_name <- paste0("step_", ind)
+  # read the step's own reactiveVal (kept in sync by shinypal_setup()); fall
+  # back to the shared chunks reactive until that reactiveVal exists
+  rv <- shinypal_env$chunk_rvs[[step_name]]
+  chunk <- if (is.null(rv)) shinypal_env$chunks()[[step_name]] else rv()
   # re-throw any per-step error so the consuming reactive's req()/validate()
   # semantics handle it normally (silent errors stay silent, etc.)
   if (inherits(chunk, "condition")) stop(chunk)
   chunk
+}
+
+# Format a code object with shinymeta::formatCode(), caching the result by the
+# code's deparsed text so styler (slow and allocation-heavy) runs only once per
+# distinct chunk
+#' @importFrom shinymeta formatCode
+#' @keywords internal
+#' @noRd
+format_chunk <- function(code) {
+  shinypal_env <- check_setup()
+  key <- paste(deparse(code, width.cutoff = 500L), collapse = "\n")
+  formatted <- shinypal_env$fmt_cache[[key]]
+  if (is.null(formatted)) {
+    formatted <- formatCode(code)
+    shinypal_env$fmt_cache[[key]] <- formatted
+  }
+  formatted
 }
 
 #' @title Check whether the workflow has incomplete or errored steps
@@ -413,6 +435,8 @@ step_varname <- function(ind) {
 
 clear_workflow <- function() {
   shinypal_env <- check_setup()
+  # forget cached formatting so the cache doesn't outlive the workflow
+  shinypal_env$fmt_cache <- new.env(parent = emptyenv())
   shinypal_env$report_list(tagList())
   shinypal_env$code_chain(list())
   shinypal_env$libraries_chain(list())

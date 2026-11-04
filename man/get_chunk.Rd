@@ -17,7 +17,8 @@ A code object suitable for printing or passing to
 Returns the code chunk for \code{ind}, expanded with a shared context across
 all currently-registered steps. Use this inside a reactive consumer
 (e.g., \code{renderPrint()}, \code{observeEvent()}) to display or copy a step's
-code. The chunk is rebuilt whenever any dependency changes.
+code. The consumer is only invalidated when this step's chunk changes, not
+whenever another step's code is rebuilt.
 }
 \examples{
 \dontrun{
