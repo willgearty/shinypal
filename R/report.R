@@ -261,11 +261,13 @@ knit_expand_safe <- function(file, vars = list(),
 }
 
 # Total matches of each `pattern` across the character vector `string`. A base-
-# regex equivalent of shinymeta:::count_matches_by_pattern().
+# regex equivalent of shinymeta:::count_matches_by_pattern(). knitr's inline-code
+# pattern uses lookbehinds, which base R's default (TRE) engine rejects, so match
+# with PCRE (perl = TRUE).
 #' @keywords internal
 count_matches_by_pattern <- function(string, pattern) {
   vapply(pattern, function(regex) {
-    hits <- gregexpr(regex, string)
+    hits <- gregexpr(regex, string, perl = TRUE)
     sum(vapply(hits, function(h) if (h[1L] == -1L) 0L else length(h),
                integer(1)))
   }, integer(1), USE.NAMES = FALSE)
