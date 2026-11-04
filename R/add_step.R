@@ -39,7 +39,7 @@
 #'   libs = "utils"
 #' )
 #' }
-#' @importFrom shiny observeEvent showNotification
+#' @importFrom shiny observeEvent showNotification insertUI removeUI
 #' @importFrom shiny reactiveValuesToList
 #' @importFrom rlang check_required
 #' @importFrom htmltools div tags HTML
@@ -93,9 +93,6 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
     # scroll this step's report block into view
     tags$script(HTML(paste0(
       "(function(){",
-      "var seen=window.__shinypalReportScrolled=",
-      "window.__shinypalReportScrolled||{};",
-      "if(seen[", ind, "])return;seen[", ind, "]=1;",
       "var el=document.getElementById('report_step_", ind, "');if(!el)return;",
       "var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;",
       "requestAnimationFrame(function(){",
@@ -106,6 +103,10 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
                    "border-radius: 0.375rem;")
   )
   shinypal_env$report_list(tmp_list)
+  # insert only this step's block so existing blocks (and their outputs) are
+  # left alone
+  insertUI("#shinypal_report_steps", where = "beforeEnd",
+           ui = tmp_list[[paste0("step_", ind)]])
 
   # add the code to the code chain
   tmp_list <- shinypal_env$code_chain()
@@ -163,6 +164,7 @@ add_shinypal_step <- function(ind, fun_workflow, fun_report,
     }
     accordion_panel_remove("workflow_accordion",
                            target = paste0("step_", ind))
+    removeUI(paste0("#report_step_", ind))
     for (fun in c(shinypal_env$report_list,
                   shinypal_env$code_chain,
                   shinypal_env$libraries_chain,
